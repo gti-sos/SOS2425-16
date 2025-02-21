@@ -1,8 +1,8 @@
 {
   "name": "sos2425-16",
   "version": "1.0.0",
-  "description": "...",
-  "main": "index-GAM.js",
+  "description": "--------------\r - **Team**\r   - Gonzalo Aguilera Mancheño (https://github.com/TheVaultBoy16)\r   - Pablo Viña Santa Cruz (https://github.com/nfn8347)\r   - Iván Barbero Lay (https://github.com/ivabarlay)\r - **Project description**: Our work consists of analyzing the relationship between unemployment, emigration and tax increases in Spain with an API that is able to unify these data for the different analyses.\r - **Repository**: [gti-sos/SOS2425-16](https://github.com/gti-sos/SOS2425-16)\r - **URL**: TBD\r -  **APIs**:\r     - TBD\r     - TBD\r     - TBD",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
