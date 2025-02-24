@@ -18,16 +18,16 @@ let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
 
 
 
-function average(lista){
-    let sum=0;
-    if(lista.length===0){
+function average(arr){
+    let acc=0;
+    if(arr.length===0){
         return 0;
     }
-    lista.forEach(n =>{
-        sum+= n;
+    arr.forEach(n =>{
+        acc+= n;
     });
 
-    return sum/lista.length;
+    return acc/arr.length;
 }
 
 console.log(average(array_between_30_34_yo_cat));
