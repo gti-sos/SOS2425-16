@@ -18,7 +18,7 @@ let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
 
 
 
-function promedio(lista){
+function average(lista){
     let sum=0;
     if(lista.length===0){
         return 0;
@@ -30,4 +30,4 @@ function promedio(lista){
     return sum/lista.length;
 }
 
-console.log(promedio(array_between_30_34_yo_cat));
+console.log(average(array_between_30_34_yo_cat));
