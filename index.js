@@ -9,6 +9,10 @@ app.get("/cool",(request,response)=>{
     response.send(cool());
 });
 
+app.get("/about",(request,response)=>{
+    response.send("./public/about.html");
+});
+
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}...`);
 });
