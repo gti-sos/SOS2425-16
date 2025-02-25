@@ -10,7 +10,7 @@ app.get("/cool",(request,response)=>{
 });
 
 app.get("/about",(request,response)=>{
-    response.send("./public/about.html");
+    app.use("/",express.static("./public/about.html"));
 });
 
 app.listen(PORT,()=>{
