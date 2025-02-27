@@ -31,3 +31,5 @@ function average(){
 }
 
 console.log(average());
+
+//module.exports = average();

@@ -35,8 +35,6 @@ let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
     obj.between_30_34_yo
 );
 
-
-
 function average(){
     let acc=0;
     if(array_between_30_34_yo_cat.length===0){
