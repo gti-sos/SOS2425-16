@@ -48,5 +48,6 @@ function average(){
 }
 
 app.get("/samples/GAM",(request,response)=>{
-    response.send(average());
+    let res= average();
+    response.send(res.toString());
 });
