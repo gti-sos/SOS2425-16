@@ -35,18 +35,20 @@ let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
     obj.between_30_34_yo
 );
 
-function average(arr){
+
+
+function average(){
     let acc=0;
-    if(arr.length===0){
+    if(array_between_30_34_yo_cat.length===0){
         return 0;
     }
-    arr.forEach(n =>{
+    array_between_30_34_yo_cat.forEach(n =>{
         acc+= n;
     });
 
-    return acc/arr.length;
+    return acc/array_between_30_34_yo_cat.length;
 }
 
 app.get("/samples/GAM",(request,response)=>{
-    response.json(average(array_between_30_34_yo_cat));
+    response.json(average());
 });
