@@ -50,5 +50,5 @@ function average(){
 }
 
 app.get("/samples/GAM",(request,response)=>{
-    response.json(average());
+    response.send(average());
 });
