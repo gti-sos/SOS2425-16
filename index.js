@@ -48,5 +48,5 @@ function average(arr){
 }
 
 app.get("/samples/GAM",(request,response)=>{
-    response.send("viva");
+    response.json(average(array_between_30_34_yo_cat));
 });
