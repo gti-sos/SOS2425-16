@@ -19,23 +19,6 @@ app.listen(PORT,()=>{
 
 import * as datos from './index-GAM.js';
 
-
-// let array_between_30_34_yo_cat= datos.array_data.slice(-3).map(obj=>
-//     obj.between_30_34_yo
-// );
-
-// function average(){
-//     let acc=0;
-//     if(array_between_30_34_yo_cat.length===0){
-//         return 0;
-//     }
-//     array_between_30_34_yo_cat.forEach(n =>{
-//         acc+= n;
-//     });
-
-//     return acc/array_between_30_34_yo_cat.length;
-// }
-
 app.get("/samples/GAM",(request,response)=>{
     let res= datos.average();
     response.send(res.toString());
