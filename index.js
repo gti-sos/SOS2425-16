@@ -99,6 +99,10 @@ app.get(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
 });
 
 app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
+    response.sendStatus(405);
+});
+
+app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
     let {id} = request.params; // de la URL
     let {id :bodyId, ...updatedData } = request.body; // del Body
     let ind=emigrationData.findIndex(i => i.id === id);
@@ -110,10 +114,6 @@ app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
     }
     emigrationData[ind] = {...emigrationData[ind], ...updatedData};
     response.sendStatus(200);
-});
-
-app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
-    response.sendStatus(405);
 });
 
 app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
