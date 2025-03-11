@@ -103,14 +103,14 @@ app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
 });
 
 app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
-    let {id} = request.params; // de la URL
+    let id= Number(request.params.id); // de la URL, hay que parsearlo aqui o despues porque sale como String
     let {id :bodyId, ...updatedData } = request.body; // del Body
+    if(bodyId != id){
+        response.sendStatus(400);
+    }
     let ind=emigrationData.findIndex(i => i.id === id);
     if( ind === -1){
         response.sendStatus(404); // igual hay que chequear que esta dentro de los id que contienen a cataluña o hacer un slice, que los reenumere con id del 0 al ultimo tambien
-    }
-    if(bodyId != id){
-        response.sendStatus(400);
     }
     emigrationData[ind] = {...emigrationData[ind], ...updatedData};
     response.sendStatus(200);
