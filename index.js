@@ -70,7 +70,7 @@ app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
     response.send(JSON.stringify(res,null,2));
 });
 
-//16.a
+//16.a.1
 
 app.post(BASE_API+"/emigration-stats",(request,response)=>{
     console.log("New POST to /emigration-stats");
@@ -80,8 +80,40 @@ app.post(BASE_API+"/emigration-stats",(request,response)=>{
     response.sendStatus(201);
 });
 
+app.put(BASE_API+"/emigration-stats",(request,response)=>{ // método incorrecto
+    response.sendStatus(405);
+});
 
+app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
+    //let res= emigrationData.slice(); // la copio
+    //res.length=0; // la vacio
+    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+});
 
+//16.a.2
+
+app.get(BASE_API+"/emigration-stats/Cataluña",(request,response)=>{
+    let res= emigrationData.filter(obj => obj.autonomic_community === "Cataluña");
+    response.send(JSON.stringify(res,null,2));
+});
+
+// app.post(BASE_API+"/emigration-stats/Cataluña",(request,response)=>{
+//     console.log("New POST to /emigration-stats");
+//     console.log(`<${request.body}>`); // <> para saber si esta vacio
+//     let newAutonomicCommunity=request.body;
+//     emigrationData.push(newAutonomicCommunity);
+//     response.sendStatus(201);
+// });
+
+// app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
+//     //let res= emigrationData.slice(); // la copio
+//     //res.length=0; // la vacio
+//     response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+// });
+
+// app.put(BASE_API+"/emigration-stats",(request,response)=>{ // método incorrecto
+//     response.sendStatus(405);
+// });
 
 
 
