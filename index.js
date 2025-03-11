@@ -20,18 +20,18 @@ app.listen(PORT,()=>{
 // index-GAM.js
 
 const emigrationData = [
-    { autonomic_community: "Andalucía", year: 2021, quarter: "Q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
-    { autonomic_community: "Andalucía", year: 2020, quarter: "Q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
-    { autonomic_community: "Asturias", year: 2021, quarter: "Q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
-    { autonomic_community: "Islas Baleares", year: 2021, quarter: "Q1", between_20_24_yo: 6320, between_25_29_yo: 1023, between_30_34_yo: 1239 },
-    { autonomic_community: "Canarias", year: 2021, quarter: "Q2", between_20_24_yo: 947, between_25_29_yo: 1625, between_30_34_yo: 1643 },
-    { autonomic_community: "Madrid", year: 2021, quarter: "Q3", between_20_24_yo: 6028, between_25_29_yo: 10836, between_30_34_yo: 10004 },
-    { autonomic_community: "Castilla Y León", year: 2021, quarter: "Q1", between_20_24_yo: 766, between_25_29_yo: 1171, between_30_34_yo: 1210 },
-    { autonomic_community: "Castilla - La Mancha", year: 2021, quarter: "Q2", between_20_24_yo: 984, between_25_29_yo: 1304, between_30_34_yo: 1512 },
-    { autonomic_community: "Cataluña", year: 2021, quarter: "Q3", between_20_24_yo: 7305, between_25_29_yo: 12960, between_30_34_yo: 13077 },
-    { autonomic_community: "Cataluña", year: 2020, quarter: "Q1", between_20_24_yo: 4469, between_25_29_yo: 8086, between_30_34_yo: 7808 },
-    { autonomic_community: "Cataluña", year: 2019, quarter: "Q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 },
-    { autonomic_community: "Madrid", year: 2020, quarter: "Q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
+    { autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
+    { autonomic_community: "andalucia", year: 2020, quarter: "q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
+    { autonomic_community: "asturias", year: 2021, quarter: "q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
+    { autonomic_community: "islas-baleares", year: 2021, quarter: "q1", between_20_24_yo: 6320, between_25_29_yo: 1023, between_30_34_yo: 1239 },
+    { autonomic_community: "canarias", year: 2021, quarter: "q2", between_20_24_yo: 947, between_25_29_yo: 1625, between_30_34_yo: 1643 },
+    { autonomic_community: "madrid", year: 2021, quarter: "q3", between_20_24_yo: 6028, between_25_29_yo: 10836, between_30_34_yo: 10004 },
+    { autonomic_community: "castilla-y-leon", year: 2021, quarter: "q1", between_20_24_yo: 766, between_25_29_yo: 1171, between_30_34_yo: 1210 },
+    { autonomic_community: "castilla-la-mancha", year: 2021, quarter: "q2", between_20_24_yo: 984, between_25_29_yo: 1304, between_30_34_yo: 1512 },
+    { autonomic_community: "cataluña", year: 2021, quarter: "q3", between_20_24_yo: 7305, between_25_29_yo: 12960, between_30_34_yo: 13077 },
+    { autonomic_community: "cataluña", year: 2020, quarter: "q1", between_20_24_yo: 4469, between_25_29_yo: 8086, between_30_34_yo: 7808 },
+    { autonomic_community: "cataluña", year: 2019, quarter: "q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 },
+    { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
 let array_between_30_34_yo_cat= emigrationData.slice(-3).map(obj=>
@@ -92,30 +92,25 @@ app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
 
 //16.a.2
 
-app.get(BASE_API+"/emigration-stats/Cataluña",(request,response)=>{
-    let res= emigrationData.filter(obj => obj.autonomic_community === "Cataluña");
+app.get(BASE_API+"/emigration-stats/cataluña",(request,response)=>{
+    console.log("New GET to /emigration-stats/cataluña");
+    let res= emigrationData.filter(obj => obj.autonomic_community === "cataluña");
     response.send(JSON.stringify(res,null,2));
 });
 
-// app.post(BASE_API+"/emigration-stats/Cataluña",(request,response)=>{
-//     console.log("New POST to /emigration-stats");
-//     console.log(`<${request.body}>`); // <> para saber si esta vacio
-//     let newAutonomicCommunity=request.body;
-//     emigrationData.push(newAutonomicCommunity);
-//     response.sendStatus(201);
-// });
+app.post(BASE_API+"/emigration-stats/cataluña",(request,response)=>{
+    response.sendStatus(405);
+});
 
-// app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
-//     //let res= emigrationData.slice(); // la copio
-//     //res.length=0; // la vacio
-//     response.sendStatus(401); // porque no quiero que se borren todos los pueblos
-// });
+app.put(BASE_API+"/emigration-stats/cataluña",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
+    response.sendStatus(405);
+});
 
-// app.put(BASE_API+"/emigration-stats",(request,response)=>{ // método incorrecto
-//     response.sendStatus(405);
-// });
-
-
+app.delete(BASE_API+"/emigration-stats/cataluña",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
+    //let res= emigrationData.slice(); // la copio
+    //res.length=0; // la vacio
+    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+});
 
 // index-PVS.js
 
