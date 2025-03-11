@@ -58,7 +58,7 @@ app.get("/samples/GAM",(request,response)=>{
 
 app.get(BASE_API+"emigration-stats",(request,response)=>{
     let res= array_data;
-    response.send(res.toString());
+    response.send(JSON.stringify(res,null,2));
 });
 
 //13.
@@ -66,7 +66,7 @@ app.get(BASE_API+"emigration-stats",(request,response)=>{
 app.get(BASE_API+"emigration-stats/loadInitialData",(request,response)=>{
     let res= array_data.slice(0,9);
     console.log("New GET to /emigration-stats"); // hacer slice
-    response.send( res.toString());
+    response.send(JSON.stringify(res,null,2));
 });
 
 
