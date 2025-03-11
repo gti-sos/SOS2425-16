@@ -2,7 +2,7 @@ const express = require("express");
 const cool = require('cool-ascii-faces');
 const app = express();
 const PORT = process.env.PORT || 16078;
-const BASE_API= "/api/v1/";
+const BASE_API= "/api/v1";
 
 app.use("/",express.static("./public"));
 app.use("/about",express.static("./public/about.html"));
@@ -18,7 +18,7 @@ app.listen(PORT,()=>{
 
 // index-GAM.js
 
-const array_data = [
+const emigrationData = [
     { autonomic_community: "Andalucía", year: 2021, quarter: "Q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
     { autonomic_community: "Andalucía", year: 2020, quarter: "Q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
     { autonomic_community: "Asturias", year: 2021, quarter: "Q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
@@ -33,7 +33,7 @@ const array_data = [
     { autonomic_community: "Madrid", year: 2020, quarter: "Q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
-let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
+let array_between_30_34_yo_cat= emigrationData.slice(-3).map(obj=>
     obj.between_30_34_yo
 );
 
@@ -56,17 +56,27 @@ app.get("/samples/GAM",(request,response)=>{
 
 //11.
 
-app.get(BASE_API+"emigration-stats",(request,response)=>{
-    let res= array_data;
+app.get(BASE_API+"/emigration-stats",(request,response)=>{
+    let res= emigrationData;
     response.send(JSON.stringify(res,null,2));
 });
 
 //13.
 
-app.get(BASE_API+"emigration-stats/loadInitialData",(request,response)=>{
-    let res= array_data.slice(0,10);
+app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
+    let res= emigrationData.slice(0,10);
     console.log("New GET to /emigration-stats"); // hacer slice
     response.send(JSON.stringify(res,null,2));
+});
+
+//16.a
+
+app.post(BASE_API+"/emigration-stats",(request,response)=>{
+    console.log("New POST to /emigration-stats");
+    console.log(`<${request.body}>`); // <> para saber si esta vacio
+    let newAutonomicCommunity=JSON.parse(request.body);
+    emigrationData.push(newAutonomicCommunity);
+    response.sendStatus(201);
 });
 
 
