@@ -29,7 +29,8 @@ const array_data = [
     { autonomic_community: "Castilla - La Mancha", year: 2021, quarter: "Q2", between_20_24_yo: 984, between_25_29_yo: 1304, between_30_34_yo: 1512 },
     { autonomic_community: "Cataluña", year: 2021, quarter: "Q3", between_20_24_yo: 7305, between_25_29_yo: 12960, between_30_34_yo: 13077 },
     { autonomic_community: "Cataluña", year: 2020, quarter: "Q1", between_20_24_yo: 4469, between_25_29_yo: 8086, between_30_34_yo: 7808 },
-    { autonomic_community: "Cataluña", year: 2019, quarter: "Q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 }
+    { autonomic_community: "Cataluña", year: 2019, quarter: "Q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 },
+    { autonomic_community: "Madrid", year: 2020, quarter: "Q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
 let array_between_30_34_yo_cat= array_data.slice(-3).map(obj=>
@@ -63,10 +64,12 @@ app.get(BASE_API+"/emigration-stats",(request,response)=>{
 //13.
 
 app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
-    let res= array_data;
+    let res= array_data.slice(0,9);
     console.log("New GET to /emigration-stats"); // hacer slice
-    response.send( JSON.stringify(res,null,2));
+    response.send( res.toString());
 });
+
+
 
 
 
