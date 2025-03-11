@@ -92,21 +92,21 @@ app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
 
 //16.a.2
 
-app.get(BASE_API+"/emigration-stats/cataluña",(request,response)=>{
-    console.log("New GET to /emigration-stats/cataluña");
+app.get(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
+    console.log("New GET to /emigration-stats/cataluna");
     let res= emigrationData.filter(obj => obj.autonomic_community === "cataluña");
     response.send(JSON.stringify(res,null,2));
 });
 
-app.post(BASE_API+"/emigration-stats/cataluña",(request,response)=>{
+app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
     response.sendStatus(405);
 });
 
-app.put(BASE_API+"/emigration-stats/cataluña",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
+app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
     response.sendStatus(405);
 });
 
-app.delete(BASE_API+"/emigration-stats/cataluña",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
+app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
     //let res= emigrationData.slice(); // la copio
     //res.length=0; // la vacio
     response.sendStatus(401); // porque no quiero que se borren todos los pueblos
