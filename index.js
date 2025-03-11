@@ -107,7 +107,7 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
     let {id :bodyId, ...updatedData } = request.body; // del Body
     let ind=emigrationData.findIndex(i => i.id === id);
     if( ind === -1){
-        response.sendStatus(404);
+        response.sendStatus(404); // igual hay que chequear que esta dentro de los id que contienen a cataluña o hacer un slice, que los reenumere con id del 0 al ultimo tambien
     }
     if(bodyId != id){
         response.sendStatus(400);
