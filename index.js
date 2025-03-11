@@ -6,6 +6,7 @@ const BASE_API= "/api/v1";
 
 app.use("/",express.static("./public"));
 app.use("/about",express.static("./public/about.html"));
+app.use(express.json());
 
 app.get("/cool",(request,response)=>{
     response.send(cool());
@@ -74,7 +75,7 @@ app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
 app.post(BASE_API+"/emigration-stats",(request,response)=>{
     console.log("New POST to /emigration-stats");
     console.log(`<${request.body}>`); // <> para saber si esta vacio
-    let newAutonomicCommunity=JSON.parse(request.body);
+    let newAutonomicCommunity=request.body;
     emigrationData.push(newAutonomicCommunity);
     response.sendStatus(201);
 });
