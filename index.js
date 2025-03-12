@@ -94,6 +94,11 @@ app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
 
 app.get(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
     console.log("New GET to /emigration-stats/cataluna");
+    let id= Number(request.query.id);
+    if (id){
+        let res= emigrationData.filter(obj => obj.id === id);
+        response.send(JSON.stringify(res,null,2));
+    }
     let res= emigrationData.filter(obj => obj.autonomic_community === "cataluña");
     response.send(JSON.stringify(res,null,2));
 });
