@@ -102,8 +102,8 @@ app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
     response.sendStatus(405);
 });
 
-app.put(BASE_API+"/emigration-stats/cataluna?id=:id",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
-    let id= Number(request.params.id); // de la URL, hay que parsearlo aqui o despues porque sale como String de la URL
+app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
+    let id= Number(request.query.id); // de la URL, hay que parsearlo aqui o despues porque sale como String de la URL
     let {id :bodyId, ...updatedData } = request.body; // del Body
     if(Number(bodyId) != id){ 
         response.sendStatus(400);
