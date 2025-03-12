@@ -113,7 +113,7 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
     if(Number(bodyId) != id){ 
         response.sendStatus(400); // que debe aparecer el id en el body de la peticion, pero tambien asegurarme de que parazca en la peticion?
     }
-    let ind=emigrationData.findIndex(i => i.id === id);
+    let ind=emigrationData.findIndex(i => i.id === id); // devuelve la posicion del array en la que se encuentra el id
     if( ind === -1){
         response.sendStatus(404); // igual hay que chequear que esta dentro de los id que contienen a cataluña o hacer un slice, que los reenumere con id del 0 al ultimo tambien
     }
@@ -128,7 +128,7 @@ app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas,
     if( ind === -1){
         response.sendStatus(404);
     }
-    emigrationData.filter(obj => obj.id !== id);     // se descuadran los id ahora
+    emigrationData.splice(ind,1);     // se descuadran los id ahora
 });
 
 // index-PVS.js
