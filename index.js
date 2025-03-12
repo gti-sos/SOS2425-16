@@ -99,7 +99,7 @@ app.put(BASE_API+"/emigration-stats",(request,response)=>{ // método incorrecto
     response.sendStatus(405);
 });
 
-app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas
+app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas, dejarlo asi y cambiarlo el dia del feedback
     //let res= emigrationData.slice(); // la copio
     //res.length=0; // la vacio
     response.sendStatus(401); // porque no quiero que se borren todos los pueblos
@@ -126,11 +126,11 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
     let id= Number(request.query.id); // de la URL, hay que parsearlo aqui o despues porque sale como String de la URL
     let {id :bodyId, ...updatedData } = request.body; // del Body
 
-    const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
-    let invalidFields= Object.keys(request.body).filter(f => !allowedFields.includes(f))
-    if(invalidFields.length>0){
-        response.sendStatus(400);
-    }
+    // const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
+    // let invalidFields= Object.keys(request.body).filter(f => !allowedFields.includes(f))
+    // if(invalidFields.length>0){
+    //     response.sendStatus(400);
+    // }
 
     if(Number(bodyId) != id){ 
         response.sendStatus(400); // que debe aparecer el id en el body de la peticion, pero tambien asegurarme de que parazca en la peticion?
