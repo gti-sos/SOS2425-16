@@ -129,6 +129,7 @@ app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas,
         response.sendStatus(404);
     }
     emigrationData.splice(ind,1);     // se descuadran los id ahora
+    response.sendStatus(200);
 });
 
 // index-PVS.js
