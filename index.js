@@ -82,14 +82,12 @@ app.post(BASE_API+"/emigration-stats",(request,response)=>{
     if(invalidFields.length>0){ // si funca
         response.sendStatus(400);
     }
-
-    let lastId=emigrationData[emigrationData.length -1].id;
-    let newId=lastId+1;
-
     if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ // veo si ya existe por el nuevoId (mala idea, el id se autoincrementa), el some devuelve booleano, no funca
         response.sendStatus(409);
     }
 
+    let lastId=emigrationData[emigrationData.length -1].id;
+    let newId=lastId+1;
     newAutonomicCommunity= {id: newId, ...newAutonomicCommunity};
 
     emigrationData.push(newAutonomicCommunity);
