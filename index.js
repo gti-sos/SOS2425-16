@@ -76,9 +76,11 @@ app.post(BASE_API+"/emigration-stats",(request,response)=>{
     console.log("New POST to /emigration-stats");
     console.log(`<${request.body}>`); // <> para saber si esta vacio
     let newAutonomicCommunity=request.body;
-    
+
     let lastId=emigrationData[emigrationData.length -1].id;
-    newAutonomicCommunity.id= lastId+1;
+    let newId=lastId+1;
+
+    newAutonomicCommunity= {id: newId, ...newAutonomicCommunity};
 
     emigrationData.push(newAutonomicCommunity);
     response.sendStatus(201);
