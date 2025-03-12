@@ -75,17 +75,18 @@ app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
 app.post(BASE_API+"/emigration-stats",(request,response)=>{
     console.log("New POST to /emigration-stats");
     console.log(`<${request.body}>`); // <> para saber si esta vacio
+
     const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
     let newAutonomicCommunity=request.body;
     let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f))
-    if(invalidFields.length>0){
+    if(invalidFields.length>0){ // si funca
         response.sendStatus(400);
     }
 
     let lastId=emigrationData[emigrationData.length -1].id;
     let newId=lastId+1;
 
-    if(emigrationData.some(i => i.id === newId)){ // veo si ya existe por el nuevoId, el some devuelve booleano
+    if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ // veo si ya existe por el nuevoId (mala idea, el id se autoincrementa), el some devuelve booleano, no funca
         response.sendStatus(409);
     }
 
