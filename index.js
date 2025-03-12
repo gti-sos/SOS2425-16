@@ -96,7 +96,7 @@ app.get(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
     console.log("New GET to /emigration-stats/cataluna");
     let id= Number(request.query.id);
     if (id){
-        let res= emigrationData.filter(obj => obj.id === id);
+        let res= emigrationData.filter(obj => obj.id === id); // busca por id
         response.send(JSON.stringify(res,null,2));
     }
     let res= emigrationData.filter(obj => obj.autonomic_community === "cataluña");
@@ -111,7 +111,7 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
     let id= Number(request.query.id); // de la URL, hay que parsearlo aqui o despues porque sale como String de la URL
     let {id :bodyId, ...updatedData } = request.body; // del Body
     if(Number(bodyId) != id){ 
-        response.sendStatus(400);
+        response.sendStatus(400); // que debe aparecer el id en el body de la peticion, pero tambien asegurarme de que parazca en la peticion?
     }
     let ind=emigrationData.findIndex(i => i.id === id);
     if( ind === -1){
@@ -122,9 +122,13 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
 });
 
 app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
+    let id= Number(request.query.id);
     //let res= emigrationData.slice(); // la copio
-    //res.length=0; // la vacio
-    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+    let ind=emigrationData.findIndex(i => i.id === id);
+    if( ind === -1){
+        response.sendStatus(404);
+    }
+    emigrationData.filter(obj => obj.id !== id);     // se descuadran los id ahora
 });
 
 // index-PVS.js
