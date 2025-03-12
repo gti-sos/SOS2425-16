@@ -75,10 +75,19 @@ app.get(BASE_API+"/emigration-stats/loadInitialData",(request,response)=>{
 app.post(BASE_API+"/emigration-stats",(request,response)=>{
     console.log("New POST to /emigration-stats");
     console.log(`<${request.body}>`); // <> para saber si esta vacio
+    const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
     let newAutonomicCommunity=request.body;
+    let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f))
+    if(invalidFields.length>0){
+        response.sendStatus(400);
+    }
 
     let lastId=emigrationData[emigrationData.length -1].id;
     let newId=lastId+1;
+
+    if(emigrationData.some(i => i.id === newId)){ // veo si ya existe por el nuevoId, el some devuelve booleano
+        response.sendStatus(409);
+    }
 
     newAutonomicCommunity= {id: newId, ...newAutonomicCommunity};
 
@@ -116,6 +125,14 @@ app.post(BASE_API+"/emigration-stats/cataluna",(request,response)=>{
 app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, actualizo todas las de cataluña? o solo una en especifico (id ?)
     let id= Number(request.query.id); // de la URL, hay que parsearlo aqui o despues porque sale como String de la URL
     let {id :bodyId, ...updatedData } = request.body; // del Body
+
+    const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
+    let invalidFields= Object.keys(request.body).filter(f => !allowedFields.includes(f))
+    if(invalidFields.length>0){
+        response.sendStatus(400);
+    }
+
+
     if(Number(bodyId) != id){ 
         response.sendStatus(400); // que debe aparecer el id en el body de la peticion, pero tambien asegurarme de que parazca en la peticion?
     }
