@@ -132,7 +132,6 @@ app.put(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas, ac
         response.sendStatus(400);
     }
 
-
     if(Number(bodyId) != id){ 
         response.sendStatus(400); // que debe aparecer el id en el body de la peticion, pero tambien asegurarme de que parazca en la peticion?
     }
