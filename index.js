@@ -202,35 +202,35 @@ app.get("/samples/PVS",(request,response)=>{
 
 
 const initialData = [
-    { autonomic_community: "Andalucía", year: 2021, quarter: "Q1", atr_irpf: 3916659, atr_soc_no_consolidadas: 2826482, atr_iva: 24136288 },
-    { autonomic_community: "Aragón", year: 2021, quarter: "Q2", atr_irpf: 73006, atr_soc_no_consolidadas: 937242, atr_iva: 9372455 },
-    { autonomic_community: "Asturias, Principado de", year: 2021, quarter: "Q3", atr_irpf: 53477, atr_soc_no_consolidadas: 419513, atr_iva: 5104967 },
-    { autonomic_community: "Balears,Illes", year: 2021, quarter: "Q1", atr_irpf: 571182, atr_soc_no_consolidadas: 838753, atr_iva: 4119440 },
-    { autonomic_community: "Cantabria", year: 2021, quarter: "Q2", atr_irpf: 30049, atr_soc_no_consolidadas: 356759, atr_iva: 3382981 },
-    { autonomic_community: "Castilla y León", year: 2021, quarter: "Q3", atr_irpf: 1285544, atr_soc_no_consolidadas: 1001814, atr_iva: 10195560 },
-    { autonomic_community: "Castilla - La Mancha", year: 2021, quarter: "Q1", atr_irpf: 988287, atr_soc_no_consolidadas: 699208, atr_iva: 7078642 },
-    { autonomic_community: "Cataluña", year: 2021, quarter: "Q2", atr_irpf: 3880364, atr_soc_no_consolidadas: 6975928, atr_iva: 64849291 },
-    { autonomic_community: "Comunitat Valenciana", year: 2021, quarter: "Q1", atr_irpf: 2467168, atr_soc_no_consolidadas: 2833549, atr_iva: 26538375 },
-    { autonomic_community: "Extremadura", year: 2021, quarter: "Q1", atr_irpf: 509167, atr_soc_no_consolidadas: 259255, atr_iva: 2844182 },
-    { autonomic_community: "Galicia", year: 2021, quarter: "Q1", atr_irpf: 1378027, atr_soc_no_consolidadas: 1647520, atr_iva: 15803448 },
-    { autonomic_community: "Madrid, Comunidad de", year: 2021, quarter: "Q1", atr_irpf: 3572326, atr_soc_no_consolidadas: 15509272, atr_iva: 123096234 },
-    { autonomic_community: "Murcia, Región de", year: 2021, quarter: "Q2", atr_irpf: 694035, atr_soc_no_consolidadas: 749846, atr_iva: 7277119 },
-    { autonomic_community: "Rioja, La", year: 2021, quarter: "Q3", atr_irpf: 175378, atr_soc_no_consolidadas: 213559, atr_iva: 1523642 },
-    { autonomic_community: "Andalucía", year: 2020, quarter: "Q1", atr_irpf: 3797932, atr_soc_no_consolidadas: 2045255, atr_iva: 19655675 },
-    { autonomic_community: "Aragón", year: 2020, quarter: "Q1", atr_irpf: 725392, atr_soc_no_consolidadas: 823261, atr_iva: 8257375 },
-    { autonomic_community: "Asturias, Principado de", year: 2020, quarter: "Q1", atr_irpf: 525355, atr_soc_no_consolidadas: 287938, atr_iva: 3548610 },
-    { autonomic_community: "Cantabria", year: 2020, quarter: "Q2", atr_irpf: 294038, atr_soc_no_consolidadas: 172383, atr_iva: 2829442 },
-    { autonomic_community: "Castilla y León", year: 2020, quarter: "Q3", atr_irpf: 1278006, atr_soc_no_consolidadas: 760391, atr_iva: 8880282 },
-    { autonomic_community: "Castilla - La Mancha", year: 2020, quarter: "Q1", atr_irpf: 965897, atr_soc_no_consolidadas: 585027, atr_iva: 5786846 },
-    { autonomic_community: "Cataluña", year: 2020, quarter: "Q1", atr_irpf: 3839962, atr_soc_no_consolidadas: 6136336, atr_iva: 56706888 },
-    { autonomic_community: "Comunitat Valenciana", year: 2020, quarter: "Q2", atr_irpf: 2409920, atr_soc_no_consolidadas: 2251326, atr_iva: 22543255 },
-    { autonomic_community: "Extremadura", year: 2020, quarter: "Q3", atr_irpf: 497511, atr_soc_no_consolidadas: 225552, atr_iva: 2311629 },
-    { autonomic_community: "Galicia", year: 2020, quarter: "Q1", atr_irpf: 1358533, atr_soc_no_consolidadas: 1138038, atr_iva: 13110283 },
-    { autonomic_community: "Balears,Illes", year: 2020, quarter: "Q1", atr_irpf: 555447, atr_soc_no_consolidadas: 464026, atr_iva: 3534163 },
-    { autonomic_community: "Madrid, Comunidad de", year: 2020, quarter: "Q2", atr_irpf: 3522254, atr_soc_no_consolidadas: 12702500, atr_iva: 93863668 },
-    { autonomic_community: "Murcia, Región de", year: 2020, quarter: "Q3", atr_irpf: 672009, atr_soc_no_consolidadas: 649349, atr_iva: 93863668 },
-    { autonomic_community: "Rioja, La", year: 2020, quarter: "Q1", atr_irpf: 173428, atr_soc_no_consolidadas: 152021, atr_iva: 1353261 },
-    { autonomic_community: "Madrid, Comunidad de", year: 2019, quarter: "Q1", atr_irpf: 2323123, atr_soc_no_consolidadas: 9312321, atr_iva: 80221221 } 
+    { id: 1, autonomic_community: "Andalucía", year: 2021, quarter: "Q1", atr_irpf: 3916659, atr_soc_no_consolidadas: 2826482, atr_iva: 24136288 },
+    { id: 2, autonomic_community: "Aragón", year: 2021, quarter: "Q2", atr_irpf: 73006, atr_soc_no_consolidadas: 937242, atr_iva: 9372455 },
+    { id: 3, autonomic_community: "Asturias, Principado de", year: 2021, quarter: "Q3", atr_irpf: 53477, atr_soc_no_consolidadas: 419513, atr_iva: 5104967 },
+    { id: 4, autonomic_community: "Balears,Illes", year: 2021, quarter: "Q1", atr_irpf: 571182, atr_soc_no_consolidadas: 838753, atr_iva: 4119440 },
+    { id: 5, autonomic_community: "Cantabria", year: 2021, quarter: "Q2", atr_irpf: 30049, atr_soc_no_consolidadas: 356759, atr_iva: 3382981 },
+    { id: 6, autonomic_community: "Castilla y León", year: 2021, quarter: "Q3", atr_irpf: 1285544, atr_soc_no_consolidadas: 1001814, atr_iva: 10195560 },
+    { id: 7, autonomic_community: "Castilla - La Mancha", year: 2021, quarter: "Q1", atr_irpf: 988287, atr_soc_no_consolidadas: 699208, atr_iva: 7078642 },
+    { id: 8, autonomic_community: "Cataluña", year: 2021, quarter: "Q2", atr_irpf: 3880364, atr_soc_no_consolidadas: 6975928, atr_iva: 64849291 },
+    { id: 9, autonomic_community: "Comunitat Valenciana", year: 2021, quarter: "Q1", atr_irpf: 2467168, atr_soc_no_consolidadas: 2833549, atr_iva: 26538375 },
+    { id: 10, autonomic_community: "Extremadura", year: 2021, quarter: "Q1", atr_irpf: 509167, atr_soc_no_consolidadas: 259255, atr_iva: 2844182 },
+    { id: 11, autonomic_community: "Galicia", year: 2021, quarter: "Q1", atr_irpf: 1378027, atr_soc_no_consolidadas: 1647520, atr_iva: 15803448 },
+    { id: 12, autonomic_community: "Madrid, Comunidad de", year: 2021, quarter: "Q1", atr_irpf: 3572326, atr_soc_no_consolidadas: 15509272, atr_iva: 123096234 },
+    { id: 13, autonomic_community: "Murcia, Región de", year: 2021, quarter: "Q2", atr_irpf: 694035, atr_soc_no_consolidadas: 749846, atr_iva: 7277119 },
+    { id: 14, autonomic_community: "Rioja, La", year: 2021, quarter: "Q3", atr_irpf: 175378, atr_soc_no_consolidadas: 213559, atr_iva: 1523642 },
+    { id: 15, autonomic_community: "Andalucía", year: 2020, quarter: "Q1", atr_irpf: 3797932, atr_soc_no_consolidadas: 2045255, atr_iva: 19655675 },
+    { id: 16, autonomic_community: "Aragón", year: 2020, quarter: "Q1", atr_irpf: 725392, atr_soc_no_consolidadas: 823261, atr_iva: 8257375 },
+    { id: 17, autonomic_community: "Asturias, Principado de", year: 2020, quarter: "Q1", atr_irpf: 525355, atr_soc_no_consolidadas: 287938, atr_iva: 3548610 },
+    { id: 18, autonomic_community: "Cantabria", year: 2020, quarter: "Q2", atr_irpf: 294038, atr_soc_no_consolidadas: 172383, atr_iva: 2829442 },
+    { id: 19, autonomic_community: "Castilla y León", year: 2020, quarter: "Q3", atr_irpf: 1278006, atr_soc_no_consolidadas: 760391, atr_iva: 8880282 },
+    { id: 20, autonomic_community: "Castilla - La Mancha", year: 2020, quarter: "Q1", atr_irpf: 965897, atr_soc_no_consolidadas: 585027, atr_iva: 5786846 },
+    { id: 21, autonomic_community: "Cataluña", year: 2020, quarter: "Q1", atr_irpf: 3839962, atr_soc_no_consolidadas: 6136336, atr_iva: 56706888 },
+    { id: 22, autonomic_community: "Comunitat Valenciana", year: 2020, quarter: "Q2", atr_irpf: 2409920, atr_soc_no_consolidadas: 2251326, atr_iva: 22543255 },
+    { id: 23, autonomic_community: "Extremadura", year: 2020, quarter: "Q3", atr_irpf: 497511, atr_soc_no_consolidadas: 225552, atr_iva: 2311629 },
+    { id: 24, autonomic_community: "Galicia", year: 2020, quarter: "Q1", atr_irpf: 1358533, atr_soc_no_consolidadas: 1138038, atr_iva: 13110283 },
+    { id: 25, autonomic_community: "Balears,Illes", year: 2020, quarter: "Q1", atr_irpf: 555447, atr_soc_no_consolidadas: 464026, atr_iva: 3534163 },
+    { id: 26, autonomic_community: "Madrid, Comunidad de", year: 2020, quarter: "Q2", atr_irpf: 3522254, atr_soc_no_consolidadas: 12702500, atr_iva: 93863668 },
+    { id: 27, autonomic_community: "Murcia, Región de", year: 2020, quarter: "Q3", atr_irpf: 672009, atr_soc_no_consolidadas: 649349, atr_iva: 93863668 },
+    { id: 28, autonomic_community: "Rioja, La", year: 2020, quarter: "Q1", atr_irpf: 173428, atr_soc_no_consolidadas: 152021, atr_iva: 1353261 },
+    { id: 29, autonomic_community: "Madrid, Comunidad de", year: 2019, quarter: "Q1", atr_irpf: 2323123, atr_soc_no_consolidadas: 9312321, atr_iva: 80221221 } 
 ];
 
 const taxesData = new Array();
@@ -264,6 +264,11 @@ app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{
     if(!taxesData.length){
        taxesData.push(...initialData);
     }
-    response.send(taxesData)
+    response.send(taxesData);
 })
 
+// 14
+app.get(BASE_API + "/taxes-stats/", (request,response) =>{
+    let res = taxesData;
+    response.send(JSON.stringify(res, null, 2));
+});
