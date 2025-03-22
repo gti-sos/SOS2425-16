@@ -200,8 +200,8 @@ app.get("/samples/PVS",(request,response)=>{
 
 // index-IBL.js
 
-
-const initialData = [
+// Initial data for the array
+const initialTaxesData = [
     {autonomic_community: "Andalucía", year: 2021, quarter: "Q1", atr_irpf: 3916659, atr_soc_no_consolidadas: 2826482, atr_iva: 24136288 },
     {autonomic_community: "Aragón", year: 2021, quarter: "Q2", atr_irpf: 73006, atr_soc_no_consolidadas: 937242, atr_iva: 9372455 },
     {autonomic_community: "Asturias, Principado de", year: 2021, quarter: "Q3", atr_irpf: 53477, atr_soc_no_consolidadas: 419513, atr_iva: 5104967 },
@@ -233,10 +233,11 @@ const initialData = [
     {autonomic_community: "Madrid, Comunidad de", year: 2019, quarter: "Q1", atr_irpf: 2323123, atr_soc_no_consolidadas: 9312321, atr_iva: 80221221 } 
 ];
 
+// Array that will contain all data about taxes
 const taxesData = new Array();
 
-//Parametros en reduce:  .reduce(acc, currentValue, currentIndex, array)
-
+// Parameters in reduce:  .reduce(acc, currentValue, currentIndex, array)
+// Averages all the values of IVA in Madrid
 function averageRateIVAMadrid(arrayData) {
     let average = arrayData
         .filter((v) => {return (v.autonomic_community === "Madrid, Comunidad de")})
@@ -247,12 +248,14 @@ function averageRateIVAMadrid(arrayData) {
     return average;
 }
 
+// Sample get  operation for the averageRateIVAMadrid function
 app.get("/samples/IBL",(request,response)=>{
         response.send(averageRateIVAMadrid(taxesData).toString());
 });
 
 // 11
 
+// GET operation for all the data in taxesData
 app.get(BASE_API + "/taxes-stats", (request,response) =>{
     let res = taxesData;
     response.send(JSON.stringify(res, null, 2));
@@ -260,19 +263,23 @@ app.get(BASE_API + "/taxes-stats", (request,response) =>{
 
 // 13
 
+// GET operation that inits the data on taxesData from initialTaxesData
 app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{
     if(!taxesData.length){
-       taxesData.push(...initialData);
+       taxesData.push(...initialTaxesData);
     }
     response.send(taxesData);
 })
 
 // 14
+
+// GET operation for all communities
 app.get(BASE_API + "/taxes-stats/autonomic_community/", (request,response) =>{
     let res = taxesData.map(v => v.autonomic_community);
     response.send(JSON.stringify(res, null, 2));
 });
 
+// GET operation for a certain community
 app.get(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
     let paramName = request.params.name;
     let res = taxesData.filter(v => v.autonomic_community === paramName)
