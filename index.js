@@ -163,17 +163,18 @@ app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
     //let ind=emigrationData.findIndex(i => i.autonomic_community === paramName && i.year === paramYear && i.quarter===paramQuarter );
     if(invalidFields.length>0){
         response.sendStatus(400);
-    }else{
-        emigrationData.forEach(element => {
-            if((element.autonomic_community === paramName && parseInt(element.year) === parseInt(paramYear) && element.quarter === paramQuarter)){
-                element.between_20_24_yo = putBody.between_20_24_yo;
-                element.between_25_29_yo = putBody.between_25_29_yo;
-                element.between_30_34_yo = putBody.between_30_34_yo;
-                response.sendStatus(200);
-            }else{
-                response.sendStatus(400);
+    }else if (emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
+        response.sendStatus(404);
+    }
+    else{
+        emigrationData.forEach(v => {
+            if((v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter)){
+                v.between_20_24_yo = putBody.between_20_24_yo;
+                v.between_25_29_yo = putBody.between_25_29_yo;
+                v.between_30_34_yo = putBody.between_30_34_yo;
             }
         })
+        response.sendStatus(200);
 
     }
 
