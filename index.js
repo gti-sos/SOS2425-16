@@ -139,8 +139,8 @@ app.get(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
     let paramYear = request.params.year;
     let paramQuarter = request.params.quarter;
     console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-    let res = taxesData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-    if(request.length===0){
+    let res = emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
+    if(res.length===0){
         response.sendStatus(404);
     }
     response.send(JSON.stringify(res,null,2));
