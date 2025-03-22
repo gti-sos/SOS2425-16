@@ -103,7 +103,7 @@ app.post(BASE_API+"/emigration-stats",(request,response)=>{
         response.sendStatus(400);
     }
     //let emigrationDataWithoutId=emigrationData.map(({id, ...resto}) => resto );
-    else if(newAutonomicCommunity.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ // veo si ya existe por el nuevoId (mala idea, el id se autoincrementa), el some devuelve booleano, no funca
+    else if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ // veo si ya existe por el nuevoId (mala idea, el id se autoincrementa), el some devuelve booleano, no funca
         response.sendStatus(409); // copiar la primera haceiendo un slice sin el id o borrar el id
     }
     else{
