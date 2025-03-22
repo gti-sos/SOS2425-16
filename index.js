@@ -199,8 +199,8 @@ app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=
         response.sendStatus(404);
     }else{
         res.forEach((item) => emigrationData.splice(emigrationData.indexOf(item), 1));
-        response.sendStatus(200); // sacarlo si da fallos
     }
+    response.sendStatus(200);
 });
 
 // index-PVS.js
