@@ -282,10 +282,21 @@ app.get(BASE_API + "/taxes-stats/autonomic_community/", (request,response) =>{
 // GET operation for a certain community
 app.get(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
     let paramName = request.params.name;
-    let res = taxesData.filter(v => v.autonomic_community === paramName)
+    let res = taxesData.filter(v => v.autonomic_community === paramName);
     response.send(JSON.stringify(res, null, 2));
 
 });
 
+// DELETE operation for all communities
+app.delete(BASE_API + "/taxes-stats/autonomic_community/", (request, response) => {
+    taxesData.length = 0;
+})
 
+// DELETE operation for a certain community
+app.delete(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
+    let paramName = request.params.name;
+    taxesData.filter(v => v.autonomic_community === paramName)
+        .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
+    response.send(JSON.stringify(taxesData, null, 2));
+})
 
