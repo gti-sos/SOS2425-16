@@ -156,7 +156,8 @@ app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
     let paramName = request.params.name; // comprobar que es igual al del body, decido que es ese el identifiacador (parametro obligatorio en el body)
     let paramYear = request.params.year;
     let paramQuarter = request.params.quarter;
-    let {autonomic_community:bodyName, ...updatedData} = request.body;
+    let putBody= request.body;
+    //let {autonomic_community:bodyName, ...updatedData} = request.body;
     let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
     let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
     //let ind=emigrationData.findIndex(i => i.autonomic_community === paramName && i.year === paramYear && i.quarter===paramQuarter );
@@ -165,9 +166,9 @@ app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
     }else{
         emigrationData.forEach(element => {
             if((element.autonomic_community === paramName && parseInt(element.year) === parseInt(paramYear) && element.quarter === paramQuarter)){
-                element.between_20_24_yo = postBody.between_20_24_yo;
-                element.between_25_29_yo = postBody.between_25_29_yo;
-                element.between_30_34_yo = postBody.between_30_34_yo;
+                element.between_20_24_yo = putBody.between_20_24_yo;
+                element.between_25_29_yo = putBody.between_25_29_yo;
+                element.between_30_34_yo = putBody.between_30_34_yo;
                 response.sendStatus(200);
             }else{
                 response.sendStatus(400);
