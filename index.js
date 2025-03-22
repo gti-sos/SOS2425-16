@@ -159,16 +159,21 @@ app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
     let {autonomic_community:bodyName, ...updatedData} = request.body;
     let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
     let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
-    let ind=emigrationData.findIndex(i => i.autonomic_community === paramName && i.year === paramYear && i.quarter===paramQuarter );
+    //let ind=emigrationData.findIndex(i => i.autonomic_community === paramName && i.year === paramYear && i.quarter===paramQuarter );
     if(invalidFields.length>0){
         response.sendStatus(400);
-    }else if(paramName != bodyName){ // parametro identificativo OBLIGATORIO, el bodyName
-        response.sendStatus(400);
-    }else if(ind === -1){
-        response.sendStatus(404);
     }else{
-        emigrationData[ind] = {...emigrationData[ind], ...updatedData};
-        response.sendStatus(200);
+        emigrationData.forEach(element => {
+            if((element.autonomic_community === paramName && parseInt(element.year) === parseInt(paramYear) && element.quarter === paramQuarter)){
+                element.between_20_24_yo = postBody.between_20_24_yo;
+                element.between_25_29_yo = postBody.between_25_29_yo;
+                element.between_30_34_yo = postBody.between_30_34_yo;
+                response.sendStatus(200);
+            }else{
+                response.sendStatus(400);
+            }
+        })
+
     }
 
     // if(Number(bodyId) != id){ 
