@@ -268,7 +268,7 @@ app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{
 })
 
 // 14
-app.get(BASE_API + "/taxes-stats/", (request,response) =>{
-    let res = taxesData;
+app.get(BASE_API + "/taxes-stats/autonomic_community/", (request,response) =>{
+    let res = taxesData.map(v => v.autonomic_community);
     response.send(JSON.stringify(res, null, 2));
 });
