@@ -297,6 +297,7 @@ app.delete(BASE_API + "/taxes-stats/autonomic_community/:name", (request, respon
     let paramName = request.params.name;
     taxesData.filter(v => v.autonomic_community === paramName)
         .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
-    response.send(JSON.stringify(taxesData, null, 2));
 })
+
+// 
 
