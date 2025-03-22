@@ -60,7 +60,7 @@ app.get("/samples/GAM",(request,response)=>{
 //11.
 
 app.get(BASE_API+"/emigration-stats",(request,response)=>{
-    let res= initialEmigrationData;
+    let res= emigrationData;
     response.send(JSON.stringify(res,null,2));
 });
 
