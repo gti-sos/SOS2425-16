@@ -274,30 +274,104 @@ app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{
 // 14
 
 // GET operation for all communities
-app.get(BASE_API + "/taxes-stats/autonomic_community/", (request,response) =>{
+app.get(BASE_API + "/taxes-stats/", (request,response) =>{
     let res = taxesData.map(v => v.autonomic_community);
     response.send(JSON.stringify(res, null, 2));
 });
 
 // GET operation for a certain community
-app.get(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
+app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let paramName = request.params.name;
-    let res = taxesData.filter(v => v.autonomic_community === paramName);
+    let paramYear = request.params.year;
+    let paramQuarter = request.params.quarter;
+    let res = taxesData.filter(v => v.autonomic_community === paramName 
+        && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
     response.send(JSON.stringify(res, null, 2));
 
 });
 
-// DELETE operation for all communities
-app.delete(BASE_API + "/taxes-stats/autonomic_community/", (request, response) => {
+// GET operation for a certain community on a certain year
+// app.get(BASE_API + "/taxes-stats/:name?year=:yearNum", (request, response) => {
+//     let paramName = request.params.name;
+//     let paramYear = request.params.yearNum;
+//     let res = taxesData.filter(v => (v.autonomic_community === paramName) && (v.year == paramYear));
+//     response.send(JSON.stringify(res, null, 2));
+//
+// });
+
+// GET operation for a certain community on a certain year on a certain quarter
+// app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
+//     let paramName = request.params.name;
+//     let paramYear = request.params.year;
+//     let paramQuarter = request.params.quarter;
+//     let res = taxesData.filter(v => (v.autonomic_community === paramName) && (v.year === paramYear) && (v.quarter === paramQuarter));
+//     response.send(JSON.stringify(res, null, 2));
+//
+// });
+
+// DELETE operation for all
+app.delete(BASE_API + "/taxes-stats/", (request, response) => {
     taxesData.length = 0;
+    response.sendStatus(200);
 })
 
 // DELETE operation for a certain community
-app.delete(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
+app.delete(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let paramName = request.params.name;
-    taxesData.filter(v => v.autonomic_community === paramName)
+    let paramYear = request.params.year;
+    let paramQuarter = request.params.quarter;
+    taxesData.filter(v => v.autonomic_community === paramName && parseInt(v.year) === parseInt(paramYear) && v.quarter === paramQuarter)
         .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
+    response.sendStatus(200);
 })
 
-// 
+// POST operation for creating community data (name, year and quarter)
+app.post(BASE_API + "/taxes-stats", (request, response) => {
+    let postBody = request.body;
+    let allowedFields = ["autonomic_community", "year", "quarter", "atr_irpf", "atr_soc_no_consolidadas", "atr_iva"];
+    let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
+
+    if (invalidFields.length > 0){
+        response.sendStatus(400);
+    }
+    else if (taxesData.some(j => JSON.stringify(postBody) === JSON.stringify(j))) {
+        response.sendStatus(409);
+    }
+    else{
+        response.sendStatus(201);
+        taxesData.push(postBody);
+    }
+});
+
+app.put(BASE_API+"/taxes-stats",(request,response)=>{ // método incorrecto
+    response.sendStatus(405);
+});
+
+// PUT operation for updating data (name, year, quarter, irpf, iva and societies data)
+app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
+    let paramName = request.params.name;
+    let paramYear = request.params.year;
+    let paramQuarter = request.params.quarter;
+    let postBody = request.body;
+    let allowedFields = ["autonomic_community", "year", "quarter", "atr_irpf", "atr_soc_no_consolidadas", "atr_iva"];
+    let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
+
+    if (invalidFields.length > 0){
+        response.sendStatus(400);
+    }
+    else{
+        taxesData.forEach(element => {
+            if((element.autonomic_community === paramName && parseInt(element.year) === parseInt(paramYear) 
+                && element.quarter === paramQuarter)){
+                element.atr_irpf = postBody.atr_irpf;
+                element.atr_soc_no_consolidadas = postBody.atr_soc_no_consolidadas;
+                element.atr_iva = postBody.atr_iva;
+            }
+        
+        })
+        response.sendStatus(200);
+    }
+
+
+})
 
