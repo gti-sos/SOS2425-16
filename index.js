@@ -311,8 +311,9 @@ app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
 
 // DELETE operation for all
 app.delete(BASE_API + "/taxes-stats/", (request, response) => {
-    taxesData.length = 0;
-    response.sendStatus(200);
+    // taxesData.length = 0;
+    // response.sendStatus(200);
+    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
 })
 
 // DELETE operation for a certain community
@@ -358,6 +359,10 @@ app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
 
     if (invalidFields.length > 0){
         response.sendStatus(400);
+    }
+    else if(taxesData.filter(v => v.autonomic_community === paramName 
+        && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
+        response.sendStatus(404);
     }
     else{
         taxesData.forEach(element => {
