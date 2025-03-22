@@ -272,3 +272,13 @@ app.get(BASE_API + "/taxes-stats/autonomic_community/", (request,response) =>{
     let res = taxesData.map(v => v.autonomic_community);
     response.send(JSON.stringify(res, null, 2));
 });
+
+app.get(BASE_API + "/taxes-stats/autonomic_community/:name", (request, response) => {
+    let paramName = request.params.name;
+    let res = taxesData.filter(v => v.autonomic_community === paramName)
+    response.send(JSON.stringify(res, null, 2));
+
+});
+
+
+
