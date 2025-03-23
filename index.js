@@ -157,30 +157,30 @@ app.delete(BASE_API+"/emigration-stats/cataluna",(request,response)=>{ // dudas,
 // index-PVS.js
 
 const initialUnemploymentData = [
-    { id: 1, autonomic_community: "andalucia", year: 2021, quarter: "q1", unemployment_rate: 22.80, previous_quarter_var: 0.01, previous_year_quarter_var: 1.54 },
-    { id: 2, autonomic_community: "aragon", year: 2021, quarter: "q1", unemployment_rate: 12.4, previous_quarter_var: -0.13, previous_year_quarter_var: 1.72 },
-    { id: 3, autonomic_community: "extremadura", year: 2021, quarter: "q1", unemployment_rate: 23.3, previous_quarter_var: 2.01, previous_year_quarter_var: -0.26 },
-    { id: 4, autonomic_community: "galicia", year: 2021, quarter: "q1", unemployment_rate: 12.8, previous_quarter_var: 1.17, previous_year_quarter_var: 0.18 },
-    { id: 5, autonomic_community: "andalucia", year: 2021, quarter: "q2", unemployment_rate: 21.8, previous_quarter_var: -0.98, previous_year_quarter_var: 0.45 },
-    { id: 6, autonomic_community: "castilla-la-mancha", year: 2021, quarter: "q2", unemployment_rate: 16.7, previous_quarter_var: -0.84, previous_year_quarter_var: -0.17 },
-    { id: 7, autonomic_community: "catalunya", year: 2021, quarter: "q2", unemployment_rate: 12.4, previous_quarter_var: -0.65, previous_year_quarter_var: -0.34 },
-    { id: 8, autonomic_community: "canarias", year: 2021, quarter: "q3", unemployment_rate: 24.5, previous_quarter_var: -0.28, previous_year_quarter_var: -0.55 },
-    { id: 9, autonomic_community: "islas-baleares", year: 2021, quarter: "q3", unemployment_rate: 10.0, previous_quarter_var: -4.72, previous_year_quarter_var: -3.26 },
-    { id: 10, autonomic_community: "comunidad-de-madrid", year: 2021, quarter: "q4", unemployment_rate: 10.2, previous_quarter_var: -1.95, previous_year_quarter_var: -3.35 },
-    { id: 11, autonomic_community: "extremadura", year: 2020, quarter: "q1", unemployment_rate: 23.6, previous_quarter_var: 0.11, previous_year_quarter_var: 1.07 },
-    { id: 12, autonomic_community: "andalucia", year: 2020, quarter: "q1", unemployment_rate: 21.2, previous_quarter_var: 0.41, previous_year_quarter_var: 0.13 },
-    { id: 13, autonomic_community: "aragon", year: 2020, quarter: "q1", unemployment_rate: 10.6, previous_quarter_var: 0.71, previous_year_quarter_var: 0.14 },
-    { id: 14, autonomic_community: "asturias", year: 2020, quarter: "q1", unemployment_rate: 14.4, previous_quarter_var: 1.23, previous_year_quarter_var: -0.66 },
-    { id: 15, autonomic_community: "cantabria", year: 2020, quarter: "q1", unemployment_rate: 11.1, previous_quarter_var: -0.09, previous_year_quarter_var: -1.11 },
-    { id: 16, autonomic_community: "ceuta", year: 2020, quarter: "q1", unemployment_rate: 23.9, previous_quarter_var: -3.69, previous_year_quarter_var: 1.58 },
-    { id: 17, autonomic_community: "castilla-y-leon", year: 2020, quarter: "q2", unemployment_rate: 12.4, previous_quarter_var: 0.53, previous_year_quarter_var: 0.59 },
-    { id: 18, autonomic_community: "castilla-la-mancha", year: 2020, quarter: "q2", unemployment_rate: 16.8, previous_quarter_var: -1.27, previous_year_quarter_var: 0.42 },
-    { id: 19, autonomic_community: "canarias", year: 2020, quarter: "q2", unemployment_rate: 21.6, previous_quarter_var: 2.76, previous_year_quarter_var: 0.55 },
-    { id: 20, autonomic_community: "catalunya", year: 2020, quarter: "q2", unemployment_rate: 12.8, previous_quarter_var: 2.12, previous_year_quarter_var: 1.61 },
-    { id: 21, autonomic_community: "andalucia", year: 2020, quarter: "q3", unemployment_rate: 23.8, previous_quarter_var: 2.48, previous_year_quarter_var: 1.97 },
-    { id: 22, autonomic_community: "comunidad-de-madrid", year: 2020, quarter: "q3", unemployment_rate: 13.3, previous_quarter_var: 0.64, previous_year_quarter_var: 2.99 },
-    { id: 23, autonomic_community: "canarias", year: 2020, quarter: "q4", unemployment_rate: 25.2, previous_quarter_var: 0.18, previous_year_quarter_var: 6.44 },
-    { id: 24, autonomic_community: "islas-baleares", year: 2020, quarter: "q4", unemployment_rate: 17.3, previous_quarter_var: 4.06, previous_year_quarter_var: 7.43 }
+    { autonomic_community: "andalucia", year: 2021, quarter: "q1", unemployment_rate: 22.80, previous_quarter_var: 0.01, previous_year_quarter_var: 1.54 },
+    { autonomic_community: "aragon", year: 2021, quarter: "q1", unemployment_rate: 12.4, previous_quarter_var: -0.13, previous_year_quarter_var: 1.72 },
+    { autonomic_community: "extremadura", year: 2021, quarter: "q1", unemployment_rate: 23.3, previous_quarter_var: 2.01, previous_year_quarter_var: -0.26 },
+    { autonomic_community: "galicia", year: 2021, quarter: "q1", unemployment_rate: 12.8, previous_quarter_var: 1.17, previous_year_quarter_var: 0.18 },
+    { autonomic_community: "andalucia", year: 2021, quarter: "q2", unemployment_rate: 21.8, previous_quarter_var: -0.98, previous_year_quarter_var: 0.45 },
+    { autonomic_community: "castilla-la-mancha", year: 2021, quarter: "q2", unemployment_rate: 16.7, previous_quarter_var: -0.84, previous_year_quarter_var: -0.17 },
+    { autonomic_community: "catalunya", year: 2021, quarter: "q2", unemployment_rate: 12.4, previous_quarter_var: -0.65, previous_year_quarter_var: -0.34 },
+    { autonomic_community: "canarias", year: 2021, quarter: "q3", unemployment_rate: 24.5, previous_quarter_var: -0.28, previous_year_quarter_var: -0.55 },
+    { autonomic_community: "islas-baleares", year: 2021, quarter: "q3", unemployment_rate: 10.0, previous_quarter_var: -4.72, previous_year_quarter_var: -3.26 },
+    { autonomic_community: "comunidad-de-madrid", year: 2021, quarter: "q4", unemployment_rate: 10.2, previous_quarter_var: -1.95, previous_year_quarter_var: -3.35 },
+    { autonomic_community: "extremadura", year: 2020, quarter: "q1", unemployment_rate: 23.6, previous_quarter_var: 0.11, previous_year_quarter_var: 1.07 },
+    { autonomic_community: "andalucia", year: 2020, quarter: "q1", unemployment_rate: 21.2, previous_quarter_var: 0.41, previous_year_quarter_var: 0.13 },
+    { autonomic_community: "aragon", year: 2020, quarter: "q1", unemployment_rate: 10.6, previous_quarter_var: 0.71, previous_year_quarter_var: 0.14 },
+    { autonomic_community: "asturias", year: 2020, quarter: "q1", unemployment_rate: 14.4, previous_quarter_var: 1.23, previous_year_quarter_var: -0.66 },
+    { autonomic_community: "cantabria", year: 2020, quarter: "q1", unemployment_rate: 11.1, previous_quarter_var: -0.09, previous_year_quarter_var: -1.11 },
+    { autonomic_community: "ceuta", year: 2020, quarter: "q1", unemployment_rate: 23.9, previous_quarter_var: -3.69, previous_year_quarter_var: 1.58 },
+    { autonomic_community: "castilla-y-leon", year: 2020, quarter: "q2", unemployment_rate: 12.4, previous_quarter_var: 0.53, previous_year_quarter_var: 0.59 },
+    { autonomic_community: "castilla-la-mancha", year: 2020, quarter: "q2", unemployment_rate: 16.8, previous_quarter_var: -1.27, previous_year_quarter_var: 0.42 },
+    { autonomic_community: "canarias", year: 2020, quarter: "q2", unemployment_rate: 21.6, previous_quarter_var: 2.76, previous_year_quarter_var: 0.55 },
+    { autonomic_community: "catalunya", year: 2020, quarter: "q2", unemployment_rate: 12.8, previous_quarter_var: 2.12, previous_year_quarter_var: 1.61 },
+    { autonomic_community: "andalucia", year: 2020, quarter: "q3", unemployment_rate: 23.8, previous_quarter_var: 2.48, previous_year_quarter_var: 1.97 },
+    { autonomic_community: "comunidad-de-madrid", year: 2020, quarter: "q3", unemployment_rate: 13.3, previous_quarter_var: 0.64, previous_year_quarter_var: 2.99 },
+    { autonomic_community: "canarias", year: 2020, quarter: "q4", unemployment_rate: 25.2, previous_quarter_var: 0.18, previous_year_quarter_var: 6.44 },
+    { autonomic_community: "islas-baleares", year: 2020, quarter: "q4", unemployment_rate: 17.3, previous_quarter_var: 4.06, previous_year_quarter_var: 7.43 }
 ];
 
 //Parametros en reduce:  .reduce(acc, currentValue, currentIndex, array)
@@ -207,89 +207,138 @@ app.get(BASE_API+"/unemployment-stats",(request,response)=>{
     response.send(JSON.stringify(res,null,2));
 });
 
-app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{  //loadInitialData corregido
+app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{  //loadInitialData corregido
     if(!unemploymentData.length){
         unemploymentData.push(...initialUnemploymentData);
     }
     response.send(unemploymentData);
 })
 
-app.get(BASE_API+"/unemployment-stats/andalucia",(request,response)=>{
-    console.log("New GET to /unemployment-stats/andalucia");
-    let id= Number(request.query.id);
-    if (id){
-        let res= unemploymentData.filter(obj => obj.id === id); //printeamos el dato a partir del id de la url
-        response.send(JSON.stringify(res,null,2));
-    } // si no se especifica en la url, printeamos solo por comunidad autonoma=andalucia -->Obtenemos todo de andalucia
-    let res= unemploymentData.filter(obj => obj.autonomic_community === "andalucia"); 
-    response.send(JSON.stringify(res,null,2));
+app.get(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response) => { //****BIEN HECHO  ******/
+
+    let paramCCAA = request.params.ccaa;
+    let paramYear = parseInt(request.params.year); // Convertir a número
+    let paramQuarter = request.params.quarter;
+
+    console.log(`New GET to /unemployment-stats/${paramCCAA}/${paramYear}/${paramQuarter}`);
+
+    let res = unemploymentData.filter(v => 
+        v.autonomic_community === paramCCAA && 
+        parseInt(v.year) === paramYear && 
+        v.quarter === paramQuarter
+    );
+
+    if (res.length === 0) {
+        return response.sendStatus(404); // Devuelve 404 si no se encontraron datos
+    }
+
+    response.send(JSON.stringify(res, null, 2));
 });
 
-app.post(BASE_API+"/unemployment-stats",(request,response)=>{
+
+app.post(BASE_API+"/unemployment-stats", (request, response) => { //****BIEN HECHO  ******/
     console.log("New POST to /unemployment-stats");
-    console.log(`<${request.body}>`); // <> para saber si esta vacio
 
-    const allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
-    let newAutonomicCommunity=request.body;
-    let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f))
-    if(invalidFields.length>0){ // si hay campos que no existen:
-        response.sendStatus(400);
+    if (!request.body || Object.keys(request.body).length === 0) {
+        return response.sendStatus(400); // Bad Request si el body está vacío
     }
-    let unemploymentDataWithoutId=unemploymentData.map(({id, ...resto}) => resto ); //Pillamos los datos sin los ids
-    if (unemploymentDataWithoutId.some(i => 
+
+    let allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
+    let newAutonomicCommunity = request.body;
+
+    // Validación de campos permitidos
+    let invalidFields = Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
+    if (invalidFields.length > 0) {
+        return response.sendStatus(400); // Bad Request si hay campos no permitidos
+    }
+
+    // Verificar si ya existe un registro con los mismos valores clave
+    let exists = unemploymentData.some(i => 
         i.autonomic_community === newAutonomicCommunity.autonomic_community &&
-        i.year === newAutonomicCommunity.year &&
-        i.quarter === newAutonomicCommunity.quarter)) { // Duda en el comentario de Gonzalo (aqui no se usa el id)
-        response.sendStatus(409);
+        parseInt(i.year) === parseInt(newAutonomicCommunity.year) &&
+        i.quarter === newAutonomicCommunity.quarter
+    );
+
+    if (exists) {
+        return response.sendStatus(409); // Conflicto si el registro ya existe
     }
 
-    let lastId=unemploymentData[unemploymentData.length -1].id; //pillamos el ultimo id de data
-    let newId=lastId+1; //autoincrementamos para asignarlo al nuevo elemento
-    newAutonomicCommunity= {id: newId, ...newAutonomicCommunity};
-
-    unemploymentData.push(newAutonomicCommunity); //Finalmente lo añadimos a nuestro array
-    response.sendStatus(201);
+    // Agregar el nuevo dato
+    unemploymentData.push(newAutonomicCommunity);
+    response.sendStatus(201); // Created
 });
 
-app.put(BASE_API+"/unemployment-stats/andalucia",(request,response)=>{ //Acualizamos solo por id
-    //let id= Number(request.query.id); // de la URL, lo parseamos porque es un string
-    if (!request.query.id) {
-        return response.sendStatus(400); // Bad Request
-    }
-    let id = Number(request.query.id); //Con esto nos aseguramos de controlar el fallo si no nos pasan el id***********
-    if (isNaN(id)) {
-        return response.sendStatus(400);
-    }
-    let {id :bodyId, ...updatedData } = request.body; // obtenemos todo del request.body
-
-    if(Number(bodyId) != id){ //Se compara el id recibido en la URL con el id enviado en el cuerpo de la solicitud
-        response.sendStatus(400); // Si son distintos, sacamos el error: bad request
-    }
-    let ind = unemploymentData.findIndex(i => i.id === id && i.autonomic_community === "andalucia");
-     //Sacamos ese mismo id de nuestro array asegurandonos que es de andalucia
-    if( ind === -1){ //Si ese id no esta en nuestro array, devuelve -1
-        response.sendStatus(404); // Si no esta, devolvemos: Not Found
-    }
-    unemploymentData[ind] = {...unemploymentData[ind], ...updatedData}; //Actualizamos en dicho id finalmente
-    response.sendStatus(200); // OK
+app.post(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter",(request,response)=>{
+    response.sendStatus(405);
 });
 
-app.delete(BASE_API+"/unemployment-stats",(request,response)=>{ 
-    response.sendStatus(401); // Al intentar eliminarlo todo, le avisamos que no tiene permisos.
+app.put(BASE_API+"/unemployment-stats",(request,response)=>{ // método incorrecto
+    response.sendStatus(405);
 });
 
-app.delete(BASE_API+"/unemployment-stats/andalucia",(request,response)=>{ // dudas, borro todas las de andalucia? o solo una en especifico (id ?)
-    let id= Number(request.query.id);
-    //Pillamos el id del url y hacemos que deje de ser un string
-    let ind = unemploymentData.findIndex(i => i.id === id && i.autonomic_community === "andalucia");
-    if( ind === -1){
-        response.sendStatus(404); //Si no lo encuentra, not found
-    }
-    unemploymentData.splice(ind,1);
-    unemploymentData = unemploymentData.map((item, index) => ({ ...item, id: index + 1 })); //Con esto ya no se descuadran los id
+app.put(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response) => { //****BIEN HECHO  ******/
+    let paramCCAA = request.params.ccaa;
+    let paramYear = request.params.year;
+    let paramQuarter = request.params.quarter;
+    let { autonomic_community: bodyName, ...updatedData } = request.body;
 
+    let allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
+    let invalidFields = Object.keys(request.body).filter(f => !allowedFields.includes(f));
+
+    if (invalidFields.length > 0) {
+        return response.sendStatus(400); // Devolver aquí para evitar múltiples respuestas
+    }
+
+    let record = unemploymentData.find(element => 
+        element.autonomic_community === paramCCAA &&
+        parseInt(element.year) === parseInt(paramYear) &&
+        element.quarter === paramQuarter
+    );
+
+    if (!record) {
+        return response.sendStatus(404); // 404 si no se encuentra el registro
+    }
+
+    // Actualizar los valores
+    Object.assign(record, updatedData);
     response.sendStatus(200);
 });
+
+
+app.delete(BASE_API+"/unemployment-stats",(request,response)=>{  //****BIEN HECHO  ******/
+    //response.sendStatus(401); // Al intentar eliminarlo todo, le avisamos que no tiene permisos.
+    response.sendStatus(405);
+});
+
+app.delete(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response) => { //****BIEN HECHO  ******/
+
+    let paramCCAA = request.params.ccaa;
+    let paramYear = parseInt(request.params.year); // Convertir a número
+    let paramQuarter = request.params.quarter;
+
+    console.log(`New DELETE to /unemployment-stats/${paramCCAA}/${paramYear}/${paramQuarter}`);
+
+    // Filtrar los datos a eliminar
+    let res = unemploymentData.filter(v => 
+        v.autonomic_community === paramCCAA && 
+        parseInt(v.year) === paramYear && 
+        v.quarter === paramQuarter
+    );
+
+    if (res.length === 0) {
+        return response.sendStatus(404); // Devuelve 404 si no se encontraron datos
+    }
+
+    // Filtrar unemploymentData para eliminar las coincidencias
+    unemploymentData.filter(v => v.autonomic_community === paramCCAA && parseInt(v.year) === parseInt(paramYear) && 
+        v.quarter === paramQuarter)
+        .forEach((item) => unemploymentData.splice(unemploymentData.indexOf(item), 1));
+
+    response.sendStatus(200); // Eliminación exitosa
+});
+
+
+
 
 // index-IBL.js
 
