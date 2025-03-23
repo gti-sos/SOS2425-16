@@ -538,6 +538,13 @@ app.post(BASE_API + "/taxes-stats", (request, response) => {
     }
 });
 
+
+// POST operation cannot be sent to /taxes-stats/:name/:year/:quarter
+app.post(BASE_API+"/taxes-stats/:name/:year/:quarter",(request,response)=>{ // método incorrecto
+    response.sendStatus(405);
+});
+
+// PUT operation cannot be sent to /taxes-stats
 app.put(BASE_API+"/taxes-stats",(request,response)=>{ // método incorrecto
     response.sendStatus(405);
 });
