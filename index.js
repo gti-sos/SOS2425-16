@@ -193,7 +193,7 @@ app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=
     let paramYear = request.params.year;
     let paramQuarter = request.params.quarter;
     console.log(`New DELETE to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-    let res = emigrationData.filter(v => (v.autonomic_community === paramName) && (v.year === paramYear) && (v.quarter === paramQuarter));
+    let res = emigrationData.filter(v => v.autonomic_community === paramName && v.year === paramYear && v.quarter === paramQuarter);
     if(request.length===0){
         response.sendStatus(404);
     }else{
