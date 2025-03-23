@@ -503,9 +503,8 @@ app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
 
 // DELETE operation for all
 app.delete(BASE_API + "/taxes-stats/", (request, response) => {
-    // taxesData.length = 0;
-    // response.sendStatus(200);
-    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+    taxesData.length = 0;
+    response.sendStatus(200);
 })
 
 // DELETE operation for a certain community
