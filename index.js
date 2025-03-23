@@ -124,6 +124,7 @@ app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas, dejarlo 
     let res= emigrationData.slice(); // la copio
     res.length=0; // la vacio
     //response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+    response.send(200);
 });
 
 //16.a.2
