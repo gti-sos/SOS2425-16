@@ -70,7 +70,7 @@ app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
     if(!emigrationData.length){
         emigrationData.push(...initialEmigrationData);
     }
-    response.send(emigrationData);
+    response.send(initialEmigrationData);
 })
 
 
@@ -123,7 +123,7 @@ app.put(BASE_API+"/emigration-stats",(request,response)=>{ // método incorrecto
 app.delete(BASE_API+"/emigration-stats",(request,response)=>{ // dudas, dejarlo asi y cambiarlo el dia del feedback
     let res= emigrationData.slice(); // la copio
     res.length=0; // la vacio
-    response.sendStatus(401); // porque no quiero que se borren todos los pueblos
+    //response.sendStatus(401); // porque no quiero que se borren todos los pueblos
 });
 
 //16.a.2
