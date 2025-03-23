@@ -476,7 +476,12 @@ app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let paramQuarter = request.params.quarter;
     let res = taxesData.filter(v => v.autonomic_community === paramName 
         && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-    response.send(JSON.stringify(res, null, 2));
+    if(!res.length){
+        response.sendStatus(404);
+    }
+    else{
+        response.send(JSON.stringify(res, null, 2));
+    }
 
 });
 
