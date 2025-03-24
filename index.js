@@ -162,7 +162,11 @@ app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
     //let ind=emigrationData.findIndex(i => i.autonomic_community === paramName && i.year === paramYear && i.quarter===paramQuarter );
     if(invalidFields.length>0){
         response.sendStatus(400);
-    }else if (emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
+    }
+    else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
+        response.sendStatus(400);
+    }
+    else if (emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
         response.sendStatus(404);
     }
     else{
@@ -565,10 +569,10 @@ app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
 
 
-    if(!(postBody.autonomic_community === paramName && parseInt(postBody.year) === parseInt(paramYear) && parseInt(postBody.quarter) === parseInt(paramQuarter))){
+    if (invalidFields.length > 0){
         response.sendStatus(400);
     }
-    else if (invalidFields.length > 0){
+    else if(!((postBody.autonomic_community === paramName) && (parseInt(postBody.year) === parseInt(paramYear)) && (postBody.quarter === paramQuarter))){
         response.sendStatus(400);
     }
     else if(taxesData.filter(v => v.autonomic_community === paramName 
@@ -590,4 +594,3 @@ app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
 
 
 })
-
