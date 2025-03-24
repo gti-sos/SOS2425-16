@@ -565,10 +565,10 @@ app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
 
 
-    if(!(postBody.autonomic_community === paramName && parseInt(postBody.year) === parseInt(paramYear) && parseInt(postBody.quarter) === parseInt(paramQuarter))){
+    if (invalidFields.length > 0){
         response.sendStatus(400);
     }
-    else if (invalidFields.length > 0){
+    else if(!((postBody.autonomic_community === paramName) && (parseInt(postBody.year) === parseInt(paramYear)) && (postBody.quarter === paramQuarter))){
         response.sendStatus(400);
     }
     else if(taxesData.filter(v => v.autonomic_community === paramName 
