@@ -356,10 +356,10 @@ app.put(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response)
 });
 
 
-app.delete(BASE_API+"/unemployment-stats",(request,response)=>{  //****BIEN HECHO  ******/
-    //response.sendStatus(401); // Al intentar eliminarlo todo, le avisamos que no tiene permisos.
-    response.sendStatus(405);
-});
+app.delete(BASE_API + "/unemployment-stats/", (request, response) => {
+    unemploymentData.length = 0;
+    response.sendStatus(200);
+})
 
 app.delete(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response) => { //****BIEN HECHO  ******/
 
