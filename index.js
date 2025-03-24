@@ -338,6 +338,9 @@ app.put(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response)
 
     if (invalidFields.length > 0) {
         return response.sendStatus(400); // Devolver aquí para evitar múltiples respuestas
+    } else if (!(request.body.autonomic_community === paramName && parseInt(request.body.year) === parseInt(paramYear) && 
+                parseInt(request.body.quarter) === parseInt(paramQuarter))) {
+                response.sendStatus(400);
     }
 
     let record = unemploymentData.find(element => 
@@ -561,7 +564,11 @@ app.put(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
     let allowedFields = ["autonomic_community", "year", "quarter", "atr_irpf", "atr_soc_no_consolidadas", "atr_iva"];
     let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
 
-    if (invalidFields.length > 0){
+
+    if(!(postBody.autonomic_community === paramName && parseInt(postBody.year) === parseInt(paramYear) && parseInt(postBody.quarter) === parseInt(paramQuarter))){
+        response.sendStatus(400);
+    }
+    else if (invalidFields.length > 0){
         response.sendStatus(400);
     }
     else if(taxesData.filter(v => v.autonomic_community === paramName 
