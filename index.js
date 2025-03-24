@@ -332,15 +332,14 @@ app.put(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response)
     let paramYear = request.params.year;
     let paramQuarter = request.params.quarter;
     let { autonomic_community: bodyName, ...updatedData } = request.body;
-    let body = request.body;
 
     let allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
     let invalidFields = Object.keys(request.body).filter(f => !allowedFields.includes(f));
 
     if (invalidFields.length > 0) {
         return response.sendStatus(400); // Devolver aquí para evitar múltiples respuestas
-    } else if (!(body.autonomic_community === paramName && parseInt(body.year) === parseInt(paramYear) && 
-                parseInt(body.quarter) === parseInt(paramQuarter))) {
+    } else if (!(request.body.autonomic_community === paramName && parseInt(request.body.year) === parseInt(paramYear) && 
+                parseInt(request.body.quarter) === parseInt(paramQuarter))) {
                 response.sendStatus(400);
     }
 
