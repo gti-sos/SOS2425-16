@@ -83,21 +83,25 @@ function loadBackendGAM(app){
 
     
     
-    // //16.a.1 método inutil de momento
-    // app.get(BASE_API+"/emigration-stats/:name",(request,response)=>{
-    //     let paramName = request.params.name;
-    //     console.log(`New GET to /emigration-stats/${paramName}`);
-    //     //let id= Number(request.query.id);
-    //     /*if (id){
-    //         let res= emigrationData.filter(obj => obj.id === id); // busca por id
-    //         response.send(JSON.stringify(res,null,2));
-    //     }*/
-    //     let res= emigrationData.filter(obj => obj.autonomic_community === paramName);
-    //     if(res.length === 0){
-    //         response.sendStatus(404);
-    //     }
-    //     response.send(JSON.stringify(res,null,2));
-    // });
+    // busqueda por nombre rollo query ?
+     app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        let paramName = request.params.name;
+        let paramYear = request.params.year;
+        let paramQuarter = request.params.quarter;
+        console.log(`New GET to /emigration-stats/${paramName}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+            response.sendStatus(404);
+        }
+        db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+                if(err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{ 
+                response.send(JSON.stringify(emigrationData,null,2));
+                }
+            });
+        });
         
     app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
         console.log("New POST to /emigration-stats");
@@ -109,12 +113,19 @@ function loadBackendGAM(app){
         if(invalidFields.length>0){
             response.sendStatus(400);
         }
-        else if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){
+        else if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ //se lo pasa por los huevos
             response.sendStatus(409);
         }
         else{
-            response.sendStatus(201);
-            db.insert(newAutonomicCommunity);
+            db.insert(newAutonomicCommunity,(err,newDoc)=>{
+                if (err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{
+                    response.sendStatus(201);
+                }
+            });
         }
     });
     
@@ -129,7 +140,7 @@ function loadBackendGAM(app){
                 console.error(`ERROR: ${err}`);
             }
         });
-        response.send(200);
+        response.sendStatus(200);
     });
     
     //Métodos para un recurso en específico
@@ -140,18 +151,19 @@ function loadBackendGAM(app){
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+            response.sendStatus(404);
+        }
         db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
             else{ 
-                if(!emigrationData){
-                    response.sendStatus(404);
-                }
-                else{
-                    response.send(JSON.stringify(emigrationData,null,2));
-                }
+                // if(!emigrationData){
+                //     response.sendStatus(404); // a veces no lo encuentra por la carisima,sacar afuera
+                // }
+                response.send(JSON.stringify(emigrationData,null,2));
             }
         });
         // let res = emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
