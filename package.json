@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-api-local": "npx newman run tests/back/api-tests.json -e tests/back/api-env-local.json",
+    "test-api-online": "npx newman run tests/back/api-tests.json -e tests/back/api-env-online.json",
+    "test-local": "start-server-and-test start http://localhost:16078 test-api-local",
+    "test": "npm run test-local"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,7 @@
   "homepage": "https://github.com/gti-sos/SOS2425-16#readme",
   "dependencies": {
     "cool-ascii-faces": "^1.3.4",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "nedb": "^1.8.0"
   }
 }
