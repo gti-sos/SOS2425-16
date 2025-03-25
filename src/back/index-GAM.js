@@ -1,3 +1,9 @@
+import dataStore from "nedb";
+
+const BASE_API= "/api/v1";
+
+let db = new dataStore();
+
 const initialEmigrationData = [
     {autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
     { autonomic_community: "andalucia", year: 2020, quarter: "q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
@@ -12,6 +18,8 @@ const initialEmigrationData = [
     { autonomic_community: "cataluña", year: 2019, quarter: "q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 },
     { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
+
+const emigrationData=new Array();
 
 let array_between_30_34_yo_cat= initialEmigrationData.slice(-3).map(obj=>
     obj.between_30_34_yo
@@ -29,7 +37,235 @@ function average(){
     return acc/array_between_30_34_yo_cat.length;
 }
 
-console.log(average());
+function loadBackendGAM(app){
+    
+    app.get("/samples/GAM",(request,response)=>{
+        let res= average();
+        response.send(res.toString());
+    });
+
+
+    //13.
+
+    db.find({},(err,emigrationData)=>{ // esto es una puta mierda, si lo saco fuera si funciona (explicacion?)
+        if (err){
+            response.status(500).send("Error code 01 (please contact admin)");                
+            console.error(`ERROR: ${err}`);
+        }
+        else if(emigrationData.length < 1){
+            db.insert(initialEmigrationData);
+        }
+    });
+    
+    app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
+        if(!emigrationData.length){
+            emigrationData.push(...initialEmigrationData);
+         }
+        response.send(emigrationData);
+    });
+    
+    //11.
+    
+    app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        db.find({},(err,emigrationData)=>{
+            if (err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }else{
+                response.send(JSON.stringify(emigrationData.map((c)=>{
+                    delete c._id;
+                    return c;
+                }),null,2));
+            }
+        });
+    });
+    
+
+    
+    
+    // busqueda por nombre rollo query ?
+     app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        let paramName = request.params.name;
+        let paramYear = request.params.year;
+        let paramQuarter = request.params.quarter;
+        console.log(`New GET to /emigration-stats/${paramName}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+            response.sendStatus(404);
+        }
+        db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+                if(err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{ 
+                response.send(JSON.stringify(emigrationData,null,2));
+                }
+            });
+        });
+        
+    app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
+        console.log("New POST to /emigration-stats");
+        console.log(`<${request.body}>`); // <> para saber si esta vacio
+    
+        const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
+        let newAutonomicCommunity=request.body;
+        let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f))
+        if(invalidFields.length>0){
+            response.sendStatus(400);
+        }
+        else if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ //se lo pasa por los huevos
+            response.sendStatus(409);
+        }
+        else{
+            db.insert(newAutonomicCommunity,(err,newDoc)=>{
+                if (err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{
+                    response.sendStatus(201);
+                }
+            });
+        }
+    });
+    
+    app.put(BASE_API+"/emigration-stats",(request,response)=>{ 
+        response.sendStatus(405);
+    });
+    
+    app.delete(BASE_API+"/emigration-stats",(request,response)=>{ 
+        db.remove({},{multi: true},function(err,numRemoved){
+            if (err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+        });
+        response.sendStatus(200);
+    });
+    
+    //Métodos para un recurso en específico
+
+    
+    app.get(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+        let paramName = request.params.name;
+        let paramYear = request.params.year;
+        let paramQuarter = request.params.quarter;
+        console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+            response.sendStatus(404);
+        }
+        db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+            if(err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else{ 
+                // if(!emigrationData){
+                //     response.sendStatus(404); // a veces no lo encuentra por la carisima,sacar afuera
+                // }
+                response.send(JSON.stringify(emigrationData,null,2));
+            }
+        });
+        // let res = emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
+        // if(res.length===0){
+        //     response.sendStatus(404);
+        // }
+        // response.send(JSON.stringify(res,null,2));
+    });
+    
+    app.post(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+        response.sendStatus(405);
+    });
+    
+    app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+        let paramName = request.params.name;
+        let paramYear = request.params.year;
+        let paramQuarter = request.params.quarter;
+        let putBody= request.body;
+        let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
+        let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
+
+        if(invalidFields.length>0){ // este error no se lanza, se aborta el despliegue del tiron (al menos en local)
+            response.sendStatus(400);
+        }
+        else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
+            response.sendStatus(400); 
+        }
+
+        db.update({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{$set: putBody},{},(err,numReplaced)=>{
+            if(err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else{
+                if((numReplaced === 0)){
+                    response.sendStatus(404);
+                }
+                else{
+                    response.sendStatus(200);
+                }
+            } 
+
+        });
+
+        // if(invalidFields.length>0){
+        //     response.sendStatus(400);
+        // }
+        // else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
+        //     response.sendStatus(400);
+        // }
+        // else if (emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
+        //     response.sendStatus(404);
+        // }
+        // else{
+        //     emigrationData.forEach(v => {
+        //         if((v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter)){
+        //             v.between_20_24_yo = putBody.between_20_24_yo;
+        //             v.between_25_29_yo = putBody.between_25_29_yo;
+        //             v.between_30_34_yo = putBody.between_30_34_yo;
+        //         }
+        //     })
+        //     response.sendStatus(200);
+    
+        // }
+    });
+    
+    app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
+        let paramName = request.params.name;
+        let paramYear = request.params.year;
+        let paramQuarter = request.params.quarter;
+        console.log(`New DELETE to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
+        db.delete({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{
+            if(err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else{
+                if((numRemoved === 0)){
+                    response.sendStatus(404);
+                }
+                else{
+                    response.sendStatus(200);
+                }
+            } 
+
+        })
+    
+        // if(request.length===0){
+        //     response.sendStatus(404);
+        // } else{
+        //     console.log(res)
+        //     res.forEach((item) => emigrationData.splice(emigrationData.indexOf(item), 1));
+        // }
+        //response.sendStatus(200);
+    });
+}
+
+export {loadBackendGAM}
+
+
+
+
 
 
 
