@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test-api-local": "npx newman run tests/back/api-tests.json -e tests/back/api-env-local.json",
-    "test-api-online": "npx newman run tests/back/api-tests.json -e tests/back/api-env-online.json",
-    "test-local": "start-server-and-test start http://localhost:16078 test-api-local",
-    "test": "npm run test-local"
+    "test-api-local-GAM": "npx newman run tests/back/api-tests-GAM.json -e tests/back/api-env-local.json",
+    "test-api-online-GAM": "npx newman run tests/back/api-tests-GAM.json -e tests/back/api-env-online.json",
+    "test-local-GAM": "start-server-and-test start http://localhost:16078 test-api-local-GAM",
+    "test-GAM": "npm run test-local-GAM"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,8 @@
     "cool-ascii-faces": "^1.3.4",
     "express": "^4.21.2",
     "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "start-server-and-test": "^2.0.11"
   }
 }

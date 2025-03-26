@@ -344,6 +344,10 @@ function loadBackendGAM(app){
         // }
         //response.sendStatus(200);
     });
+
+    app.get(BASE_API+"/docs",(request,response)=>{
+        response.redirect("https://documenter.getpostman.com/view/359472/2sAYkGLezF");
+    });
 }
 
 export {loadBackendGAM}
