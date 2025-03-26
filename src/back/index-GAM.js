@@ -64,35 +64,42 @@ function loadBackendGAM(app){
         response.send(emigrationData);
     });
     
+
+    //BÚSQUEDAS:
+
+
+    // solo se puede tener una activa a la vez, misma url no se puede diferenciar (?)
+
     //11.
-    
+
+    /*
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        db.find({},(err,emigrationData)=>{
-            if (err){
-                response.status(500).send("Error code 01 (please contact admin)");                
-                console.error(`ERROR: ${err}`);
-            }else{
-                response.send(JSON.stringify(emigrationData.map((c)=>{
-                    delete c._id;
-                    return c;
-                }),null,2));
-            }
-        });
+            db.find({},(err,emigrationData)=>{
+                if (err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }else{
+                    response.send(JSON.stringify(emigrationData.map((c)=>{
+                        delete c._id;
+                        return c;
+                    }),null,2));
+                }
+            });
     });
-    
+    */
 
     
-    
-    // busqueda por nombre rollo query ?
+    /*
+    // busqueda por nombre rollo query de un objeto en concreto ? solo se puede hacer esta o la de arriba, las dos a la vez no
      app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        let paramName = request.params.name;
-        let paramYear = request.params.year;
-        let paramQuarter = request.params.quarter;
+        let paramName= request.query.autonomic_community;
+        let paramYear= request.query.year;
+        let paramQuarter= request.query.quarter;
         console.log(`New GET to /emigration-stats/${paramName}`);
-        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+        if(emigrationData.filter(v => v.autonomic_community === paramName && Number(v.year)===Number(paramYear) && v.quarter === paramQuarter).length===0){
             response.sendStatus(404);
         }
-        db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+        db.findOne({autonomic_community: paramName, year: Number(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
                 if(err){
                     response.status(500).send("Error code 01 (please contact admin)");                
                     console.error(`ERROR: ${err}`);
@@ -102,6 +109,84 @@ function loadBackendGAM(app){
                 }
             });
         });
+    */
+
+    /*
+    // busqueda por nombre rollo query de una comunidad en un año
+      app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        let paramName= request.query.autonomic_community;
+        let paramYear= request.query.year;
+        console.log(`New GET to /emigration-stats/${paramName}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName && Number(v.year)===Number(paramYear)).length===0){
+            response.sendStatus(404);
+        }
+        db.find({autonomic_community: paramName, year: Number(paramYear)},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+                if(err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{ 
+                response.send(JSON.stringify(emigrationData,null,2));
+                }
+            });
+        });
+    */
+   /*
+    // busqueda por nombre rollo query de una comunidad
+      app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        let paramName= request.query.autonomic_community;
+        console.log(`New GET to /emigration-stats/${paramName}`);
+        if(emigrationData.filter(v => v.autonomic_community === paramName).length===0){
+            response.sendStatus(404);
+        }
+        db.find({autonomic_community: paramName},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+                if(err){
+                    response.status(500).send("Error code 01 (please contact admin)");                
+                    console.error(`ERROR: ${err}`);
+                }
+                else{ 
+                response.send(JSON.stringify(emigrationData,null,2));
+                }
+            });
+        });
+    */
+
+    //PAGINACIÓN (sobre todos los objetos):
+
+    app.get(BASE_API+"/emigration-stats",(request,response)=>{
+        let limit= request.query.limit;
+        let offset=request.query.offset;
+        limit= parseInt(limit) || 5; // valor por defecto 5
+        offset= parseInt(offset) || 0; //valor por defecto 0
+
+        db.count({}, (err, total) => {
+            if(err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else{
+                db.find({}, { _id: 0 }).skip(offset).limit(limit).exec((err, docs) => {
+                    if(err){
+                        response.status(500).send("Error code 01 (please contact admin)");                
+                        console.error(`ERROR: ${err}`);
+                    }
+                    else{
+                        response.json({
+                            offset,
+                            limit,
+                            total,
+                            hasMore: offset + limit < total, // Indica si hay más datos
+                            data: docs
+                        });
+                    }
+                });
+            }
+        });
+    });
+    
+
+
+    
         
     app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
         console.log("New POST to /emigration-stats");
