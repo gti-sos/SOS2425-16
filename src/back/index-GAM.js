@@ -72,7 +72,7 @@ function loadBackendGAM(app){
 
     //11.
 
-    /*
+    
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
             db.find({},(err,emigrationData)=>{
                 if (err){
@@ -86,7 +86,7 @@ function loadBackendGAM(app){
                 }
             });
     });
-    */
+    
 
     
     /*
@@ -151,6 +151,7 @@ function loadBackendGAM(app){
         });
     */
 
+    /*
     //PAGINACIÓN (sobre todos los objetos):
 
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
@@ -184,7 +185,7 @@ function loadBackendGAM(app){
         });
     });
     
-
+    */
 
     
         
@@ -345,8 +346,8 @@ function loadBackendGAM(app){
         //response.sendStatus(200);
     });
 
-    app.get(BASE_API+"/docs",(request,response)=>{
-        response.redirect("https://documenter.getpostman.com/view/359472/2sAYkGLezF");
+    app.get(BASE_API+"/emigration-stats/docs",(request,response)=>{
+        response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 }
 
