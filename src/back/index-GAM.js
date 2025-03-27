@@ -21,6 +21,7 @@ const initialEmigrationData = [
 
 const emigrationData=new Array();
 
+/*
 let array_between_30_34_yo_cat= initialEmigrationData.slice(-3).map(obj=>
     obj.between_30_34_yo
 );
@@ -36,18 +37,19 @@ function average(){
 
     return acc/array_between_30_34_yo_cat.length;
 }
-
+*/
 function loadBackendGAM(app){
     
+    /*
     app.get("/samples/GAM",(request,response)=>{
         let res= average();
         response.send(res.toString());
     });
-
+    */
 
     //13.
 
-    db.find({},(err,emigrationData)=>{ // esto es una puta mierda, si lo saco fuera si funciona (explicacion?)
+    db.find({},(err,emigrationData)=>{ 
         if (err){
             response.status(500).send("Error code 01 (please contact admin)");                
             console.error(`ERROR: ${err}`);
@@ -56,12 +58,12 @@ function loadBackendGAM(app){
             db.insert(initialEmigrationData);
         }
     });
-    
+
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
         if(!emigrationData.length){
             emigrationData.push(...initialEmigrationData);
          }
-        response.send(emigrationData);
+         response.send(emigrationData);
     });
     
 
@@ -74,17 +76,17 @@ function loadBackendGAM(app){
 
     
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
-            db.find({},(err,emigrationData)=>{
-                if (err){
-                    response.status(500).send("Error code 01 (please contact admin)");                
-                    console.error(`ERROR: ${err}`);
-                }else{
-                    response.send(JSON.stringify(emigrationData.map((c)=>{
-                        delete c._id;
-                        return c;
-                    }),null,2));
-                }
-            });
+        db.find({},(err,emigrationData)=>{
+            if (err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }else{
+                response.send(JSON.stringify(emigrationData.map((c)=>{
+                    delete c._id;
+                    return c;
+                }),null,2));
+            }
+        });
     });
     
 
@@ -195,24 +197,38 @@ function loadBackendGAM(app){
     
         const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
         let newAutonomicCommunity=request.body;
-        let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f))
-        if(invalidFields.length>0){
+        console.log(newAutonomicCommunity);
+        let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
+        if(invalidFields.length>0){ // aqui si entra
             response.sendStatus(400);
         }
-        else if(emigrationData.some(i => JSON.stringify(i) === JSON.stringify(newAutonomicCommunity))){ //se lo pasa por los huevos
-            response.sendStatus(409);
+
+        db.findOne({
+            autonomic_community: newAutonomicCommunity.autonomic_community,
+            year: parseInt(newAutonomicCommunity.year),
+            quarter: newAutonomicCommunity.quarter
+        },
+        (err,existingResource)=>{
+            if (err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else if (existingResource){
+                response.sendStatus(409);
+            }
+            else{
+                db.insert(newAutonomicCommunity,(err,newDoc)=>{
+                    if (err){
+                        response.status(500).send("Error code 01 (please contact admin)");                
+                        console.error(`ERROR: ${err}`);
+                    }
+                    else{
+                        response.sendStatus(201);
+                    }
+                });
+            }
         }
-        else{
-            db.insert(newAutonomicCommunity,(err,newDoc)=>{
-                if (err){
-                    response.status(500).send("Error code 01 (please contact admin)");                
-                    console.error(`ERROR: ${err}`);
-                }
-                else{
-                    response.sendStatus(201);
-                }
-            });
-        }
+        );        
     });
     
     app.put(BASE_API+"/emigration-stats",(request,response)=>{ 
@@ -237,13 +253,19 @@ function loadBackendGAM(app){
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        if(emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length===0){
+        let recurso=emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
+        if(recurso.length===0 || !recurso){
             response.sendStatus(404);
         }
         db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+            }
+
+            
+            else if (!emigrationData){ // se caga encima
+                response.sendStatus(404);
             }
             else{ 
                 // if(!emigrationData){
@@ -321,7 +343,7 @@ function loadBackendGAM(app){
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New DELETE to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        db.delete({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{
+        db.remove({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{ // cuando solo borra un objeto devuelve null
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
