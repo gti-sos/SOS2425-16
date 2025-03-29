@@ -19,7 +19,7 @@ const initialEmigrationData = [
     { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
-const emigrationData=new Array();
+//const emigrationData=new Array();
 
 /*
 let array_between_30_34_yo_cat= initialEmigrationData.slice(-3).map(obj=>
@@ -49,21 +49,18 @@ function loadBackendGAM(app){
 
     //13.
 
-    db.find({},(err,emigrationData)=>{ 
-        if (err){
-            response.status(500).send("Error code 01 (please contact admin)");                
-            console.error(`ERROR: ${err}`);
-        }
-        else if(emigrationData.length < 1){
-            db.insert(initialEmigrationData);
-        }
-    });
+
 
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
-        if(!emigrationData.length){
-            emigrationData.push(...initialEmigrationData);
-         }
-         response.send(emigrationData);
+        db.find({},(err,emigrationData)=>{ 
+            if (err){
+                response.status(500).send("Error code 01 (please contact admin)");                
+                console.error(`ERROR: ${err}`);
+            }
+            else if(emigrationData.length < 1){
+                db.insert(initialEmigrationData);
+            }
+        });
     });
     
 
