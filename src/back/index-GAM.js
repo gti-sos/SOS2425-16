@@ -52,13 +52,27 @@ function loadBackendGAM(app){
 
 
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
-        db.find({},(err,emigrationData)=>{ 
+
+        db.count({},(err,cont)=>{ 
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
-            else if(emigrationData.length < 1){
-                db.insert(initialEmigrationData);
+            else if(cont >0){
+                response.sendStatus(409);
+            }
+            else{
+                db.insert(initialEmigrationData, (err,emigrationData)=>{
+                    if (err){
+                        response.status(500).send("Error code 01 (please contact admin)");                
+                        console.error(`ERROR: ${err}`);
+                    }else{
+                        response.send(JSON.stringify(emigrationData.map((c)=>{
+                            delete c._id;
+                            return c;
+                        }),null,2));
+                    }
+                });
             }
         });
     });
@@ -250,17 +264,15 @@ function loadBackendGAM(app){
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        let recurso=emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-        if(recurso.length===0 || !recurso){
-            response.sendStatus(404);
-        }
+        //let recurso=emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter); // hay que ver como meterlo dentro
+        //if(recurso.length===0 || !recurso){
+        //    response.sendStatus(404);
+        //}
         db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
-
-            
             else if (!emigrationData){ // se caga encima
                 response.sendStatus(404);
             }
