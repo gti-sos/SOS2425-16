@@ -338,8 +338,8 @@ app.put(BASE_API+"/unemployment-stats/:ccaa/:year/:quarter", (request, response)
 
     if (invalidFields.length > 0) {
         return response.sendStatus(400); // Devolver aquí para evitar múltiples respuestas
-    } else if (!(request.body.autonomic_community === paramName && parseInt(request.body.year) === parseInt(paramYear) && 
-                parseInt(request.body.quarter) === parseInt(paramQuarter))) {
+    } else if (!(request.body.autonomic_community === paramCCAA && parseInt(request.body.year) === parseInt(paramYear) && 
+                request.body.quarter === paramQuarter)) {
                 response.sendStatus(400);
     }
 
