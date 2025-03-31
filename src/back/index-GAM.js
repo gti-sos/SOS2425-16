@@ -57,9 +57,11 @@ function loadBackendGAM(app){
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }
             else if(cont >0){
                 response.sendStatus(409);
+                return;
             }
             else{
                 db.insert(initialEmigrationData, (err,emigrationData)=>{
@@ -91,6 +93,7 @@ function loadBackendGAM(app){
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }else{
                 response.send(JSON.stringify(emigrationData.map((c)=>{
                     delete c._id;
@@ -212,8 +215,8 @@ function loadBackendGAM(app){
         let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
         if(invalidFields.length>0){ // aqui si entra
             response.sendStatus(400);
+            return;
         }
-
         db.findOne({
             autonomic_community: newAutonomicCommunity.autonomic_community,
             year: parseInt(newAutonomicCommunity.year),
@@ -223,15 +226,18 @@ function loadBackendGAM(app){
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }
             else if (existingResource){
                 response.sendStatus(409);
+                return;
             }
             else{
                 db.insert(newAutonomicCommunity,(err,newDoc)=>{
                     if (err){
                         response.status(500).send("Error code 01 (please contact admin)");                
                         console.error(`ERROR: ${err}`);
+                        return;
                     }
                     else{
                         response.sendStatus(201);
@@ -251,9 +257,12 @@ function loadBackendGAM(app){
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
+            }else{
+                response.sendStatus(200);
+    
             }
         });
-        response.sendStatus(200);
     });
     
     //Métodos para un recurso en específico
@@ -272,9 +281,11 @@ function loadBackendGAM(app){
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }
             else if (!emigrationData){ // se caga encima
                 response.sendStatus(404);
+                return;
             }
             else{ 
                 // if(!emigrationData){
@@ -304,22 +315,27 @@ function loadBackendGAM(app){
 
         if(invalidFields.length>0){ // este error no se lanza, se aborta el despliegue del tiron (al menos en local)
             response.sendStatus(400);
+            return;
         }
         else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
-            response.sendStatus(400); 
+            response.sendStatus(400);
+            return; 
         }
 
         db.update({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{$set: putBody},{},(err,numReplaced)=>{
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }
             else{
                 if((numReplaced === 0)){
                     response.sendStatus(404);
+                    return;
                 }
                 else{
                     response.sendStatus(200);
+                    return;
                 }
             } 
 
@@ -356,13 +372,16 @@ function loadBackendGAM(app){
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
+                return;
             }
             else{
                 if((numRemoved === 0)){
                     response.sendStatus(404);
+                    return;
                 }
                 else{
                     response.sendStatus(200);
+                    return;
                 }
             } 
 
