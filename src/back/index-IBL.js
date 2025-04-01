@@ -89,25 +89,24 @@ function loadBackendIBL(app){
 
     // 14
 
-    // GET operation for all communities
-    app.get(BASE_API + "/taxes-stats/", (request,response) =>{
-        let res = taxesData.map(v => v.autonomic_community);
-        response.send(JSON.stringify(res, null, 2));
-    });
-
     // GET operation for a certain community
     app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
-        let res = taxesData.filter(v => v.autonomic_community === paramName 
-            && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-        if(!res.length){
-            response.sendStatus(404);
-        }
-        else{
-            response.send(JSON.stringify(res, null, 2));
-        }
+        db.find({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter}, function(err, docs){
+            if(!docs.length){
+                response.sendStatus(404);
+            }
+            else{
+                response.send(JSON.stringify(docs.map((c)=>{
+                    delete c._id;
+                    return c;
+                }),null,2));
+            }
+        });
+        // let res = taxesData.filter(v => v.autonomic_community === paramName 
+        //     && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
 
     });
 
@@ -132,8 +131,9 @@ function loadBackendIBL(app){
 
     // DELETE operation for all
     app.delete(BASE_API + "/taxes-stats/", (request, response) => {
-        taxesData.length = 0;
-        response.sendStatus(200);
+        db.remove({}, { multi: true }, function (err, numRemoved) {
+            response.sendStatus(200);
+        });     
     })
 
     // DELETE operation for a certain community
@@ -141,9 +141,21 @@ function loadBackendIBL(app){
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
-        taxesData.filter(v => v.autonomic_community === paramName && parseInt(v.year) === parseInt(paramYear) && v.quarter === paramQuarter)
-            .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
-        response.sendStatus(200);
+        db.remove({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter}, function(err, numRemoved){
+            if(err){
+                response.sendStatus(500);
+            }
+            else{
+                if(numRemoved === 0){
+                    response.sendStatus(404);
+                }
+                else{
+                    response.sendStatus(200);
+                }
+            }
+        });
+        // taxesData.filter(v => v.autonomic_community === paramName && parseInt(v.year) === parseInt(paramYear) && v.quarter === paramQuarter)
+        //     .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
     })
 
     // POST operation for creating community data (name, year and quarter)
