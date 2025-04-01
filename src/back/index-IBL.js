@@ -110,25 +110,6 @@ function loadBackendIBL(app){
 
     });
 
-    // GET operation for a certain community on a certain year
-    // app.get(BASE_API + "/taxes-stats/:name?year=:yearNum", (request, response) => {
-    //     let paramName = request.params.name;
-    //     let paramYear = request.params.yearNum;
-    //     let res = taxesData.filter(v => (v.autonomic_community === paramName) && (v.year == paramYear));
-    //     response.send(JSON.stringify(res, null, 2));
-    //
-    // });
-
-    // GET operation for a certain community on a certain year on a certain quarter
-    // app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
-    //     let paramName = request.params.name;
-    //     let paramYear = request.params.year;
-    //     let paramQuarter = request.params.quarter;
-    //     let res = taxesData.filter(v => (v.autonomic_community === paramName) && (v.year === paramYear) && (v.quarter === paramQuarter));
-    //     response.send(JSON.stringify(res, null, 2));
-    //
-    // });
-
     // DELETE operation for all
     app.delete(BASE_API + "/taxes-stats/", (request, response) => {
         db.remove({}, { multi: true }, function (err, numRemoved) {
@@ -167,15 +148,17 @@ function loadBackendIBL(app){
         if (invalidFields.length > 0){
             response.sendStatus(400);
         }
-        else if (taxesData.some(j => JSON.stringify(postBody) === JSON.stringify(j))) {
-            response.sendStatus(409);
-        }
-        else{
-            response.sendStatus(201);
-            taxesData.push(postBody);
-        }
+        db.find({ autonomic_community: postBody.autonomic_community, year: parseInt(postBody.year),
+            quarter: postBody.quarter}, function(err, docs){
+                if(docs.length > 0){
+                    response.sendStatus(409);
+                }
+                else{
+                    db.insert(postBody);
+                    response.sendStatus(201);
+                }
+        });
     });
-
 
     // POST operation cannot be sent to /taxes-stats/:name/:year/:quarter
     app.post(BASE_API+"/taxes-stats/:name/:year/:quarter",(request,response)=>{ // método incorrecto
@@ -196,31 +179,31 @@ function loadBackendIBL(app){
         let allowedFields = ["autonomic_community", "year", "quarter", "atr_irpf", "atr_soc_no_consolidadas", "atr_iva"];
         let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
 
-
         if (invalidFields.length > 0){
             response.sendStatus(400);
         }
         else if(!((postBody.autonomic_community === paramName) && (parseInt(postBody.year) === parseInt(paramYear)) && (postBody.quarter === paramQuarter))){
             response.sendStatus(400);
         }
-        else if(taxesData.filter(v => v.autonomic_community === paramName 
-            && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
-            response.sendStatus(404);
-        }
         else{
-            taxesData.forEach(element => {
-                if((element.autonomic_community === paramName && parseInt(element.year) === parseInt(paramYear) 
-                    && element.quarter === paramQuarter)){
-                    element.atr_irpf = postBody.atr_irpf;
-                    element.atr_soc_no_consolidadas = postBody.atr_soc_no_consolidadas;
-                    element.atr_iva = postBody.atr_iva;
+            db.find({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter}, function(err, docs){
+                if(docs.length === 0){
+                    response.sendStatus(404);
+                } 
+                else{
+                    db.update({ _id: docs[0]._id}, { $set: {atr_irpf: parseInt(postBody.atr_irpf), 
+                        atr_soc_no_consolidadas: parseInt(postBody.atr_soc_no_consolidadas), 
+                        atr_iva: parseInt(postBody.atr_iva)}}, {}, function(err, numReplaced){
+                            if(err){
+                                response.sendStatus(500);
+                            }
+                            else{
+                                response.sendStatus(200);
+                            }
+                    });
                 }
-            
             })
-            response.sendStatus(200);
         }
-
-
     })
 }
 
