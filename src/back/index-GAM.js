@@ -4,6 +4,8 @@ const BASE_API= "/api/v1";
 
 let db = new dataStore();
 
+// Initial data extracted form the propuse sheet
+
 const initialEmigrationData = [
     {autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
     { autonomic_community: "andalucia", year: 2020, quarter: "q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
@@ -38,6 +40,9 @@ function average(){
     return acc/array_between_30_34_yo_cat.length;
 }
 */
+
+// Function that contains all of the HTTP requests.
+
 function loadBackendGAM(app){
     
     /*
@@ -50,6 +55,7 @@ function loadBackendGAM(app){
     //13.
 
 
+    // GET request that inserts to the database the initial data. If there's any data previously charged into the base there will be a conflict. 
 
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
 
@@ -80,14 +86,15 @@ function loadBackendGAM(app){
     });
     
 
-    //BÚSQUEDAS:
+    //Searches:
 
 
     // solo se puede tener una activa a la vez, misma url no se puede diferenciar (?)
 
     //11.
 
-    
+    // GET request that retrieves from de DB the current data loaded.
+
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
         db.find({},(err,emigrationData)=>{
             if (err){
@@ -104,9 +111,12 @@ function loadBackendGAM(app){
     });
     
 
-    
+    // Query request searches:
     /*
     // busqueda por nombre rollo query de un objeto en concreto ? solo se puede hacer esta o la de arriba, las dos a la vez no
+
+     // GET request that retrieves from de DB a certain item that matches with the three query parameters.
+
      app.get(BASE_API+"/emigration-stats",(request,response)=>{
         let paramName= request.query.autonomic_community;
         let paramYear= request.query.year;
@@ -129,6 +139,9 @@ function loadBackendGAM(app){
 
     /*
     // busqueda por nombre rollo query de una comunidad en un año
+
+     // GET request that retrieves from de DB the items (or once) that matches with the two query parameters.
+
       app.get(BASE_API+"/emigration-stats",(request,response)=>{
         let paramName= request.query.autonomic_community;
         let paramYear= request.query.year;
@@ -149,6 +162,9 @@ function loadBackendGAM(app){
     */
    /*
     // busqueda por nombre rollo query de una comunidad
+
+     // GET request that retrieves from de DB the items (or once) that matches with the query parameter.
+
       app.get(BASE_API+"/emigration-stats",(request,response)=>{
         let paramName= request.query.autonomic_community;
         console.log(`New GET to /emigration-stats/${paramName}`);
@@ -169,6 +185,10 @@ function loadBackendGAM(app){
 
     /*
     //PAGINACIÓN (sobre todos los objetos):
+
+    // Pagination request:
+
+    // GET request that retrieves from de DB the items for its positions from 0 to the limit parameter.
 
     app.get(BASE_API+"/emigration-stats",(request,response)=>{
         let limit= request.query.limit;
@@ -204,7 +224,8 @@ function loadBackendGAM(app){
     */
 
     
-        
+    // POST request that inserts one item to the DB.
+
     app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
         console.log("New POST to /emigration-stats");
         console.log(`<${request.body}>`); // <> para saber si esta vacio
@@ -247,11 +268,15 @@ function loadBackendGAM(app){
         }
         );        
     });
+
+    // PUT request that is not allowed.
     
     app.put(BASE_API+"/emigration-stats",(request,response)=>{ 
         response.sendStatus(405);
     });
     
+    //DELETE request that removes every item from the DB.
+
     app.delete(BASE_API+"/emigration-stats",(request,response)=>{ 
         db.remove({},{multi: true},function(err,numRemoved){
             if (err){
@@ -267,6 +292,9 @@ function loadBackendGAM(app){
     
     //Métodos para un recurso en específico
 
+    //Methods for a specific resource:
+
+    // GET request that retrieves from de DB the item which parameters are the indacated in the request.
     
     app.get(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
         let paramName = request.params.name;
@@ -300,11 +328,16 @@ function loadBackendGAM(app){
         // }
         // response.send(JSON.stringify(res,null,2));
     });
+
+    // POST request that is not allowed.
     
     app.post(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
         response.sendStatus(405);
     });
     
+
+    // PUT request that updates from de DB the item which parameters are the indacated in the request.
+
     app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
         let paramName = request.params.name;
         let paramYear = request.params.year;
@@ -363,6 +396,9 @@ function loadBackendGAM(app){
         // }
     });
     
+    // DELETE request that removes from de DB the item which parameters are the indacated in the request.
+
+
     app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
         let paramName = request.params.name;
         let paramYear = request.params.year;
@@ -395,6 +431,8 @@ function loadBackendGAM(app){
         // }
         //response.sendStatus(200);
     });
+
+    // GET request that navigates to my personal POSTMAN collection documentation.
 
     app.get(BASE_API+"/emigration-stats/docs",(request,response)=>{
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
