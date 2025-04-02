@@ -94,16 +94,23 @@ function loadBackendIBL(app){
         let paramQuarter = request.query.quarter;
         let paramOffset = request.query.offset;
         let paramLimit = request.query.limit;
-        let query = { autonomic_community: paramName};
 
+        let query = { autonomic_community: paramName};
+        let paramFields = request.query.fields
+    
         if(paramYear){
             query.year = paramYear;
         }
         if(paramQuarter){
             query.quarter = paramQuarter;
         }
+        if(paramFields){
+            paramFields = paramFields.split(',');
+        }
+
         paramOffset? parseInt(paramOffset): 0;
         paramLimit? parseInt(paramLimit): -1;
+
         // db.find(query, function(err, docs){
         //     if(!docs.length){
         //         response.sendStatus(404);
@@ -118,11 +125,16 @@ function loadBackendIBL(app){
 
         db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
             if(!docs.length){
-                response.sendStatus(400);
+                response.sendStatus(404);
             }
             else{
                 response.send(JSON.stringify(docs.map((c) => {
                     delete c._id;
+                    Object.keys(c).forEach(field => {
+                        if (!paramFields.includes(field)) {
+                            delete c[field];
+                        }
+                    });
                     return c;
                 }), null, 2));
             }
