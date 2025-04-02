@@ -87,7 +87,32 @@ function loadBackendIBL(app){
         });
     })
 
-    // 14
+    // GET operation for a certain community and querying for year or/and quarter
+    app.get(BASE_API + "/taxes-stats/:name", (request, response) => {
+        let paramName = request.params.name;
+        let paramYear = request.query.year;
+        let paramQuarter = request.query.quarter;
+        let query = { autonomic_community: paramName};
+
+        if(paramYear){
+            query.year = parseInt(paramYear);
+        }
+        if(paramQuarter){
+            query.quarter = paramQuarter;
+        }
+
+        db.find(query, function(err, docs){
+            if(!docs.length){
+                response.sendStatus(404);
+            }
+            else{
+                response.send(JSON.stringify(docs.map((c)=>{
+                    delete c._id;
+                    return c;
+                }),null,2));
+            }
+        });
+    });
 
     // GET operation for a certain community
     app.get(BASE_API + "/taxes-stats/:name/:year/:quarter", (request, response) => {
@@ -105,10 +130,9 @@ function loadBackendIBL(app){
                 }),null,2));
             }
         });
-        // let res = taxesData.filter(v => v.autonomic_community === paramName 
-        //     && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-
     });
+
+
 
     // DELETE operation for all
     app.delete(BASE_API + "/taxes-stats/", (request, response) => {
