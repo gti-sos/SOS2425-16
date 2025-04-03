@@ -149,15 +149,17 @@ function loadBackendIBL(app){
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
-        db.find({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter}, function(err, docs){
-            if(!docs.length){
+        db.findOne({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter}, function(err, docs){
+            if(!docs){
                 response.sendStatus(404);
             }
             else{
-                response.send(JSON.stringify(docs.map((c)=>{
-                    delete c._id;
-                    return c;
-                }),null,2));
+                delete docs._id;
+                response.send(JSON.stringify(docs, null, 2))
+                // response.send(JSON.stringify(docs.map((c)=>{
+                //     delete c._id;
+                //     return c;
+                // }),null,2));
             }
         });
     });
