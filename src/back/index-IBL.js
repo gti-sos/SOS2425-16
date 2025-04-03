@@ -61,15 +61,15 @@ function loadBackendIBL(app){
     // 11
 
     // GET operation for all the data in taxesData
-    app.get(BASE_API + "/taxes-stats", (request,response) =>{
-        db.find({},(err,data)=>{
-            response.send(JSON.stringify(data.map((c)=>{
-                delete c._id;
-                return c;
-            }),null,2));
-        });
-
-    });
+    // app.get(BASE_API + "/taxes-stats", (request,response) =>{
+    //     db.find({},(err,data)=>{
+    //         response.send(JSON.stringify(data.map((c)=>{
+    //             delete c._id;
+    //             return c;
+    //         }),null,2));
+    //     });
+    //
+    // });
 
     // 13
 
@@ -88,16 +88,19 @@ function loadBackendIBL(app){
     })
 
     // GET operation for a certain community and querying for year or/and quarter paginated
-    app.get(BASE_API + "/taxes-stats/:name", (request, response) => {
-        let paramName = request.params.name;
+    app.get(BASE_API + "/taxes-stats", (request, response) => {
+        let paramName = request.query.autonomic_community;
         let paramYear = parseInt(request.query.year);
         let paramQuarter = request.query.quarter;
         let paramOffset = request.query.offset;
         let paramLimit = request.query.limit;
 
-        let query = { autonomic_community: paramName};
+        let query = {};
         let paramFields = request.query.fields;
     
+        if(paramName){
+            query.autonomic_community = paramName;
+        }
         if(paramYear){
             query.year = paramYear;
         }
