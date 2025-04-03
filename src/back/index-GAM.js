@@ -95,133 +95,51 @@ function loadBackendGAM(app){
 
     // GET request that retrieves from de DB the current data loaded.
 
-    app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        db.find({},(err,emigrationData)=>{
-            if (err){
-                response.status(500).send("Error code 01 (please contact admin)");                
-                console.error(`ERROR: ${err}`);
-                return;
-            }else{
-                response.send(JSON.stringify(emigrationData.map((c)=>{
-                    delete c._id;
-                    return c;
-                }),null,2));
-            }
-        });
-    });
+     // GET operation for a certain community and querying for year or/and quarter paginated
+     app.get(BASE_API + "/emigration-stats", (request, response) => {
+        let paramName = request.query.autonomic_community;
+        let paramYear = parseInt(request.query.year);
+        let paramQuarter = request.query.quarter;
+        let paramOffset = request.query.offset;
+        let paramLimit = request.query.limit;
+
+        let query = {};
+        let paramFields = request.query.fields;
     
-
-    // Query request searches:
-    /*
-    // busqueda por nombre rollo query de un objeto en concreto ? solo se puede hacer esta o la de arriba, las dos a la vez no
-
-     // GET request that retrieves from de DB a certain item that matches with the three query parameters.
-
-     app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        let paramName= request.query.autonomic_community;
-        let paramYear= request.query.year;
-        let paramQuarter= request.query.quarter;
-        console.log(`New GET to /emigration-stats/${paramName}`);
-        if(emigrationData.filter(v => v.autonomic_community === paramName && Number(v.year)===Number(paramYear) && v.quarter === paramQuarter).length===0){
-            response.sendStatus(404);
+        if(paramName){
+            query.autonomic_community = paramName;
         }
-        db.findOne({autonomic_community: paramName, year: Number(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
-                if(err){
-                    response.status(500).send("Error code 01 (please contact admin)");                
-                    console.error(`ERROR: ${err}`);
-                }
-                else{ 
-                response.send(JSON.stringify(emigrationData,null,2));
-                }
-            });
-        });
-    */
-
-    /*
-    // busqueda por nombre rollo query de una comunidad en un año
-
-     // GET request that retrieves from de DB the items (or once) that matches with the two query parameters.
-
-      app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        let paramName= request.query.autonomic_community;
-        let paramYear= request.query.year;
-        console.log(`New GET to /emigration-stats/${paramName}`);
-        if(emigrationData.filter(v => v.autonomic_community === paramName && Number(v.year)===Number(paramYear)).length===0){
-            response.sendStatus(404);
+        if(paramYear){
+            query.year = paramYear;
         }
-        db.find({autonomic_community: paramName, year: Number(paramYear)},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
-                if(err){
-                    response.status(500).send("Error code 01 (please contact admin)");                
-                    console.error(`ERROR: ${err}`);
-                }
-                else{ 
-                response.send(JSON.stringify(emigrationData,null,2));
-                }
-            });
-        });
-    */
-   /*
-    // busqueda por nombre rollo query de una comunidad
-
-     // GET request that retrieves from de DB the items (or once) that matches with the query parameter.
-
-      app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        let paramName= request.query.autonomic_community;
-        console.log(`New GET to /emigration-stats/${paramName}`);
-        if(emigrationData.filter(v => v.autonomic_community === paramName).length===0){
-            response.sendStatus(404);
+        if(paramQuarter){
+            query.quarter = paramQuarter;
         }
-        db.find({autonomic_community: paramName},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
-                if(err){
-                    response.status(500).send("Error code 01 (please contact admin)");                
-                    console.error(`ERROR: ${err}`);
-                }
-                else{ 
-                response.send(JSON.stringify(emigrationData,null,2));
-                }
-            });
-        });
-    */
+        if(paramFields){
+            paramFields = paramFields.split(',');
+        }
 
-    /*
-    //PAGINACIÓN (sobre todos los objetos):
+        paramOffset? parseInt(paramOffset): 0;
+        paramLimit? parseInt(paramLimit): -1;
 
-    // Pagination request:
-
-    // GET request that retrieves from de DB the items for its positions from 0 to the limit parameter.
-
-    app.get(BASE_API+"/emigration-stats",(request,response)=>{
-        let limit= request.query.limit;
-        let offset=request.query.offset;
-        limit= parseInt(limit) || 5; // valor por defecto 5
-        offset= parseInt(offset) || 0; //valor por defecto 0
-
-        db.count({}, (err, total) => {
-            if(err){
-                response.status(500).send("Error code 01 (please contact admin)");                
-                console.error(`ERROR: ${err}`);
+        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
+            if(!docs.length){
+                response.sendStatus(404);
+                return;
             }
             else{
-                db.find({}, { _id: 0 }).skip(offset).limit(limit).exec((err, docs) => {
-                    if(err){
-                        response.status(500).send("Error code 01 (please contact admin)");                
-                        console.error(`ERROR: ${err}`);
-                    }
-                    else{
-                        response.json({
-                            offset,
-                            limit,
-                            total,
-                            hasMore: offset + limit < total, // Indica si hay más datos
-                            data: docs
-                        });
-                    }
-                });
+                response.send(JSON.stringify(docs.map((c) => {
+                    delete c._id;
+                    Object.keys(c).forEach(field => {
+                        if (paramFields != undefined && !paramFields.includes(field)) {
+                            delete c[field];
+                        }
+                    });
+                    return c;
+                }), null, 2));
             }
-        });
+        })
     });
-    
-    */
 
     
     // POST request that inserts one item to the DB.
@@ -301,10 +219,7 @@ function loadBackendGAM(app){
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        //let recurso=emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter); // hay que ver como meterlo dentro
-        //if(recurso.length===0 || !recurso){
-        //    response.sendStatus(404);
-        //}
+
         db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
@@ -322,11 +237,6 @@ function loadBackendGAM(app){
                 response.send(JSON.stringify(emigrationData,null,2));
             }
         });
-        // let res = emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter);
-        // if(res.length===0){
-        //     response.sendStatus(404);
-        // }
-        // response.send(JSON.stringify(res,null,2));
     });
 
     // POST request that is not allowed.
@@ -373,27 +283,6 @@ function loadBackendGAM(app){
             } 
 
         });
-
-        // if(invalidFields.length>0){
-        //     response.sendStatus(400);
-        // }
-        // else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
-        //     response.sendStatus(400);
-        // }
-        // else if (emigrationData.filter(v => v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter).length == 0){
-        //     response.sendStatus(404);
-        // }
-        // else{
-        //     emigrationData.forEach(v => {
-        //         if((v.autonomic_community === paramName && parseInt(v.year)===parseInt(paramYear) && v.quarter === paramQuarter)){
-        //             v.between_20_24_yo = putBody.between_20_24_yo;
-        //             v.between_25_29_yo = putBody.between_25_29_yo;
-        //             v.between_30_34_yo = putBody.between_30_34_yo;
-        //         }
-        //     })
-        //     response.sendStatus(200);
-    
-        // }
     });
     
     // DELETE request that removes from de DB the item which parameters are the indacated in the request.
@@ -422,14 +311,6 @@ function loadBackendGAM(app){
             } 
 
         })
-    
-        // if(request.length===0){
-        //     response.sendStatus(404);
-        // } else{
-        //     console.log(res)
-        //     res.forEach((item) => emigrationData.splice(emigrationData.indexOf(item), 1));
-        // }
-        //response.sendStatus(200);
     });
 
     // GET request that navigates to my personal POSTMAN collection documentation.
