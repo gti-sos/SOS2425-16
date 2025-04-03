@@ -38,25 +38,25 @@ const initialTaxesData = [
 ];
 
 // Array that will contain all data about taxes
-const taxesData = new Array();
+// const taxesData = new Array();
 
 // Parameters in reduce:  .reduce(acc, currentValue, currentIndex, array)
 // Averages all the values of IVA in Madrid
-function averageRateIVAMadrid(arrayData) {
-    let average = arrayData
-        .filter((v) => {return (v.autonomic_community === "Madrid, Comunidad de")})
-        .map((v) => {return v.atr_iva})
-        .reduce((acc, rate, _, arr) => {
-            return acc + (rate / arr.length);
-        }, 0);
-    return average;
-}
+// function averageRateIVAMadrid(arrayData) {
+//     let average = arrayData
+//         .filter((v) => {return (v.autonomic_community === "Madrid, Comunidad de")})
+//         .map((v) => {return v.atr_iva})
+//         .reduce((acc, rate, _, arr) => {
+//             return acc + (rate / arr.length);
+//         }, 0);
+//     return average;
+// }
 
 function loadBackendIBL(app){
     // Sample get  operation for the averageRateIVAMadrid function
-    app.get("/samples/IBL",(request,response)=>{
-            response.send(averageRateIVAMadrid(taxesData).toString());
-    });
+    // app.get("/samples/IBL",(request,response)=>{
+    //         response.send(averageRateIVAMadrid(taxesData).toString());
+    // });
 
     // 11
 
@@ -96,7 +96,7 @@ function loadBackendIBL(app){
         let paramLimit = request.query.limit;
 
         let query = { autonomic_community: paramName};
-        let paramFields = request.query.fields
+        let paramFields = request.query.fields;
     
         if(paramYear){
             query.year = paramYear;
@@ -131,7 +131,7 @@ function loadBackendIBL(app){
                 response.send(JSON.stringify(docs.map((c) => {
                     delete c._id;
                     Object.keys(c).forEach(field => {
-                        if (!paramFields.includes(field)) {
+                        if (paramFields != undefined && !paramFields.includes(field)) {
                             delete c[field];
                         }
                     });
