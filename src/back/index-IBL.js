@@ -259,6 +259,10 @@ function loadBackendIBL(app){
             })
         }
     })
+
+    app.get(BASE_API+"/taxes-stats/docs",(request,response)=>{
+        response.redirect("https://documenter.getpostman.com/view/42371471/2sB2cSiPzP");
+    });
 }
 
 export {loadBackendIBL}
