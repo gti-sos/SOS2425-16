@@ -6,8 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "test-api-local-PVS": "npx newman run tests/back/api-tests-PVS.json -e tests/back/api-env-local.json",
+    "test-api-online-PVS": "npx newman run tests/back/api-tests-PVS.json -e tests/back/api-env-online.json",
     "test-api-local-GAM": "npx newman run tests/back/api-tests-GAM.json -e tests/back/api-env-local.json",
     "test-api-online-GAM": "npx newman run tests/back/api-tests-GAM.json -e tests/back/api-env-online.json",
+    "test-local-PVS": "start-server-and-test start http://localhost:16078 test-api-local-PVS",
+    "test-PVS": "npm run test-local-PVS",
     "test-local-GAM": "start-server-and-test start http://localhost:16078 test-api-local-GAM",
     "test-GAM": "npm run test-local-GAM",
     "test-api-local-IBL": "npx newman run tests/back/api-tests-IBL.json -e tests/back/api-env-local.json",
