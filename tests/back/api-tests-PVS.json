@@ -1,0 +1,1076 @@
+{
+	"info": {
+		"_postman_id": "15cd17f5-0727-4baa-aad9-acb02d8421c9",
+		"name": "Colección de Pablo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42345307",
+		"_collection_link": "https://planetary-space-86792.postman.co/workspace/SOS2425-16~623594d9-34c5-4301-b713-c6998dbd0f22/collection/42345307-15cd17f5-0727-4baa-aad9-acb02d8421c9?action=share&source=collection_link&creator=42345307"
+	},
+	"item": [
+		{
+			"name": "Normal",
+			"item": [
+				{
+					"name": "Load data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"loadInitialData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Update the test to fix JSONError and check if the returned array is not empty",
+									"pm.test(\"Returned array is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Extremadura data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Update the test to fix JSONError and check if the returned array is not empty",
+									"pm.test(\"Returned array is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"extremadura\");",
+									"    pm.expect(pm.response.text()).to.include(\"2021\");",
+									"    pm.expect(pm.response.text()).to.include(\"q1\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2021/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"extremadura",
+								"2021",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Extremadura data 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2033/q2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"extremadura",
+								"2033",
+								"q2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Andalucia data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"autonomic_community\": \"andalucia\", \"year\": 2021, \"quarter\": \"q2\",  \"unemployment_rate\": 11.8, \"previous_quarter_var\": -0.78, \"previous_year_quarter_var\": 0.25 \n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2021/q2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"andalucia",
+								"2021",
+								"q2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Extremadura data 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"extremadura\", \"year\": 2021, \"quarter\": \"q3\", \"unemployment_rate\": 21.8, \"previous_quarter_var\": -0.98, \"previous_year_quarter_var\": 0.45\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2021/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"extremadura",
+								"2021",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"andalucia\",\n    \"year\": 2023,\n    \"quarter\": \"q1\",\n    \"unemployment_rate\": 41.8, \n    \"previous_quarter_var\": 0.95, \n    \"previous_year_quarter_var\": 0.62\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new data 409",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"autonomic_community\": \"comunidad-de-madrid\", \"year\": 2021, \"quarter\": \"q4\", \"unemployment_rate\": 10.2, \"previous_quarter_var\": -1.95, \"previous_year_quarter_var\": -3.35 }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST 405 error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 405\", function () {",
+									"    pm.response.to.have.status(405);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"extremadura\",\n    \"year\": 2021,\n    \"quarter\": \"q1\",\n    \"unemployment_rate\": 10.2, \n    \"previous_quarter_var\": -1.95, \n    \"previous_year_quarter_var\": -3.35\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2021/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"extremadura",
+								"2021",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT to unknown data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"aragon\", \"year\": 2021, \"quarter\": \"q3\",  \n    \"unemployment_rate\": 10.2, \n    \"previous_quarter_var\": -1.95, \n    \"previous_year_quarter_var\": -3.35\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/aragon/2021/q3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"aragon",
+								"2021",
+								"q3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Cantabria Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"autonomic_community\": \"andalucia\", \"year\": 2023, \"quarter\": \"q1\", \"unemployment_rate\": 31.8, \n    \"previous_quarter_var\": 0.75, \n    \"previous_year_quarter_var\": 0.42 \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2023/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"andalucia",
+								"2023",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT error 405",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 405\", function () {",
+									"    pm.response.to.have.status(405);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"andalucia\", \"year\": 2021, \"quarter\": \"q1\",  \"unemployment_rate\": 28.9, \"previous_quarter_var\": 0.51, \"previous_year_quarter_var\": 1.94 \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete created data",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2023/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"andalucia",
+								"2023",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests sin nada especial"
+		},
+		{
+			"name": "Query Requests",
+			"item": [
+				{
+					"name": "Load data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"loadInitialData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"andalucia\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?autonomic_community=andalucia",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get name and year",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"andalucia\");",
+									"    pm.expect(pm.response.text()).to.include(\"2020\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?autonomic_community=andalucia&year=2020",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								},
+								{
+									"key": "year",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get name year and quarter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"andalucia\");",
+									"    pm.expect(pm.response.text()).to.include(\"2020\");",
+									"    pm.expect(pm.response.text()).to.include(\"q3\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?autonomic_community=andalucia&year=2020&quarter=q3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								},
+								{
+									"key": "year",
+									"value": "2020"
+								},
+								{
+									"key": "quarter",
+									"value": "q3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all data Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests con queries"
+		},
+		{
+			"name": "Paginación",
+			"item": [
+				{
+					"name": "Load data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"loadInitialData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Andalucia name with pagination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"andalucia\");",
+									"});",
+									"",
+									"pm.test(\"Number of items is equal to the limit\", function () {",
+									"    pm.expect(pm.response.json()).to.have.lengthOf(parseInt(pm.request.url.query.get('limit')));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?autonomic_community=andalucia&offset=0&limit=1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests con paginacion"
+		},
+		{
+			"name": "Vistas",
+			"item": [
+				{
+					"name": "Load data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"loadInitialData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Andalucia data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"andalucia\");",
+									"    pm.expect(pm.response.text()).to.not.include(\"previous_quarter_var\");",
+									"    pm.expect(pm.response.text()).to.not.include(\"previous_year_quarter_var\");",
+									"    pm.expect(pm.response.text()).to.not.include(\"quarter\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?autonomic_community=andalucia&offset=0&limit=2&fields=autonomic_community,year,unemployment_rate",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "fields",
+									"value": "autonomic_community,year,unemployment_rate"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests que implementan vistas"
+		}
+	]
+}
