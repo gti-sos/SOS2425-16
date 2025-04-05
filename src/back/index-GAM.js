@@ -21,77 +21,26 @@ const initialEmigrationData = [
     { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
-//const emigrationData=new Array();
-
-/*
-let array_between_30_34_yo_cat= initialEmigrationData.slice(-3).map(obj=>
-    obj.between_30_34_yo
-);
-
-function average(){
-    let acc=0;
-    if(array_between_30_34_yo_cat.length===0){
-        return 0;
-    }
-    array_between_30_34_yo_cat.forEach(n =>{
-        acc+= n;
-    });
-
-    return acc/array_between_30_34_yo_cat.length;
-}
-*/
-
 // Function that contains all of the HTTP requests.
 
 function loadBackendGAM(app){
-    
-    /*
-    app.get("/samples/GAM",(request,response)=>{
-        let res= average();
-        response.send(res.toString());
-    });
-    */
-
-    //13.
-
-
-    // GET request that inserts to the database the initial data. If there's any data previously charged into the base there will be a conflict. 
+    // GET request that inserts to the database the initial data.
 
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
-
-        db.count({},(err,cont)=>{ 
+        db.find({},(err, data)=>{
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
-                return;
             }
-            else if(cont >0){
-                response.sendStatus(409);
-                return;
-            }
-            else{
-                db.insert(initialEmigrationData, (err,emigrationData)=>{
-                    if (err){
-                        response.status(500).send("Error code 01 (please contact admin)");                
-                        console.error(`ERROR: ${err}`);
-                    }else{
-                        response.send(JSON.stringify(emigrationData.map((c)=>{
-                            delete c._id;
-                            return c;
-                        }),null,2));
-                    }
-                });
+            else if(data.length < 1){
+                db.insert(initialEmigrationData);
+                response.sendStatus(200);
             }
         });
     });
     
 
     //Searches:
-
-
-    // solo se puede tener una activa a la vez, misma url no se puede diferenciar (?)
-
-    //11.
 
     // GET request that retrieves from de DB the current data loaded.
 
@@ -146,13 +95,13 @@ function loadBackendGAM(app){
 
     app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
         console.log("New POST to /emigration-stats");
-        console.log(`<${request.body}>`); // <> para saber si esta vacio
+        console.log(`<${request.body}>`); 
     
         const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
         let newAutonomicCommunity=request.body;
         console.log(newAutonomicCommunity);
         let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
-        if(invalidFields.length>0){ // aqui si entra
+        if(invalidFields.length>0){ 
             response.sendStatus(400);
             return;
         }
@@ -207,8 +156,6 @@ function loadBackendGAM(app){
             }
         });
     });
-    
-    //Métodos para un recurso en específico
 
     //Methods for a specific resource:
 
@@ -226,14 +173,11 @@ function loadBackendGAM(app){
                 console.error(`ERROR: ${err}`);
                 return;
             }
-            else if (!emigrationData){ // se caga encima
+            else if (!emigrationData){
                 response.sendStatus(404);
                 return;
             }
             else{ 
-                // if(!emigrationData){
-                //     response.sendStatus(404); // a veces no lo encuentra por la carisima,sacar afuera
-                // }
                 response.send(JSON.stringify(emigrationData,null,2));
             }
         });
@@ -256,7 +200,7 @@ function loadBackendGAM(app){
         let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
         let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
 
-        if(invalidFields.length>0){ // este error no se lanza, se aborta el despliegue del tiron (al menos en local)
+        if(invalidFields.length>0){
             response.sendStatus(400);
             return;
         }
@@ -288,12 +232,12 @@ function loadBackendGAM(app){
     // DELETE request that removes from de DB the item which parameters are the indacated in the request.
 
 
-    app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ // dudas, borro todas las de cataluña? o solo una en especifico (id ?)
+    app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New DELETE to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        db.remove({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{ // cuando solo borra un objeto devuelve null
+        db.remove({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{ 
             if(err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
