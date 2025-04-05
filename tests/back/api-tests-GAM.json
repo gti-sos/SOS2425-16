@@ -608,51 +608,6 @@
 					"response": []
 				},
 				{
-					"name": "Put Madrid Error 404",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 400\", function () {\r",
-									"    pm.response.to.have.status(400);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"autonomic_community\": \"madrid\",\r\n\"year\": 2020,\r\n\"quarter\": \"q1\",\r\n\"between_20_24_yo\": 211,\r\n\"between_25_29_yo\": 115,\r\n\"between_30_34_yo\": 231\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/pepe",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"madrid",
-								"2020",
-								"pepe"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Put Madrid Copy Error 400",
 					"event": [
 						{
