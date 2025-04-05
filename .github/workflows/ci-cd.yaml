@@ -9,7 +9,7 @@ jobs:
       - name: Install dependences
         run: npm install
       - name: Run tests
-        run: npm run test-local-GAM
+        run: npm run test
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
