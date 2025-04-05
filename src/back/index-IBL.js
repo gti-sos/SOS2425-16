@@ -53,26 +53,6 @@ const initialTaxesData = [
 // }
 
 function loadBackendIBL(app){
-    // Sample get  operation for the averageRateIVAMadrid function
-    // app.get("/samples/IBL",(request,response)=>{
-    //         response.send(averageRateIVAMadrid(taxesData).toString());
-    // });
-
-    // 11
-
-    // GET operation for all the data in taxesData
-    // app.get(BASE_API + "/taxes-stats", (request,response) =>{
-    //     db.find({},(err,data)=>{
-    //         response.send(JSON.stringify(data.map((c)=>{
-    //             delete c._id;
-    //             return c;
-    //         }),null,2));
-    //     });
-    //
-    // });
-
-    // 13
-
     // GET operation that inits the data on taxesData from initialTaxesData
     app.get(BASE_API + "/taxes-stats/loadInitialData", (request,response) =>{
         db.find({},(err, data)=>{
@@ -114,18 +94,6 @@ function loadBackendIBL(app){
         paramOffset? parseInt(paramOffset): 0;
         paramLimit? parseInt(paramLimit): -1;
 
-        // db.find(query, function(err, docs){
-        //     if(!docs.length){
-        //         response.sendStatus(404);
-        //     }
-        //     else{
-        //         response.send(JSON.stringify(docs.map((c)=>{
-        //             delete c._id;
-        //             return c;
-        //         }),null,2));
-        //     }
-        // });
-
         db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
             if(!docs.length){
                 response.sendStatus(404);
@@ -156,10 +124,6 @@ function loadBackendIBL(app){
             else{
                 delete docs._id;
                 response.send(JSON.stringify(docs, null, 2))
-                // response.send(JSON.stringify(docs.map((c)=>{
-                //     delete c._id;
-                //     return c;
-                // }),null,2));
             }
         });
     });
@@ -191,8 +155,6 @@ function loadBackendIBL(app){
                 }
             }
         });
-        // taxesData.filter(v => v.autonomic_community === paramName && parseInt(v.year) === parseInt(paramYear) && v.quarter === paramQuarter)
-        //     .forEach((item) => taxesData.splice(taxesData.indexOf(item), 1));
     })
 
     // POST operation for creating community data (name, year and quarter)
