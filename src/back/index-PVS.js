@@ -119,14 +119,12 @@ function loadBackendPVS(app) {
                 response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
             }
-            else if(!docs.length){
+            else if(!docs){
                 return response.sendStatus(404);
             }
             else{
-                response.send(JSON.stringify(docs.map((c)=>{
-                    delete c._id;
-                    return c;
-                }),null,2));
+                delete docs._id;
+                response.send(JSON.stringify(docs, null, 2))
             }
         });
     });
