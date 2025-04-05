@@ -9,5 +9,5 @@
 - **URL**: https://sos2425-16.onrender.com/
 -  **APIs**:
     - https://sos2425-16.onrender.com/api/v1/emigration-stats/docs (Developed by Gonzalo Aguilera Mancheño)
-    - TBD
-    - TBD
+    - https://sos2425-16.onrender.com/api/v1/taxes-stats/docs (Developed by Iván Barbero Lay)
+    - https://sos2425-16.onrender.com/api/v1/unemployment-stats/docs (Developed by Pablo Viña Santa Cruz)
