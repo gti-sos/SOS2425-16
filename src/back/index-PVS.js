@@ -61,22 +61,6 @@ function loadBackendPVS(app) {
         });
     })
 
-    app.get(BASE_API + "/unemployment-stats", (request,response) =>{
-        db.find({},(err,unemploymentData)=>{
-            if (err) {
-                response.status(500).send("Error code 01 (please contact admin)");
-                console.error(`ERROR: ${err}`);
-            }
-            else {
-                    response.send(JSON.stringify(unemploymentData.map((ud)=>{
-                    delete ud._id;
-                    return ud;
-                }),null,2));
-            }
-        });
-
-    });
-/*
     app.get(BASE_API + "/unemployment-stats", (request, response) => {
         let paramName = request.query.autonomic_community;
         //Parametros opcionales
@@ -101,10 +85,10 @@ function loadBackendPVS(app) {
             paramFields = paramFields.split(',');
         }
 
-        let offset = paramOffset ? parseInt(paramOffset) : 0;
-        let limit = paramLimit ? parseInt(paramLimit) : -1;
+        paramOffset ? parseInt(paramOffset) : 0;
+        paramLimit ? parseInt(paramLimit) : -1;
 
-        db.find(query).sort({ autonomic_community: 1 }).skip(offset).limit(limit).exec(function(err, docs){
+        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
             if (err) {
                 response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
@@ -116,63 +100,6 @@ function loadBackendPVS(app) {
                 response.send(JSON.stringify(docs.map((c) => {
                     delete c._id;
                     Object.keys(c).forEach(field => {  //Eliminamos los campos que no se incluyen en fields
-                        if (paramFields != undefined && !paramFields.includes(field)) {
-                            delete c[field];
-                        }
-                    });
-                    return c;
-                }), null, 2));
-            }
-        })
-    });
-*/
-
-    app.get(BASE_API + "/unemployment-stats", (request, response) => {
-        let paramName = request.query.autonomic_community;
-        let paramYear = parseInt(request.query.year);
-        let paramQuarter = request.query.quarter;
-        let paramOffset = request.query.offset;
-        let paramLimit = request.query.limit;
-
-        let query = {};
-        let paramFields = request.query.fields;
-
-        if(paramName){
-            query.autonomic_community = paramName;
-        }
-        if(paramYear){
-            query.year = paramYear;
-        }
-        if(paramQuarter){
-            query.quarter = paramQuarter;
-        }
-        if(paramFields){
-            paramFields = paramFields.split(',');
-        }
-
-        paramOffset? parseInt(paramOffset): 0;
-        paramLimit? parseInt(paramLimit): -1;
-
-        // db.find(query, function(err, docs){
-        //     if(!docs.length){
-        //         response.sendStatus(404);
-        //     }
-        //     else{
-        //         response.send(JSON.stringify(docs.map((c)=>{
-        //             delete c._id;
-        //             return c;
-        //         }),null,2));
-        //     }
-        // });
-
-        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
-            if(!docs.length){
-                response.sendStatus(404);
-            }
-            else{
-                response.send(JSON.stringify(docs.map((c) => {
-                    delete c._id;
-                    Object.keys(c).forEach(field => {
                         if (paramFields != undefined && !paramFields.includes(field)) {
                             delete c[field];
                         }
@@ -316,6 +243,10 @@ function loadBackendPVS(app) {
                 }
             })
         }
+    });
+
+    app.get(BASE_API+"/unemployment-stats/docs",(request,response)=>{
+        response.redirect("");
     });
 
 }

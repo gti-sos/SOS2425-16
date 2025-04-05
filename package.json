@@ -13,7 +13,12 @@
     "test-local-PVS": "start-server-and-test start http://localhost:16078 test-api-local-PVS",
     "test-PVS": "npm run test-local-PVS",
     "test-local-GAM": "start-server-and-test start http://localhost:16078 test-api-local-GAM",
-    "test-GAM": "npm run test-local-GAM"
+    "test-GAM": "npm run test-local-GAM",
+    "test-api-local-IBL": "npx newman run tests/back/api-tests-IBL.json -e tests/back/api-env-local.json",
+    "test-api-online-IBL": "npx newman run tests/back/api-tests-IBL.json -e tests/back/api-env-online.json",
+    "test-local-IBL": "start-server-and-test start http://localhost:16078 test-api-local-IBL",
+    "test-IBL": "npm run test-local-IBL",
+    "test": "npm run test-GAM && npm run test-PVS && npm run test-IBL"
   },
   "repository": {
     "type": "git",
