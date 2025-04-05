@@ -114,7 +114,7 @@ function loadBackendPVS(app) {
         let paramName = request.params.name;
         let paramYear = parseInt(request.params.year);
         let paramQuarter = request.params.quarter;
-        db.find({ autonomic_community: paramName, year: paramYear, quarter: paramQuarter}, function(err, docs){
+        db.findOne({ autonomic_community: paramName, year: paramYear, quarter: paramQuarter}, function(err, docs){
             if (err) {
                 response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
