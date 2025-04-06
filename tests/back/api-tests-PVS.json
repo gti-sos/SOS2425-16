@@ -1,7 +1,8 @@
 {
 	"info": {
 		"_postman_id": "15cd17f5-0727-4baa-aad9-acb02d8421c9",
-		"name": "Colección de Pablo",
+		"name": "Colección de Pablo Viña Santa Cruz",
+		"description": "Esta colección comprueba el funcionamiento de la API relacionada con el desempleo en España por CCAA, año y cuatrimestre.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "42345307",
 		"_collection_link": "https://planetary-space-86792.postman.co/workspace/SOS2425-16~623594d9-34c5-4301-b713-c6998dbd0f22/collection/42345307-15cd17f5-0727-4baa-aad9-acb02d8421c9?action=share&source=collection_link&creator=42345307"
@@ -178,96 +179,6 @@
 					"response": []
 				},
 				{
-					"name": "PUT Andalucia data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"autonomic_community\": \"andalucia\", \"year\": 2021, \"quarter\": \"q2\",  \"unemployment_rate\": 11.8, \"previous_quarter_var\": -0.78, \"previous_year_quarter_var\": 0.25 \n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2021/q2",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"andalucia",
-								"2021",
-								"q2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PUT Extremadura data 400",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"autonomic_community\": \"extremadura\", \"year\": 2021, \"quarter\": \"q3\", \"unemployment_rate\": 21.8, \"previous_quarter_var\": -0.98, \"previous_year_quarter_var\": 0.45\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2021/q1",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"extremadura",
-								"2021",
-								"q1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Create new data",
 					"event": [
 						{
@@ -289,6 +200,49 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"autonomic_community\": \"andalucia\",\n    \"year\": 2023,\n    \"quarter\": \"q1\",\n    \"unemployment_rate\": 41.8, \n    \"previous_quarter_var\": 0.95, \n    \"previous_year_quarter_var\": 0.62\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error 400 campos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"autonomic_community\": \"andalucia\",\r\n    \"year\": 2023,\r\n    \"quarter\": \"Q1\",\r\n    \"campo_mal_puesto\": 1,\r\n    \"montoya\": 2,\r\n    \"sandra\": 3\r\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -399,6 +353,96 @@
 					"response": []
 				},
 				{
+					"name": "PUT Andalucia data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"andalucia\",\n    \"year\": 2023,\n    \"quarter\": \"q1\",\n    \"unemployment_rate\": 441.8, \n    \"previous_quarter_var\": 0.195, \n    \"previous_year_quarter_var\": 0.762\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2023/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"andalucia",
+								"2023",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Extremadura data 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"extremadura\", \"year\": 2021, \"quarter\": \"q3\", \"unemployment_rate\": 21.8, \"previous_quarter_var\": -0.98, \"previous_year_quarter_var\": 0.45\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/extremadura/2021/q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats",
+								"extremadura",
+								"2021",
+								"q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "PUT to unknown data",
 					"event": [
 						{
@@ -438,51 +482,6 @@
 								"aragon",
 								"2021",
 								"q3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PUT Cantabria Data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"autonomic_community\": \"andalucia\", \"year\": 2023, \"quarter\": \"q1\", \"unemployment_rate\": 31.8, \n    \"previous_quarter_var\": 0.75, \n    \"previous_year_quarter_var\": 0.42 \n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/andalucia/2023/q1",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"andalucia",
-								"2023",
-								"q1"
 							]
 						}
 					},
@@ -589,7 +588,7 @@
 					"response": []
 				}
 			],
-			"description": "Tests sin nada especial"
+			"description": "Pruebas del FeedBack 5 (F05)"
 		},
 		{
 			"name": "Query Requests",
@@ -807,7 +806,7 @@
 					"response": []
 				}
 			],
-			"description": "Tests con queries"
+			"description": "Comprueba el funcionamiento"
 		},
 		{
 			"name": "Paginación",

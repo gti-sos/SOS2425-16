@@ -32,20 +32,8 @@ const initialUnemploymentData = [
     { autonomic_community: "islas-baleares", year: 2020, quarter: "q4", unemployment_rate: 17.3, previous_quarter_var: 4.06, previous_year_quarter_var: 7.43 }  
 ];
 
-/*
-//Parametros en reduce:  .reduce(acc, currentValue, currentIndex, array)
 
-function averageRateAndalucia(arrayData) {
-    let averageRate = 
-    arrayData
-    .filter((v) => {return (v.autonomic_community === "andalucia")})
-    .map((v) => {return v.unemployment_rate})
-    .reduce((acc, rate, _, arr) => {
-        return acc + (rate / arr.length);
-    }, 0);
-    return averageRate
-}
-*/
+
 function loadBackendPVS(app) {
     
     app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{
@@ -244,7 +232,7 @@ function loadBackendPVS(app) {
     });
 
     app.get(BASE_API+"/unemployment-stats/docs",(request,response)=>{
-        response.redirect("");
+        response.redirect("https://documenter.getpostman.com/view/42345307/2sB2cUCP3a");
     });
 
 }
