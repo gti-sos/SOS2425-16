@@ -101,6 +101,9 @@ function loadBackendIBL(app){
             if(!docs.length){
                 response.sendStatus(404);
             }
+            if(err){
+                response.sendStatus(500);
+            }
             else{
                 response.send(JSON.stringify(docs.map((c) => {
                     delete c._id;
