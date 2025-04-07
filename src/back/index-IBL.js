@@ -77,6 +77,9 @@ function loadBackendIBL(app){
         let paramQuarter = request.query.quarter;
         let paramOffset = request.query.offset;
         let paramLimit = request.query.limit;
+        let paramIVA = parseFloat(request.query.atr_iva);
+        let paramIRPF =  parseFloat(request.query.atr_irpf);
+        let paramSOC =  parseFloat(request.query.atr_soc_no_consolidadas);
 
         let query = {};
         let paramFields = request.query.fields;
@@ -90,6 +93,15 @@ function loadBackendIBL(app){
         if(paramQuarter){
             query.quarter = paramQuarter;
         }
+        if(paramIVA){
+            query.atr_iva = paramIVA;
+        }
+        if(paramIRPF){
+            query.atr_irpf = paramIRPF;
+        }
+        if(paramSOC){
+            query.atr_soc_no_consolidadas = paramSOC;
+        }
         if(paramFields){
             paramFields = paramFields.split(',');
         }
@@ -101,7 +113,7 @@ function loadBackendIBL(app){
             if(!docs.length){
                 response.sendStatus(404);
             }
-            if(err){
+            else if(err){
                 response.sendStatus(500);
             }
             else{
