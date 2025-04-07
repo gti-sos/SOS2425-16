@@ -723,9 +723,7 @@
 									"});",
 									"",
 									"pm.test(\"Body matches search\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Cantabria\");",
-									"    pm.expect(pm.response.text()).to.include(\"2021\");",
-									"    pm.expect(pm.response.text()).to.include(\"Q2\");",
+									"    pm.expect(pm.response.text()).to.include(\"24136288\");",
 									"});"
 								],
 								"type": "text/javascript",
@@ -768,9 +766,7 @@
 									"});",
 									"",
 									"pm.test(\"Body matches search\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Cantabria\");",
-									"    pm.expect(pm.response.text()).to.include(\"2021\");",
-									"    pm.expect(pm.response.text()).to.include(\"Q2\");",
+									"    pm.expect(pm.response.text()).to.include(\"3916659\");",
 									"});"
 								],
 								"type": "text/javascript",
@@ -813,9 +809,7 @@
 									"});",
 									"",
 									"pm.test(\"Body matches search\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Cantabria\");",
-									"    pm.expect(pm.response.text()).to.include(\"2021\");",
-									"    pm.expect(pm.response.text()).to.include(\"Q2\");",
+									"    pm.expect(pm.response.text()).to.include(\"2826482\");",
 									"});"
 								],
 								"type": "text/javascript",
