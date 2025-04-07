@@ -48,6 +48,9 @@ function loadBackendGAM(app){
         let paramName = request.query.autonomic_community;
         let paramYear = parseInt(request.query.year);
         let paramQuarter = request.query.quarter;
+        let paramBetween_20_24_yo = parseInt(request.query.between_20_24_yo);
+        let paramBetween_25_29_yo = parseInt(request.query.between_25_29_yo);
+        let paramBetween_30_34_yo = parseInt(request.query.between_30_34_yo);
         let paramOffset = request.query.offset;
         let paramLimit = request.query.limit;
 
@@ -62,6 +65,15 @@ function loadBackendGAM(app){
         }
         if(paramQuarter){
             query.quarter = paramQuarter;
+        }
+        if(paramBetween_20_24_yo){
+            query.between_20_24_yo = paramBetween_20_24_yo;
+        }
+        if(paramBetween_25_29_yo){
+            query.between_25_29_yo = paramBetween_25_29_yo;
+        }
+        if(paramBetween_30_34_yo){
+            query.between_30_34_yo = paramBetween_30_34_yo;
         }
         if(paramFields){
             paramFields = paramFields.split(',');

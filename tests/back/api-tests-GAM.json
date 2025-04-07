@@ -599,6 +599,58 @@
 			"name": "Query Requests",
 			"item": [
 				{
+					"name": "GET name year quarter and between_20_24_yo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&between_20_24_yo=2156",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"emigration-stats"
+							],
+							"query": [
+								{
+									"key": "autonomic_community",
+									"value": "andalucia"
+								},
+								{
+									"key": "year",
+									"value": "2020"
+								},
+								{
+									"key": "quarter",
+									"value": "q2"
+								},
+								{
+									"key": "between_20_24_yo",
+									"value": "2156"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GET name year and quarter",
 					"event": [
 						{
@@ -807,7 +859,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=madrid&year=2020&quarter=q1&offset=0&limit=2&fields=year,quarter,between_20_24_yo",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&offset=0&limit=2&fields=year,quarter,between_20_24_yo",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -819,7 +871,7 @@
 							"query": [
 								{
 									"key": "autonomic_community",
-									"value": "madrid"
+									"value": "andalucia"
 								},
 								{
 									"key": "year",
@@ -827,7 +879,7 @@
 								},
 								{
 									"key": "quarter",
-									"value": "q1"
+									"value": "q2"
 								},
 								{
 									"key": "offset",
