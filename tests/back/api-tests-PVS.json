@@ -551,82 +551,13 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
-			"description": "Pruebas del FeedBack 5 (F05)"
+			"description": "Pruebas del FeedBack 5 (F05)."
 		},
 		{
 			"name": "Query Requests",
 			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get name",
 					"event": [
@@ -770,81 +701,13 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
-			"description": "Comprueba el funcionamiento"
+			"description": "Comprueba el funcionamiento del filtro cada vez que se añade un nuevo campo."
 		},
 		{
 			"name": "Paginación",
 			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get Andalucia name with pagination",
 					"event": [
@@ -900,81 +763,13 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
-			"description": "Tests con paginacion"
+			"description": "Tests con paginación."
 		},
 		{
 			"name": "Vistas",
 			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get Andalucia data",
 					"event": [
@@ -1033,43 +828,9 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/unemployment-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"unemployment-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
-			"description": "Tests que implementan vistas"
+			"description": "Tests que implementan las vistas."
 		}
 	]
 }

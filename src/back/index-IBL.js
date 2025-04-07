@@ -60,6 +60,9 @@ function loadBackendIBL(app){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
+            else if(data.length > 0){
+                response.sendStatus(200);
+            }
             else if(data.length < 1){
                 db.insert(initialTaxesData);
                 response.sendStatus(200);
@@ -97,6 +100,9 @@ function loadBackendIBL(app){
         db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
             if(!docs.length){
                 response.sendStatus(404);
+            }
+            if(err){
+                response.sendStatus(500);
             }
             else{
                 response.send(JSON.stringify(docs.map((c) => {
