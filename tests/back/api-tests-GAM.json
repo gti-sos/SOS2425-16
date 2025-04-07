@@ -11,7 +11,7 @@
 			"name": "Normal",
 			"item": [
 				{
-					"name": "loadInitalData",
+					"name": "GET all data",
 					"event": [
 						{
 							"listen": "test",
@@ -21,42 +21,11 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"\r",
+									"// Check if the response length is 12\r",
+									"pm.test(\"Response length is 12\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.lengthOf(12);\r",
+									"});\r",
 									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -273,109 +242,6 @@
 					"response": []
 				},
 				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "loadInitalData",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Method not allowed for all data",
 					"event": [
 						{
@@ -542,7 +408,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"autonomic_community\": \"madrid\",\r\n\"year\": 2020,\r\n\"quarter\": \"q1\",\r\n\"between_20_24_yo\": 211,\r\n\"between_25_29_yo\": 115,\r\n\"between_30_34_yo\": 231\r\n}",
+							"raw": "{\r\n\"autonomic_community\": \"asturias\",\r\n\"year\": 2019,\r\n\"quarter\": \"q3\",\r\n\"between_20_24_yo\": 211,\r\n\"between_25_29_yo\": 115,\r\n\"between_30_34_yo\": 231\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -550,7 +416,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/asturias/2019/q3",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -558,9 +424,9 @@
 								"api",
 								"v1",
 								"emigration-stats",
-								"madrid",
-								"2020",
-								"q1"
+								"asturias",
+								"2019",
+								"q3"
 							]
 						}
 					},
@@ -655,7 +521,7 @@
 					"response": []
 				},
 				{
-					"name": "DELETE Madrid",
+					"name": "DELETE New Data",
 					"event": [
 						{
 							"listen": "test",
@@ -674,7 +540,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/asturias/2019/q3",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -682,51 +548,9 @@
 								"api",
 								"v1",
 								"emigration-stats",
-								"madrid",
-								"2020",
-								"q1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Madrid",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 404\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"There is no data\", function () {\r",
-									"    const responseText = pm.response.text();\r",
-									"    pm.expect(responseText).to.equal(\"Not Found\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"madrid",
-								"2020",
-								"q1"
+								"asturias",
+								"2019",
+								"q3"
 							]
 						}
 					},
@@ -767,40 +591,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"description": "Pruebas sobre peticiones de tipo /"
@@ -808,41 +598,6 @@
 		{
 			"name": "Query Requests",
 			"item": [
-				{
-					"name": "loadInitalData",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "GET name year and quarter",
 					"event": [
@@ -864,7 +619,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=madrid&year=2020&quarter=q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -876,7 +631,7 @@
 							"query": [
 								{
 									"key": "autonomic_community",
-									"value": "madrid"
+									"value": "andalucia"
 								},
 								{
 									"key": "year",
@@ -884,7 +639,7 @@
 								},
 								{
 									"key": "quarter",
-									"value": "q1"
+									"value": "q2"
 								}
 							]
 						}
@@ -912,7 +667,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=madrid&year=2020",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -924,7 +679,7 @@
 							"query": [
 								{
 									"key": "autonomic_community",
-									"value": "madrid"
+									"value": "andalucia"
 								},
 								{
 									"key": "year",
@@ -955,7 +710,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=cataluña",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -967,42 +722,8 @@
 							"query": [
 								{
 									"key": "autonomic_community",
-									"value": "cataluña"
+									"value": "andalucia"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
 							]
 						}
 					},
@@ -1014,41 +735,6 @@
 		{
 			"name": "Paginación",
 			"item": [
-				{
-					"name": "loadInitalData",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "GET paginación",
 					"event": [
@@ -1091,40 +777,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"description": "Pruebas sobre peticiones de tipo paginación"
@@ -1132,43 +784,6 @@
 		{
 			"name": "Vistas",
 			"item": [
-				{
-					"name": "loadInitalData",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get Madrid Data",
 					"event": [
@@ -1226,40 +841,6 @@
 									"key": "fields",
 									"value": "year,quarter,between_20_24_yo"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"emigration-stats"
 							]
 						}
 					},

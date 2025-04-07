@@ -21,23 +21,22 @@ const initialEmigrationData = [
     { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 }
 ];
 
-// Function that contains all of the HTTP requests.
 
-function loadBackendGAM(app){
     // GET request that inserts to the database the initial data.
 
-    app.get(BASE_API + "/emigration-stats/loadInitialData", (request,response) =>{
         db.find({},(err, data)=>{
-            if (err){
-                response.status(500).send("Error code 01 (please contact admin)");                
+            if (err){               
                 console.error(`ERROR: ${err}`);
             }
             else if(data.length < 1){
                 db.insert(initialEmigrationData);
-                response.sendStatus(200);
             }
         });
-    });
+
+// Function that contains all of the HTTP requests.
+
+function loadBackendGAM(app){
+
     
 
     //Searches:
