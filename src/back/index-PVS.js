@@ -56,6 +56,9 @@ function loadBackendPVS(app) {
         let paramQuarter = request.query.quarter;
         let paramOffset = request.query.offset;
         let paramLimit = request.query.limit;
+        let paramUR = parseFloat(request.query.unemployment_rate);
+        let paramPQV =  parseFloat(request.query.previous_quarter_var);
+        let paramPYQV =  parseFloat(request.query.previous_year_quarter_var);
         let paramFields = request.query.fields;
 
         let query = {};  //Creamos la variable donde iremos almacenando los filtros.
@@ -71,6 +74,15 @@ function loadBackendPVS(app) {
         }
         if(paramFields){
             paramFields = paramFields.split(',');
+        }
+        if(paramUR){
+            query.unemployment_rate = paramUR;
+        }
+        if(paramPQV){
+            query.previous_quarter_var = paramPQV;
+        }
+        if(paramPYQV){
+            query.previous_year_quarter_var = paramPYQV;
         }
 
         paramOffset ? parseInt(paramOffset) : 0;

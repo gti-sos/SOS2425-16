@@ -12,21 +12,7 @@
 			"name": "Normal",
 			"item": [
 				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
+					"name": "loadInitialData",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -46,230 +32,7 @@
 					"response": []
 				},
 				{
-					"name": "Get all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Update the test to fix JSONError and check if the returned array is not empty",
-									"pm.test(\"Returned array is not empty\", function () {",
-									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
-									"});",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Cantabria data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"// Update the test to fix JSONError and check if the returned array is not empty",
-									"pm.test(\"Returned array is not empty\", function () {",
-									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
-									"});",
-									"",
-									"pm.test(\"Body matches search\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Cantabria\");",
-									"    pm.expect(pm.response.text()).to.include(\"2021\");",
-									"    pm.expect(pm.response.text()).to.include(\"Q2\");",
-									"});",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2021/Q2",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"Cantabria",
-								"2021",
-								"Q2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Cantabria data 404",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2033/Q2",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"Cantabria",
-								"2033",
-								"Q2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PUT Cantabria data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"autonomic_community\": \"Cantabria\", \"year\": 2021, \"quarter\": \"Q2\",  \"atr_irpf\": 2, \"atr_soc_no_consolidadas\": 2, \"atr_iva\": 2 \n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2021/Q2",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"Cantabria",
-								"2021",
-								"Q2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PUT Cantabria data 400",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"autonomic_community\": \"Cantabria\", \"year\": 2021, \"quarter\": 3, \"campo_mal_formado\": 2, \"esto_no_es_asi\": 2, \"atr_iva\": 2 \n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2021/Q2",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"Cantabria",
-								"2021",
-								"Q2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create new data",
+					"name": "Create new data Andalucía",
 					"event": [
 						{
 							"listen": "test",
@@ -290,6 +53,49 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"autonomic_community\": \"Andalucía\",\n    \"year\": 2023,\n    \"quarter\": \"Q1\",\n    \"atr_irpf\": 1,\n    \"atr_soc_no_consolidadas\": 2,\n    \"atr_iva\": 3\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new data Cantabria",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"Cantabria\",\n    \"year\": 2023,\n    \"quarter\": \"Q2\",\n    \"atr_irpf\": 1,\n    \"atr_soc_no_consolidadas\": 2,\n    \"atr_iva\": 3\n  }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -400,6 +206,229 @@
 					"response": []
 				},
 				{
+					"name": "Get all data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Update the test to fix JSONError and check if the returned array is not empty",
+									"pm.test(\"Returned array is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cantabria data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Update the test to fix JSONError and check if the returned array is not empty",
+									"pm.test(\"Returned array is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Cantabria\");",
+									"    pm.expect(pm.response.text()).to.include(\"2023\");",
+									"    pm.expect(pm.response.text()).to.include(\"Q2\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2023/Q2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								"Cantabria",
+								"2023",
+								"Q2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cantabria data 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2033/Q2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								"Cantabria",
+								"2033",
+								"Q2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Cantabria data 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"autonomic_community\": \"Cantabria\", \"year\": 2023, \"quarter\": 1, \"campo_mal_formado\": 2, \"esto_no_es_asi\": 2, \"atr_iva\": 2 \n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2023/Q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								"Cantabria",
+								"2023",
+								"Q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Andalucía data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"autonomic_community\": \"Andalucía\", \"year\": 2023, \"quarter\": \"Q1\",  \"atr_irpf\": 2, \"atr_soc_no_consolidadas\": 2, \"atr_iva\": 2 \n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Andalucía/2023/Q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								"Andalucía",
+								"2023",
+								"Q1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "PUT to unknown data",
 					"event": [
 						{
@@ -465,7 +494,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"autonomic_community\": \"Cantabria\", \"year\": 2021, \"quarter\": \"Q2\", \"atr_irpf\": 2, \"atr_soc_no_consolidadas\": 2, \"atr_iva\": 2 \n}",
+							"raw": "{\n   \"autonomic_community\": \"Cantabria\", \"year\": 2023, \"quarter\": \"Q2\", \"atr_irpf\": 2, \"atr_soc_no_consolidadas\": 2, \"atr_iva\": 2 \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -473,7 +502,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2021/Q2",
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2023/Q2",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -482,7 +511,7 @@
 								"v1",
 								"taxes-stats",
 								"Cantabria",
-								"2021",
+								"2023",
 								"Q2"
 							]
 						}
@@ -531,63 +560,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete created data",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Andalucía/2023/Q1",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"Andalucía",
-								"2023",
-								"Q1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"description": "Tests sin nada especial"
@@ -595,40 +567,6 @@
 		{
 			"name": "Query Requests",
 			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get name",
 					"event": [
@@ -774,7 +712,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete all data Copy",
+					"name": "Get iva",
 					"event": [
 						{
 							"listen": "test",
@@ -782,46 +720,10 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "Tests con queries"
-		},
-		{
-			"name": "Paginación",
-			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"24136288\");",
 									"});"
 								],
 								"type": "text/javascript",
@@ -833,20 +735,117 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/loadInitialData",
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats?atr_iva=24136288",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"taxes-stats",
-								"loadInitialData"
+								"taxes-stats"
+							],
+							"query": [
+								{
+									"key": "atr_iva",
+									"value": "24136288"
+								}
 							]
 						}
 					},
 					"response": []
 				},
+				{
+					"name": "Get irpf",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"3916659\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats?atr_irpf=3916659",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats"
+							],
+							"query": [
+								{
+									"key": "atr_irpf",
+									"value": "3916659"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get soc_no_consolidadas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches search\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"2826482\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats?atr_soc_no_consolidadas=2826482",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats"
+							],
+							"query": [
+								{
+									"key": "atr_soc_no_consolidadas",
+									"value": "2826482"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests con queries"
+		},
+		{
+			"name": "Paginación",
+			"item": [
 				{
 					"name": "Get Cantabria name with pagination",
 					"event": [
@@ -902,40 +901,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Delete all data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"description": "Tests con paginacion"
@@ -943,40 +908,6 @@
 		{
 			"name": "Vistas",
 			"item": [
-				{
-					"name": "Load data",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/loadInitialData",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taxes-stats",
-								"loadInitialData"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get Cantabria data",
 					"event": [
@@ -1037,7 +968,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete all data",
+					"name": "Delete created data Cantabria",
 					"event": [
 						{
 							"listen": "test",
@@ -1056,7 +987,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v1/taxes-stats/",
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Cantabria/2023/Q2",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1064,7 +995,45 @@
 								"api",
 								"v1",
 								"taxes-stats",
-								""
+								"Cantabria",
+								"2023",
+								"Q2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete created data Andalucía",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/taxes-stats/Andalucía/2023/Q1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"taxes-stats",
+								"Andalucía",
+								"2023",
+								"Q1"
 							]
 						}
 					},
