@@ -60,6 +60,9 @@ function loadBackendIBL(app){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
+            else if(data.length > 0){
+                response.sendStatus(200);
+            }
             else if(data.length < 1){
                 db.insert(initialTaxesData);
                 response.sendStatus(200);
