@@ -828,6 +828,221 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Unemployment rate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches search\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"17.3\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?unemployment_rate=17.3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "unemployment_rate",
+									"value": "17.3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Previous quarter var",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches search\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"0.64\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?previous_quarter_var=0.64",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "previous_quarter_var",
+									"value": "0.64"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "previous year quarter var",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches search\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"1.58\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?previous_year_quarter_var=1.58",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "previous_year_quarter_var",
+									"value": "1.58"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "year",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches search\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"2020\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?year=2020",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "quarter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches search\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"q2\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/unemployment-stats?quarter=q2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"unemployment-stats"
+							],
+							"query": [
+								{
+									"key": "quarter",
+									"value": "q2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "Tests que implementan las vistas."
