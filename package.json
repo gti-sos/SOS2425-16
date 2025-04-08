@@ -18,7 +18,8 @@
     "test-api-online-taxes-stats": "npx newman run tests/back/api-tests-IBL.json -e tests/back/api-env-online.json",
     "test-local-taxes-stats": "start-server-and-test start http://localhost:16078 test-api-local-taxes-stats",
     "test-taxes-stats": "npm run test-local-taxes-stats",
-    "test": "npm run test-emigration-stats && npm run test-unemployment-stats && npm run test-taxes-stats"
+    "test": "npm run test-emigration-stats && npm run test-unemployment-stats && npm run test-taxes-stats",
+    "build": "cd src/front && npm install && npm run build"
   },
   "repository": {
     "type": "git",
