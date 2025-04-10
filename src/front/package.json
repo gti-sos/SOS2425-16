@@ -26,9 +26,12 @@
 		"globals": "^16.0.0",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
-		"svelte": "^5.0.0",
+		"svelte": "^5.25.10",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
 		"vite": "^6.2.5"
+	},
+	"dependencies": {
+		"@sveltestrap/sveltestrap": "^7.1.0"
 	}
 }
