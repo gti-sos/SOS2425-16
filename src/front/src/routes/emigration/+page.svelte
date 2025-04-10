@@ -40,7 +40,7 @@
     async function searchData() {
         resultStatus = result = "";
         try {
-            const res = await fetch(API+`?autonomic_community=${encodeURIComponent(autonomic_community)}&year=${encodeURIComponent(year)}&quarter=${encodeURIComponent(quarter)}`, {method:"GET"});
+            const res = await fetch(API+`?autonomic_community=${encodeURIComponent(autonomic_community)}`, {method:"GET"});
             const data = await res.json();
             result = JSON.stringify(data,null,2);
 
@@ -202,3 +202,23 @@
         </tr>
     </tbody>
 </Table>
+
+
+<!--
+<form on:submit|preventDefault={buscar}>
+    <input
+      type="text"
+      bind:value={emigration.autonomic_community}
+      placeholder="Buscar comunidad"
+      class="form-control"
+    />
+    <button class="btn btn-primary mt-2">Buscar</button>
+</form>
+
+
+<ul class="mt-3">
+    {#each emigration_data as emigration}
+      <li>{emigration.autonomic_community}</li>
+    {/each}
+</ul>
+-->
