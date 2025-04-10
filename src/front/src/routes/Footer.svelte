@@ -1,1 +1,1 @@
-<p><a href="/about">about</a></p>
+<p><a href="/about">Sobre nosotros</a></p>
