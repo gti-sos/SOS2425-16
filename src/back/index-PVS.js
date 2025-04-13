@@ -84,9 +84,16 @@ function loadBackendPVS(app) {
         if(paramPYQV){
             query.previous_year_quarter_var = paramPYQV;
         }
-
-        paramOffset ? parseInt(paramOffset) : 0;
-        paramLimit ? parseInt(paramLimit) : -1;
+        if (paramOffset) {
+            paramOffset = parseInt(paramOffset);
+        } else {
+            paramOffset = 0;
+        }
+        if (paramLimit) {
+            paramLimit = parseInt(paramLimit);
+        } else {
+            paramLimit = 0;
+        }
 
         db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
             if (err) {
