@@ -5,6 +5,11 @@ let db = new dataStore();
 
 import initialTaxesData from "./taxesData.json" with { type: "json" };
 
+/**
+    * Handles the backend operations
+    * @param { import('express').Express} app
+    */
+
 function loadBackendIBL(app) {
     // GET operation that inits the data on taxesData from initialTaxesData
     app.get(BASE_API + "/taxes-stats/loadInitialData", (request, response) => {
@@ -264,7 +269,7 @@ function loadBackendIBL(app) {
                                     },
                                 },
                                 {},
-                                function (err, numReplaced) {
+                                function (err) {
                                     if (err) {
                                         response.sendStatus(500);
                                     } else {
