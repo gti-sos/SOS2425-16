@@ -77,7 +77,7 @@
             }else{
                 console.log(`Error creating emigration: status received\n${status}`);
             }
-            result = JSON.stringify(data,null,2);
+            //result = JSON.stringify(data,null,2);
 
         } catch(error){
             console.log(`ERROR creating data from ${API}: ${error}`);
@@ -171,7 +171,7 @@
         {#each emigration_data as emigration}
         <tr>
             <td>
-                {emigration.autonomic_community}
+                <a href ="/emigration/{emigration.autonomic_community}/{emigration.year}/{emigration.quarter}">{emigration.autonomic_community}</a>
             </td>
             <td>
                 {emigration.year}
