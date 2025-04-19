@@ -55,14 +55,15 @@
         }
     }
 
-    async function deleteData(name, year, quarter){
+    async function deleteData(deleteQuery = ""){
+        console.log(deleteQuery)
         try {
-            const res = await fetch(API+"/"+name+"/"+year+"/"+quarter,{method:"DELETE"});
+            const res = await fetch(API + deleteQuery, {method:"DELETE"});
   
             const status = await res.status;
 
             if(status == 200){
-                console.log(`Tax data ${name} deleted`);
+                console.log(`Tax data ${deleteQuery} deleted`);
                 await getData();
             } else {
                 console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
@@ -142,7 +143,7 @@
 				<Button color="success" on:click={() => {searchData(`?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}`)}}>Buscar un dato</Button>
 			</td>
 			<td>
-				<Button color="warning" on:click={() => {deleteData(newTaxesName, newTaxesYear, newTaxesQuarter)}}>Borrar un dato</Button>
+				<Button color="warning" on:click={() => {deleteData(`/${newTaxesName}/${newTaxesYear}/${newTaxesQuarter}`)}}>Borrar un dato</Button>
 			</td>
 			<td>
 				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
