@@ -16,18 +16,35 @@
 	let taxesData = [];
     // let result = "";
     // let resultStatus = "";
-	let newTaxesName;
-	let newTaxesYear;
-	let newTaxesQuarter;
-	let newTaxesIRPF;
-	let newTaxesSocNoConsolidadas;
-	let newTaxesIVA;
+	let newTaxesName = "";
+	let newTaxesYear = "";
+	let newTaxesQuarter = "";
+	let newTaxesIRPF = "";
+	let newTaxesSocNoConsolidadas = "";
+	let newTaxesIVA = "";
 
     async function getData() {
         // let resultStatus = "";
         try {
             await fetch(API+"/loadInitialData", {method:"GET"})
             const res = await fetch(API, {method:"GET"})
+            const data = await res.json();
+            // result = JSON.stringify(data, null, 2);
+
+            taxesData = data;
+            console.log(`Response received:\n${JSON.stringify(taxesData,null,2)}`);
+        } catch (error) {
+            console.log(`ERROR getting data from ${API}: ${error}`);
+        }
+    }
+
+    async function searchData(searchQuery = "") {
+        // let resultStatus = "";
+        console.log(searchQuery)
+        try {
+            taxesData.length = 0;
+            await fetch(API+"/loadInitialData", {method:"GET"})
+            const res = await fetch(API + searchQuery, {method:"GET"})
             const data = await res.json();
             // result = JSON.stringify(data, null, 2);
 
@@ -46,7 +63,7 @@
 
             if(status == 200){
                 console.log(`Tax data ${name} deleted`);
-                getData();
+                await getData();
             } else {
                 console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
             }
@@ -74,7 +91,7 @@
     }
 
     onMount(async () =>{
-        getData();
+        await getData();
     });
 
 </script>
@@ -120,6 +137,9 @@
 			</td>
 			<td>
 				<Button color="success" on:click={getData}>Listar datos</Button>
+			</td>
+			<td>
+				<Button color="success" on:click={() => {searchData(`?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}`)}}>Buscar un dato</Button>
 			</td>
 			<td>
 				<Button color="warning" on:click={() => {deleteData(newTaxesName, newTaxesYear, newTaxesQuarter)}}>Borrar un dato</Button>
