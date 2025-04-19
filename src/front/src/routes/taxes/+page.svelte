@@ -14,87 +14,117 @@
 	import { Button, Table } from '@sveltestrap/sveltestrap';
 
 	let taxesData = [];
-    // let result = "";
-    // let resultStatus = "";
-	let newTaxesName = "";
-	let newTaxesYear = "";
-	let newTaxesQuarter = "";
-	let newTaxesIRPF = "";
-	let newTaxesSocNoConsolidadas = "";
-	let newTaxesIVA = "";
+	// let result = "";
+	// let resultStatus = "";
+	let newTaxesName = '';
+	let newTaxesYear = '';
+	let newTaxesQuarter = '';
+	let newTaxesIRPF = '';
+	let newTaxesSocNoConsolidadas = '';
+	let newTaxesIVA = '';
 
-    async function getData() {
-        // let resultStatus = "";
-        try {
-            await fetch(API+"/loadInitialData", {method:"GET"})
-            const res = await fetch(API, {method:"GET"})
-            const data = await res.json();
-            // result = JSON.stringify(data, null, 2);
+	async function getData() {
+		// let resultStatus = "";
+		try {
+			await fetch(API + '/loadInitialData', { method: 'GET' });
+			const res = await fetch(API, { method: 'GET' });
+			const data = await res.json();
+			// result = JSON.stringify(data, null, 2);
 
-            taxesData = data;
-            console.log(`Response received:\n${JSON.stringify(taxesData,null,2)}`);
-        } catch (error) {
-            console.log(`ERROR getting data from ${API}: ${error}`);
-        }
-    }
+			taxesData = data;
+			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+		} catch (error) {
+			console.log(`ERROR getting data from ${API}: ${error}`);
+		}
+	}
+	async function searchData() {
+		let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
 
-    async function searchData(searchQuery = "") {
-        // let resultStatus = "";
-        console.log(searchQuery)
-        try {
-            taxesData.length = 0;
-            await fetch(API+"/loadInitialData", {method:"GET"})
-            const res = await fetch(API + searchQuery, {method:"GET"})
-            const data = await res.json();
-            // result = JSON.stringify(data, null, 2);
+		// let resultStatus = "";
+		try {
+			taxesData.length = 0;
+			await fetch(API + '/loadInitialData', { method: 'GET' });
+			const res = await fetch(API + searchQuery, { method: 'GET' });
+			const data = await res.json();
+			// result = JSON.stringify(data, null, 2);
 
-            taxesData = data;
-            console.log(`Response received:\n${JSON.stringify(taxesData,null,2)}`);
-        } catch (error) {
-            console.log(`ERROR getting data from ${API}: ${error}`);
-        }
-    }
+			taxesData = data;
+			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+		} catch (error) {
+			console.log(`ERROR getting data from ${API}: ${error}`);
+		}
+	}
 
-    async function deleteData(deleteQuery = ""){
-        console.log(deleteQuery)
-        try {
-            const res = await fetch(API + deleteQuery, {method:"DELETE"});
-  
-            const status = await res.status;
+	async function deleteData() {
+		let deleteQuery = `/${newTaxesName}/${newTaxesYear}/${newTaxesQuarter}`;
 
-            if(status == 200){
-                console.log(`Tax data ${deleteQuery} deleted`);
-                await getData();
-            } else {
-                console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
-            }
-        } catch (error){
-            console.log(`ERROR:  DELETE from ${API}: ${error}`);
-        }
-    }
+		try {
+			const res = await fetch(API + deleteQuery, { method: 'DELETE' });
 
-    async function deleteAllData(){
-        try {
-            const res = await fetch(API+"/", {method:"DELETE"});
-  
-            const status = await res.status;
+			const status = await res.status;
 
-            if(status == 200){
-                console.log(`All data deleted`);
-                // getData();
-                taxesData.length = 0;
-            } else {
-                console.log(`ERROR deleting tax data: status received\n${status}`);
-            }
-        } catch (error){
-            console.log(`ERROR:  DELETE from ${API}: ${error}`);
-        }
-    }
+			if (status == 200) {
+				console.log(`Tax data ${deleteQuery} deleted`);
+				await getData();
+			} else {
+				console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+		}
+	}
 
-    onMount(async () =>{
-        await getData();
-    });
+	async function deleteAllData() {
+		try {
+			const res = await fetch(API + '/', { method: 'DELETE' });
 
+			const status = await res.status;
+
+			if (status == 200) {
+				console.log(`All data deleted`);
+				// getData();
+				taxesData.length = 0;
+			} else {
+				console.log(`ERROR deleting tax data: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+		}
+	}
+
+	async function createData() {
+		try {
+			let postBody = JSON.stringify({
+				autonomic_community: newTaxesName,
+				year: newTaxesYear,
+				quarter: newTaxesQuarter,
+				atr_irpf: newTaxesIRPF,
+				atr_soc_no_consolidadas: newTaxesSocNoConsolidadas,
+				atr_iva: newTaxesIVA
+			});
+			const res = await fetch(API, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: postBody
+			});
+
+			const status = await res.status;
+			if (status == 201) {
+				console.log(`Data created`);
+				getData();
+			} else {
+				console.log(`ERROR creating data: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR:  GET from ${API}: ${error}`);
+		}
+	}
+
+	onMount(async () => {
+		await getData();
+	});
 </script>
 
 <h2>Estadísticas sobre la emigración en España</h2>
@@ -134,45 +164,44 @@
 
 		<tr>
 			<td>
-				<Button color="primary">Insertar datos</Button>
+				<Button color="primary" on:click={createData}>Insertar datos</Button>
 			</td>
 			<td>
 				<Button color="success" on:click={getData}>Listar datos</Button>
 			</td>
 			<td>
-				<Button color="success" on:click={() => {searchData(`?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}`)}}>Buscar un dato</Button>
+				<Button color="success" on:click={searchData}>Buscar un dato</Button>
 			</td>
 			<td>
-				<Button color="warning" on:click={() => {deleteData(`/${newTaxesName}/${newTaxesYear}/${newTaxesQuarter}`)}}>Borrar un dato</Button>
+				<Button color="warning" on:click={deleteData}>Borrar un dato</Button>
 			</td>
 			<td>
 				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
 			</td>
 		</tr>
 
-        {#each taxesData as td (td)}
-            <tr>
-                <td>
-                    {td.autonomic_community}
-                </td>
-                <td>
-                    {td.year}
-                </td>
-                <td>
-                    {td.quarter}
-                </td>
-                <td>
-                    {td.atr_irpf}
-                </td>
-                <td>
-                    {td.atr_soc_no_consolidadas}
-                </td>
-                <td>
-                    {td.atr_iva}
-                </td>
-            </tr>
-        {/each}
-
+		{#each taxesData as td (td)}
+			<tr>
+				<td>
+					{td.autonomic_community}
+				</td>
+				<td>
+					{td.year}
+				</td>
+				<td>
+					{td.quarter}
+				</td>
+				<td>
+					{td.atr_irpf}
+				</td>
+				<td>
+					{td.atr_soc_no_consolidadas}
+				</td>
+				<td>
+					{td.atr_iva}
+				</td>
+			</tr>
+		{/each}
 	</tbody>
 	<tfoot> </tfoot>
 </Table>
