@@ -37,6 +37,10 @@
         }
     }
 
+    async function deleteAllData() {
+        taxesData.length = 0;
+    }
+
     onMount(async () =>{
         getData();
     });
@@ -89,9 +93,33 @@
 				<Button color="warning">Borrar un dato</Button>
 			</td>
 			<td>
-				<Button color="danger">Borrar todos los datos</Button>
+				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
 			</td>
 		</tr>
+
+        {#each taxesData as td (td)}
+            <tr>
+                <td>
+                    {td.autonomic_community}
+                </td>
+                <td>
+                    {td.year}
+                </td>
+                <td>
+                    {td.quarter}
+                </td>
+                <td>
+                    {td.atr_irpf}
+                </td>
+                <td>
+                    {td.atr_soc_no_consolidadas}
+                </td>
+                <td>
+                    {td.atr_iva}
+                </td>
+            </tr>
+        {/each}
+
 	</tbody>
 	<tfoot> </tfoot>
 </Table>
