@@ -183,7 +183,7 @@
 		{#each taxesData as td (td)}
 			<tr>
 				<td>
-					{td.autonomic_community}
+                    <a href ="/taxes/{td.autonomic_community}/{td.year}/{td.quarter}">{td.autonomic_community}</a>
 				</td>
 				<td>
 					{td.year}
