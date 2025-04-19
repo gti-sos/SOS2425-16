@@ -5,6 +5,11 @@ let db = new dataStore();
 
 import initialTaxesData from "./taxesData.json" with { type: "json" };
 
+/**
+ * Handles the backend operations
+ * @param { import('express').Express} app
+ */
+
 function loadBackendIBL(app) {
     // GET operation that inits the data on taxesData from initialTaxesData
     app.get(BASE_API + "/taxes-stats/loadInitialData", (request, response) => {
@@ -73,7 +78,7 @@ function loadBackendIBL(app) {
             .sort({ autonomic_community: 1 })
             .skip(paramOffset)
             .limit(paramLimit)
-            .exec(function (err, docs) {
+            .exec(function(err, docs) {
                 if (!docs.length) {
                     response.sendStatus(404);
                 } else if (err) {
@@ -114,7 +119,7 @@ function loadBackendIBL(app) {
                     year: parseInt(paramYear),
                     quarter: paramQuarter,
                 },
-                function (err, docs) {
+                function(err, docs) {
                     if (!docs) {
                         response.sendStatus(404);
                     } else {
@@ -128,7 +133,7 @@ function loadBackendIBL(app) {
 
     // DELETE operation for all
     app.delete(BASE_API + "/taxes-stats/", (request, response) => {
-        db.remove({}, { multi: true }, function (err, numRemoved) {
+        db.remove({}, { multi: true }, function(err, numRemoved) {
             response.sendStatus(200);
         });
     });
@@ -146,7 +151,7 @@ function loadBackendIBL(app) {
                     year: parseInt(paramYear),
                     quarter: paramQuarter,
                 },
-                function (err, numRemoved) {
+                function(err, numRemoved) {
                     if (err) {
                         response.sendStatus(500);
                     } else {
@@ -185,7 +190,7 @@ function loadBackendIBL(app) {
                 year: parseInt(postBody.year),
                 quarter: postBody.quarter,
             },
-            function (err, docs) {
+            function(err, docs) {
                 if (docs.length > 0) {
                     response.sendStatus(409);
                 } else {
@@ -248,7 +253,7 @@ function loadBackendIBL(app) {
                         year: parseInt(paramYear),
                         quarter: paramQuarter,
                     },
-                    function (err, docs) {
+                    function(err, docs) {
                         if (docs.length === 0) {
                             response.sendStatus(404);
                         } else {
@@ -264,7 +269,7 @@ function loadBackendIBL(app) {
                                     },
                                 },
                                 {},
-                                function (err, numReplaced) {
+                                function(err) {
                                     if (err) {
                                         response.sendStatus(500);
                                     } else {
