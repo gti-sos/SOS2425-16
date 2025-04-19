@@ -47,18 +47,18 @@
                 },
                 body:JSON.stringify({
                     autonomic_community : emigration_data.autonomic_community,
-                    year : emigration_data.year,
+                    year : parseInt(emigration_data.year),
                     quarter : emigration_data.quarter,
-                    between_20_24_yo : newEmigrationBetween_20_24_yo,
-                    between_25_29_yo : newEmigrationBetween_25_29_yo,
-                    between_30_34_yo : newEmigrationBetween_30_34_yo,
+                    between_20_24_yo : parseInt(newEmigrationBetween_20_24_yo),
+                    between_25_29_yo : parseInt(newEmigrationBetween_25_29_yo),
+                    between_30_34_yo : parseInt(newEmigrationBetween_30_34_yo),
                 })
             });
             const status = await res.status; 
             resultStatus = status;
             if(status === 200){
                 console.log(`Emigration updated`);
-                getData();
+                await getData();
             }else{
                 console.log(`Error editing emigration: status received\n${status}`);
             }
@@ -121,13 +121,13 @@
                 {emigration_data.quarter}
             </td>
             <td>
-                <input bind:value={emigration_data.between_20_24_yo}>
+                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 20 y 24 años" bind:value={emigration_data.between_20_24_yo}/>
             </td>
             <td>
-                <input bind:value={emigration_data.between_25_29_yo}>
+                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 25 y 29 años" bind:value={emigration_data.between_25_29_yo}/>
             </td>
             <td>
-                <input bind:value={emigration_data.between_30_34_yo}>
+                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 30 y 34 años" bind:value={emigration_data.between_30_34_yo}/>
             </td>
             <td>
                 <Button color="primary" on:click={editData}>Actualizar datos de emigración</Button>
