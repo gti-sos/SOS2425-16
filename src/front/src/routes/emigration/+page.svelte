@@ -15,12 +15,12 @@
     let emigration_data = [];
     let result = ""; // resultado que devuelve la API
     let resultStatus = "";  // codigo de estado
-    let newEmigrationName;
-    let newEmigrationYear;
-    let newEmigrationQuarter;
-    let newEmigrationBetween_20_24_yo;
-    let newEmigrationBetween_25_29_yo;
-    let newEmigrationBetween_30_34_yo;
+    let newEmigrationName = "";
+    let newEmigrationYear = "";
+    let newEmigrationQuarter = "";
+    let newEmigrationBetween_20_24_yo = "";
+    let newEmigrationBetween_25_29_yo = "";
+    let newEmigrationBetween_30_34_yo = "";
 
     // Variables para búsqueda
     let filterCommunity = "";
@@ -30,15 +30,22 @@
     let filterBetween_25_29_yo = "";
     let filterBetween_30_34_yo = "";
 
-    async function getData() {
+    async function getData() { // meterle 404
         resultStatus = result = "";
         try {
             const res = await fetch(API, {method:"GET"});
-            const data = await res.json(); //asumo que la respuesta es json, o esta parseada asi
-            result = JSON.stringify(data,null,2); // para mostrarlo al usuario
-
-            emigration_data = data;
-            console.log(`Response received:\n${JSON.stringify(emigration_data,null,2)}`);
+            if (res.status === 200){
+                const data = await res.json(); //asumo que la respuesta es json, o esta parseada asi
+                result = JSON.stringify(data,null,2); // para mostrarlo al usuario
+                emigration_data = data;
+                console.log(`Response received:\n${JSON.stringify(emigration_data,null,2)}`);
+            }else if (res.status === 404) {
+                emigration_data = [];
+                resultStatus = "No hay datos disponibles.";
+                result = "warning";
+            }else{
+                throw new Error("Error inesperado al cargar los datos");
+            }
         } catch(error){
             console.log(`ERROR getting data from ${API}: ${error}`);
         }
@@ -125,6 +132,12 @@
             if(status === 201){
                 console.log(`Emigration created`);
                 await getData();
+            }else if (status === 409) {
+                resultStatus = "Ya existe un recurso con esos datos. No se puede duplicar.";
+                result = "danger";
+            } else if (status === 400) {
+                resultStatus = "Los datos enviados no son válidos. Revisa los campos.";
+                result = "danger";
             }else{
                 console.log(`Error creating emigration: status received\n${status}`);
             }
@@ -147,6 +160,9 @@
             if(status === 200){
                 console.log(`Emigration deleted`);
                 getData();
+            }else if (status === 404) {
+                resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
+                result = "warning";
             }else{
                 console.log(`Error deleting emigration: status received\n${status}`);
             }
@@ -166,6 +182,9 @@
             if(status === 200){
                 console.log(`All data has been nuked :D`);
                 getData();
+            }else if (status === 404) {
+                resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
+                result = "warning";
             }else{
                 console.log(`Error deleting all data : status received\n${status}`);
             }
