@@ -24,8 +24,9 @@
 	let newTaxesIVA;
 
     async function getData() {
-        // let resultStatus, result = "";
+        // let resultStatus = "";
         try {
+            await fetch(API+"/loadInitialData", {method:"GET"})
             const res = await fetch(API, {method:"GET"})
             const data = await res.json();
             // result = JSON.stringify(data, null, 2);
@@ -50,7 +51,25 @@
                 console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
             }
         } catch (error){
-            console.log(`ERROR:  GET from ${API}: ${error}`);
+            console.log(`ERROR:  DELETE from ${API}: ${error}`);
+        }
+    }
+
+    async function deleteAllData(){
+        try {
+            const res = await fetch(API+"/", {method:"DELETE"});
+  
+            const status = await res.status;
+
+            if(status == 200){
+                console.log(`All data deleted`);
+                // getData();
+                taxesData.length = 0;
+            } else {
+                console.log(`ERROR deleting tax data: status received\n${status}`);
+            }
+        } catch (error){
+            console.log(`ERROR:  DELETE from ${API}: ${error}`);
         }
     }
 
@@ -105,9 +124,9 @@
 			<td>
 				<Button color="warning" on:click={() => {deleteData(newTaxesName, newTaxesYear, newTaxesQuarter)}}>Borrar un dato</Button>
 			</td>
-			<!-- <td> -->
-			<!-- 	<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button> -->
-			<!-- </td> -->
+			<td>
+				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
+			</td>
 		</tr>
 
         {#each taxesData as td (td)}
