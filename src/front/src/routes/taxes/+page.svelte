@@ -14,8 +14,8 @@
 	import { Button, Table } from '@sveltestrap/sveltestrap';
 
 	let taxesData = [];
-    let result = "";
-    let resultStatus = "";
+    // let result = "";
+    // let resultStatus = "";
 	let newTaxesName;
 	let newTaxesYear;
 	let newTaxesQuarter;
@@ -24,11 +24,11 @@
 	let newTaxesIVA;
 
     async function getData() {
-        resultStatus = result = "";
+        // let resultStatus, result = "";
         try {
             const res = await fetch(API, {method:"GET"})
             const data = await res.json();
-            result = JSON.stringify(data, null, 2);
+            // result = JSON.stringify(data, null, 2);
 
             taxesData = data;
             console.log(`Response received:\n${JSON.stringify(taxesData,null,2)}`);
@@ -37,8 +37,21 @@
         }
     }
 
-    async function deleteAllData() {
-        taxesData.length = 0;
+    async function deleteData(name, year, quarter){
+        try {
+            const res = await fetch(API+"/"+name+"/"+year+"/"+quarter,{method:"DELETE"});
+  
+            const status = await res.status;
+
+            if(status == 200){
+                console.log(`Tax data ${name} deleted`);
+                getData();
+            } else {
+                console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
+            }
+        } catch (error){
+            console.log(`ERROR:  GET from ${API}: ${error}`);
+        }
     }
 
     onMount(async () =>{
@@ -90,11 +103,11 @@
 				<Button color="success" on:click={getData}>Listar datos</Button>
 			</td>
 			<td>
-				<Button color="warning">Borrar un dato</Button>
+				<Button color="warning" on:click={() => {deleteData(newTaxesName, newTaxesYear, newTaxesQuarter)}}>Borrar un dato</Button>
 			</td>
-			<td>
-				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
-			</td>
+			<!-- <td> -->
+			<!-- 	<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button> -->
+			<!-- </td> -->
 		</tr>
 
         {#each taxesData as td (td)}
