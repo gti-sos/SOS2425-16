@@ -10,11 +10,12 @@
     }
 
     import {onMount} from "svelte";
-    import { Button, Table } from '@sveltestrap/sveltestrap';
+    import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
     let unemploymentData = [];
     let result = ""; // resultado que devuelve la API
     let resultStatus = "";  // codigo de estado
+
     let newUnemploymentAutonomicCommunity;
     let newUnemploymentYear;
     let newUnemploymentQuarter;
@@ -22,7 +23,16 @@
     let newUnemploymentPrevious_quarter_var;
     let newUnemploymentPrevious_year_quarter_var;
 
+    // Variables para búsqueda
+    let filterCommunity = "";
+    let filterYear = "";
+    let filterQuarter = "";
+    let filterRate = "";
+    let filterPQVar = "";
+    let filterPYQVar = "";
+
     async function getData() {
+        console.log("Llamada a getData()")
         resultStatus = result = "";
         try {
             const res = await fetch(API);
@@ -40,6 +50,64 @@
             result = "danger";
         }
     }
+
+    async function searchData() {
+        console.log("Llamada a searchData()");
+        resultStatus = result = "";
+        let queryParams = [];
+        console.log("Valores usados para filtrar:", {
+            filterCommunity,
+            filterYear,
+            filterQuarter,
+            filterRate,
+            filterPQVar,
+            filterPYQVar
+            });
+        //encodeURIComponent se usa para el tema de los espacios o tildes en las urls, para que estas no se rompan.
+        //En nuestros datos las ccaas no tienen espacios ni tildes, realmente no es necesario en nuestro caso, pero
+        // es bueno añadirlo.
+        if (filterCommunity) {
+            queryParams.push(`autonomic_community=${encodeURIComponent(filterCommunity)}`);
+        }
+        if (filterYear) {
+            queryParams.push(`year=${encodeURIComponent(filterYear)}`);}
+        if (filterQuarter) {
+            queryParams.push(`quarter=${encodeURIComponent(filterQuarter)}`);
+        }
+        if (filterRate) {
+            queryParams.push(`unemployment_rate=${encodeURIComponent(filterRate)}`);
+        }
+        if (filterPQVar) {
+            queryParams.push(`previous_quarter_var=${encodeURIComponent(filterPQVar)}`);
+        }
+        if (filterPYQVar) {
+            queryParams.push(`previous_year_quarter_var=${encodeURIComponent(filterPYQVar)}`);
+        }
+
+        let query = queryParams.length ? `?${queryParams.join("&")}` : "";
+        // A partir de queryParams hemos construido los parametros que añadimos en la URL, y en query detectamos si hay parametros
+        // Si los hay, le añadimos el '?' del 'http://..../unemploymen-stats?autonomic_community=....', asi construimos el filtro.
+        try {
+            console.log("🔍 URL construida:", API + query); // ✅ importante para depurar
+            const res = await fetch(API + query); //Hacemos la petición al backend con los filtros añadidos.
+
+            if (res.status === 200) {
+                const data = await res.json();
+                unemploymentData = data;
+                resultStatus = `Mostrando ${data.length} resultado(s).`;
+                result = "success";
+            } else if (res.status === 404) {
+                unemploymentData = [];
+                resultStatus = "No se encontraron datos con esos criterios.";
+                result = "warning";
+            } else {
+                throw new Error(`Código inesperado: ${res.status}`);
+            }
+        } catch (error) {
+            resultStatus = `Error al buscar datos: ${error.message}`;
+            result = "danger";
+        }
+}
 
     async function createData() {
         resultStatus = result = "";
@@ -124,11 +192,42 @@
 
 </script>
 
-<h2>Estadísticas de Desempleo en España</h2>
 
 {#if resultStatus}
     <Alert color={result}>{resultStatus}</Alert>
 {/if}
+
+<h3>Buscar datos de desempleo</h3>
+
+<form on:submit|preventDefault={searchData} class="mb-4">
+  <div class="row g-2">
+    <div class="col-md-4 col-lg-3">
+      <input class="form-control" placeholder="Comunidad Autónoma" bind:value={filterCommunity} />
+    </div>
+    <div class="col-md-2 col-lg-1">
+      <input class="form-control" type="number" placeholder="Año" bind:value={filterYear} />
+    </div>
+    <div class="col-md-2 col-lg-1">
+      <input class="form-control" placeholder="Trimestre" bind:value={filterQuarter} />
+    </div>
+    <div class="col-md-3 col-lg-2">
+      <input class="form-control" type="number" step="0.1" placeholder="Tasa desempleo" bind:value={filterRate} />
+    </div>
+    <div class="col-md-3 col-lg-2">
+      <input class="form-control" type="number" step="0.01" placeholder="Var. T. Anterior" bind:value={filterPQVar} />
+    </div>
+    <div class="col-md-3 col-lg-2">
+      <input class="form-control" type="number" step="0.01" placeholder="Var. Año Anterior" bind:value={filterPYQVar} />
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-info" type="submit">Buscar</button>
+      <button class="btn btn-secondary ms-2" type="button" on:click={getData}>Limpiar</button>
+    </div>
+  </div>
+</form>
+
+
+<h2>Estadísticas de Desempleo en España</h2>
 
 <Table striped>
     <thead>
