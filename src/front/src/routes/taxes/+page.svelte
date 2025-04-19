@@ -1,25 +1,46 @@
 <script>
-// @ts-nocheck
+	// @ts-nocheck
 
-	// import { dev } from '$app/environment';
-	// let DEVEL_HOST = 'http://localhost:16078';
-	//let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
-	// let API = '/api/v1/emigration-stats';
+	import { dev } from '$app/environment';
+	let DEVEL_HOST = 'http://localhost:16078';
+	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
+	let API = '/api/v1/taxes-stats';
 
-	// if (dev) {
-	// 	API = DEVEL_HOST + API;
-	// }
+	if (dev) {
+		API = DEVEL_HOST + API;
+	}
 
-	// import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { Button, Table } from '@sveltestrap/sveltestrap';
 
-	// let taxesData = [];
+	let taxesData = [];
+    let result = "";
+    let resultStatus = "";
 	let newTaxesName;
 	let newTaxesYear;
 	let newTaxesQuarter;
 	let newTaxesIRPF;
 	let newTaxesSocNoConsolidadas;
 	let newTaxesIVA;
+
+    async function getData() {
+        resultStatus = result = "";
+        try {
+            const res = await fetch(API, {method:"GET"})
+            const data = await res.json();
+            result = JSON.stringify(data, null, 2);
+
+            taxesData = data;
+            console.log(`Response received:\n${JSON.stringify(taxesData,null,2)}`);
+        } catch (error) {
+            console.log(`ERROR getting data from ${API}: ${error}`);
+        }
+    }
+
+    onMount(async () =>{
+        getData();
+    });
+
 </script>
 
 <h2>Estadísticas sobre la emigración en España</h2>
@@ -56,11 +77,21 @@
 				<input type="number" bind:value={newTaxesIVA} />
 			</td>
 		</tr>
+
+		<tr>
+			<td>
+				<Button color="primary">Insertar datos</Button>
+			</td>
+			<td>
+				<Button color="success" on:click={getData}>Listar datos</Button>
+			</td>
+			<td>
+				<Button color="warning">Borrar un dato</Button>
+			</td>
+			<td>
+				<Button color="danger">Borrar todos los datos</Button>
+			</td>
+		</tr>
 	</tbody>
-    <tfoot>
-        <Button color="primary">Insertar datos</Button>
-        <Button color="success">Listar datos</Button>
-        <Button color="warning">Borrar un dato</Button>
-        <Button color="danger">Borrar todos los datos</Button>
-    </tfoot>
+	<tfoot> </tfoot>
 </Table>
