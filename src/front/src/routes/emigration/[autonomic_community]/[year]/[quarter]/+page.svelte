@@ -18,9 +18,9 @@
     let result = ""; // resultado que devuelve la API
     let resultStatus = "";  // codigo de estado
 
-    let newEmigrationBetween_20_24_yo = "";
-    let newEmigrationBetween_25_29_yo = "";
-    let newEmigrationBetween_30_34_yo = "";
+    // let newEmigrationBetween_20_24_yo = "";
+    // let newEmigrationBetween_25_29_yo = "";
+    // let newEmigrationBetween_30_34_yo = "";
 
     async function getData() {
         resultStatus = result = "";
@@ -49,9 +49,9 @@
                     autonomic_community : emigration_data.autonomic_community,
                     year : parseInt(emigration_data.year),
                     quarter : emigration_data.quarter,
-                    between_20_24_yo : parseInt(newEmigrationBetween_20_24_yo),
-                    between_25_29_yo : parseInt(newEmigrationBetween_25_29_yo),
-                    between_30_34_yo : parseInt(newEmigrationBetween_30_34_yo),
+                    between_20_24_yo : parseInt(emigration_data.between_20_24_yo),
+                    between_25_29_yo : parseInt(emigration_data.between_25_29_yo),
+                    between_30_34_yo : parseInt(emigration_data.between_30_34_yo),
                 })
             });
             const status = await res.status; 
@@ -98,7 +98,7 @@
     }
 
     onMount(async () =>{
-        getData();
+        await getData();
     });
     
 </script>

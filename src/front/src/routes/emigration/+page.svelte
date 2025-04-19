@@ -195,7 +195,7 @@
     }
 
     onMount(async () =>{
-        getData();
+        await getData();
     });
     
 </script>
