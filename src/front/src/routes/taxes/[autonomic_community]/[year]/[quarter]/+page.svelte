@@ -34,8 +34,8 @@
 	let newTaxesSocNoConsolidadas = '';
 	let newTaxesIVA = '';
 
-	async function getData() {
-		resultStatus, (resultMessage = '');
+	async function getData(msg = true) {
+		// resultStatus, (resultMessage = '');
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
 			const res = await fetch(API_RES, { method: 'GET' });
@@ -48,6 +48,11 @@
 				newTaxesIRPF = taxesData.atr_irpf;
 				newTaxesSocNoConsolidadas = taxesData.atr_soc_no_consolidadas;
 				newTaxesIVA = taxesData.atr_iva;
+
+                if(msg){
+                    resultStatus = 'success';
+                    resultMessage = 'Dato recibido';
+                }
 				console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
 			} else {
 				resultStatus = 'warning';
@@ -90,7 +95,9 @@
 				const status = await res.status;
 				if (status === 200) {
 					console.log(`Taxes updated`);
-					await getData();
+                    resultStatus = 'success';
+                    resultMessage = 'Dato editado';
+					await getData(false);
 				} else {
 					resultStatus = 'warning';
 					resultMessage = 'No se pudieron editar los datos';

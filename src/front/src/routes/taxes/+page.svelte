@@ -23,9 +23,9 @@
 
     let resultMessage, resultStatus = '';
 
-	async function getData() {
+	async function getData(msg = true) {
 		let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
-		resultStatus, resultMessage = '';
+		// resultStatus, resultMessage = '';
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
             // const data = await res.json();
@@ -33,6 +33,10 @@
 
             if(res.status === 200){
                 taxesData = await res.json();
+                if(msg){
+                    resultStatus = "success";
+                    resultMessage = "Datos recibidos";
+                }
                 console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
             }
             else{
@@ -57,7 +61,9 @@
 			if (status == 200) {
 				console.log(`Tax data ${deleteQuery} deleted`);
                 newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
-				await getData();
+                resultStatus = "success";
+                resultMessage = "Dato borrado";
+				await getData(false);
 			} else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo borrar el dato";
@@ -78,6 +84,8 @@
 
 			if (status == 200) {
 				console.log(`All data deleted`);
+                resultStatus = "success";
+                resultMessage = "Todos los datos borrados";
 				// getData();
 				taxesData.length = 0;
 			} else {
@@ -115,7 +123,9 @@
 			if (status == 201) {
 				console.log(`Data created`);
                 newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
-				await getData();
+                resultStatus = "success";
+                resultMessage = "Dato creado";
+				await getData(false);
 			} else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo crear el dato";
