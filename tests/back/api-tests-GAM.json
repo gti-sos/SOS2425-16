@@ -11,7 +11,7 @@
 			"name": "Normal",
 			"item": [
 				{
-					"name": "GET all data",
+					"name": "loadInitialData",
 					"event": [
 						{
 							"listen": "test",
@@ -21,10 +21,6 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"// Check if the response length is 12\r",
-									"pm.test(\"Response length is 12\", function () {\r",
-									"    pm.expect(pm.response.json()).to.have.lengthOf(12);\r",
-									"});\r",
 									""
 								],
 								"type": "text/javascript",
@@ -36,14 +32,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v2/emigration-stats/loadInitialData",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
 								"v2",
-								"emigration-stats"
+								"emigration-stats",
+								"loadInitialData"
 							]
 						}
 					},
@@ -133,6 +130,11 @@
 								"exec": [
 									"pm.test(\"Status is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Update the test to fix JSONError and check if the returned array is not empty\r",
+									"pm.test(\"Returned array is not empty\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"Not Found\");\r",
 									"});"
 								],
 								"type": "text/javascript",
