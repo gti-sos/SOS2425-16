@@ -71,9 +71,11 @@
 			atr_iva: newTaxesIVA
 		});
 
-		let invalidValues = Object.values(postBody).filter((f) => f === '' || f === null);
+        console.log(postBody)
+		let invalidValues = Object.values(postBody).filter((f) => ((f === '') || (f === null) || (f === undefined) || (f === "")));
+        console.log(invalidValues)
 
-		if (invalidValues) {
+		if (invalidValues.length > 0) {
 			resultStatus = 'warning';
 			resultMessage = 'Campos mal formados';
 		} else {

@@ -181,7 +181,7 @@ function loadBackendIBL(app) {
             (f) => !allowedFields.includes(f)
         );
         let invalidValues = Object.values(postBody).filter(
-            (f) => (f === "") && (f === null) && (f === undefined)
+            (f) => ((f === "") || (f === null) || (f === undefined))
         );
         console.log(invalidValues)
 
@@ -243,10 +243,12 @@ function loadBackendIBL(app) {
             );
 
             let invalidValues = Object.values(postBody).filter(
-                (f) => (f === "") && (f === null) && (f === undefined)
+                (f) => ((f === "") || (f === null) || (f === undefined) || (f === "null"))
             );
+            console.log(typeof Object.values(postBody)[3])
+            console.log(invalidValues)
 
-            if (invalidFields.length > 0 || invalidValues > 0) {
+            if (invalidFields.length > 0 || invalidValues.length > 0) {
                 response.sendStatus(400);
             } else if (
                 !(
