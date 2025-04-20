@@ -170,13 +170,13 @@
 				{newTaxesQuarter}
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIRPF} />
+				<input type="number" placeholder="Inserte IRPF" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesSocNoConsolidadas} />
+				<input type="number" placeholder="Inserte impuesto de sociedades" bind:value={newTaxesSocNoConsolidadas} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIVA} />
+				<input type="number" placeholder="Inserte IVA" bind:value={newTaxesIVA} />
 
 			</td>
 		</tr>

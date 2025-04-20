@@ -158,7 +158,7 @@
 		<tr>
 			<th>Comunidad Autónoma</th>
 			<th>Año</th>
-			<th>Cuatrimestre</th>
+			<th>Trimestre</th>
 			<th>IRPF</th>
 			<th>Sociedades no consolidadas</th>
 			<th>IVA</th>
@@ -167,22 +167,22 @@
 	<tbody>
 		<tr>
 			<td>
-				<input type="text" bind:value={newTaxesName} />
+				<input type="text" placeholder="Inserte nombre" bind:value={newTaxesName} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesYear} />
+				<input type="number" placeholder="Inserte año" bind:value={newTaxesYear} />
 			</td>
 			<td>
-				<input type="text" bind:value={newTaxesQuarter} />
+				<input type="text" placeholder="Inserte trimestre" bind:value={newTaxesQuarter} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIRPF} />
+				<input type="number" placeholder="Inserte IRPF" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesSocNoConsolidadas} />
+				<input type="number" placeholder="Inserte impuesto de sociedades" bind:value={newTaxesSocNoConsolidadas} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIVA} />
+				<input type="number" placeholder="Inserte IVA" bind:value={newTaxesIVA} />
 			</td>
 		</tr>
 
