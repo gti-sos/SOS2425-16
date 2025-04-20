@@ -51,7 +51,7 @@
                     quarter : emigration_data.quarter,
                     between_20_24_yo : parseInt(emigration_data.between_20_24_yo),
                     between_25_29_yo : parseInt(emigration_data.between_25_29_yo),
-                    between_30_34_yo : parseInt(emigration_data.between_30_34_yo),
+                    between_30_34_yo : parseInt(emigration_data.between_30_34_yo),  
                 })
             });
             const status = await res.status; 
@@ -102,7 +102,9 @@
     });
     
 </script>
-
+{#if result}
+	<Alert color={result}>{resultStatus}</Alert>
+{/if}
 <h2>Datos sobre la emigración en {emigration_data.autonomic_community} para el año {emigration_data.year} y en el cuatrimestre {emigration_data.quarter}</h2>
 <!--{JSON.stringify(emigration_data,null,2)}-->
 
