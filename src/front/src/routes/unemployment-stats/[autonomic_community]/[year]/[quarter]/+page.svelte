@@ -4,7 +4,7 @@
     import { page } from "$app/stores";
     import { goto } from '$app/navigation';
     import {onMount} from "svelte";
-    import { Button, Table } from '@sveltestrap/sveltestrap';
+    import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
     let API = "/api/v1/unemployment-stats";
     let DEVEL_HOST = "http://localhost:16078";
@@ -34,7 +34,7 @@
     }
 
     async function editData() {
-        resultStatus = result = "";
+        resultStatus = result = ``;
         try {
             const res = await fetch(API_R, {
                 method:"PUT",
@@ -50,15 +50,21 @@
                     previous_year_quarter_var : unemploymentData.previous_year_quarter_var
                 })
             });
+            console.log(res.status);
             if (res.status === 200) {
-                await getData()
-                goto("/unemployment-stats");
+                console.log("entra en el if del 200");
                 resultStatus = `El dato de '${unemploymentData.autonomic_community}' (${unemploymentData.year}, ${unemploymentData.quarter}) se ha editado correctamente.`;
-                result = "success";
+                result = `success`;
+                console.log(resultStatus);
+                await getData();
+                //goto("/unemployment-stats");
+            } else if (res.status === 400) {
+                resultStatus = `Error al actualizar el dato: Revisa los campos`;
+                result = `danger`;
             }
         } catch (error){
             resultStatus = `No se pudieron obtener los datos: ${error.message}`;
-            result = "danger";
+            result = `danger`;
         }
 
     }
@@ -77,6 +83,10 @@
 	{unemploymentData.quarter}
 </h2>
 <!--{JSON.stringify(unemploymentData,null,2)}-->
+
+{#if resultStatus}
+    <Alert color={result}>{resultStatus}</Alert>
+{/if}
 
 <Table>
 	<thead>
@@ -110,22 +120,12 @@
 				<input type="number" bind:value={unemploymentData.previous_year_quarter_var} />
 			</td>
 		</tr>
-		<tr> <!--
-			<td>
-				<Button
-					color="danger"
-					on:click={() => {
-						deleteData(
-							unemploymentData.autonomic_community,
-							unemploymentData.year,
-							unemploymentData.quarter
-						);
-					}}>Borrar</Button
-				>
-			</td> -->
+		<tr> 
 			<td>
 				<Button color="primary" on:click={editData}>Actualizar</Button>
 			</td>
 		</tr>
 	</tbody>
 </Table>
+
+<button on:click={goto('/unemployment-stats')}>Atrás</button>
