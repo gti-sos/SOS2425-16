@@ -201,34 +201,9 @@
 </script>
 
 
-<h3>Buscar datos de emigración</h3>
-
-<form on:submit|preventDefault={searchData} class="mb-4">
-  <div class="row g-2">
-    <div class="col-md-4 col-lg-3">
-      <input class="form-control" placeholder="Comunidad Autónoma" bind:value={filterCommunity} />
-    </div>
-    <div class="col-md-2 col-lg-1">
-      <input class="form-control" type="number" placeholder="Año" bind:value={filterYear} />
-    </div>
-    <div class="col-md-2 col-lg-1">
-      <input class="form-control" placeholder="Cuatrimestre" bind:value={filterQuarter} />
-    </div>
-    <div class="col-md-3 col-lg-2">
-      <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 20 y 24 años" bind:value={filterBetween_20_24_yo} />
-    </div>
-    <div class="col-md-3 col-lg-2">
-      <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 25 y 29 años" bind:value={filterBetween_25_29_yo} />
-    </div>
-    <div class="col-md-3 col-lg-2">
-      <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 30 y 34 años" bind:value={filterBetween_30_34_yo} />
-    </div>
-    <div class="col-auto">
-      <button class="btn btn-info" type="submit">Buscar</button>
-      <button class="btn btn-secondary ms-2" type="button" on:click={getData}>Limpiar</button>
-    </div>
-  </div>
-</form>
+{#if resultStatus}
+    <Alert color={result}>{resultStatus}</Alert>
+{/if}
 
 <h2>Estadísticas sobre la emigración en España</h2>
 <!--{JSON.stringify(emigration_data,null,2)}-->
@@ -238,7 +213,7 @@
         <tr>
             <th>Comunidad Autónoma</th>
             <th>Año</th>
-            <th>Cuatrimestre</th>
+            <th>Trimestre</th>
             <th>Entre 20 y 24 años</th>
             <th>Entre 25 y 29 años</th>
             <th>Entre 30 y 34 años</th>
@@ -253,7 +228,7 @@
                 <input class="form-control" type="number" step="1" placeholder="Inserte año" bind:value={newEmigrationYear} />
             </td>
             <td>
-                <input class="form-control" placeholder="Cuatrimestre" bind:value={newEmigrationQuarter} />
+                <input class="form-control" placeholder="Trimestre" bind:value={newEmigrationQuarter} />
             </td>
             <td>
                 <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 20 y 24 años" bind:value={newEmigrationBetween_20_24_yo} />
@@ -264,10 +239,24 @@
             <td>
                 <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 30 y 34 años" bind:value={newEmigrationBetween_30_34_yo} />
             </td>
-            <td>
-                <Button color="primary" on:click={crateData}>Insertar datos de emigración</Button>
-            </td>
         </tr>
+        <tr>
+			<td>
+				<Button color="primary" on:click={crateData}>Insertar datos</Button>
+			</td>
+			<td>
+				<Button color="success" on:click={getData}>Buscar datos</Button>
+			</td>
+			<!-- <td> -->
+			<!-- 	<Button color="success" on:click={searchData}>Buscar un dato</Button> -->
+			<!-- </td> -->
+			<td>
+				<Button color="warning" on:click={deleteData}>Borrar un dato</Button>
+			</td>
+			<td>
+				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
+			</td>
+		</tr>
         {#each emigration_data as emigration}
         <tr>
             <td>
