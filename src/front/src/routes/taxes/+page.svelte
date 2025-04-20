@@ -11,11 +11,9 @@
 	}
 
 	import { onMount } from 'svelte';
-	import { Button, Table } from '@sveltestrap/sveltestrap';
+	import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
 	let taxesData = [];
-	// let result = "";
-	// let resultStatus = "";
 	let newTaxesName = '';
 	let newTaxesYear = '';
 	let newTaxesQuarter = '';
@@ -23,18 +21,27 @@
 	let newTaxesSocNoConsolidadas = '';
 	let newTaxesIVA = '';
 
+    let resultMessage, resultStatus = '';
+
 	async function getData() {
-		// let resultStatus = "";
+		resultStatus, resultMessage = '';
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
+            // const data = await res.json();
 			const res = await fetch(API, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
 
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            if(res.status === 200){
+                taxesData = await res.json();
+                console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            }
+            else{
+                resultStatus = "warning";
+                resultMessage = "No se pudo acceder a los datos";
+            }
 		} catch (error) {
 			console.log(`ERROR getting data from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 	async function searchData() {
@@ -113,7 +120,7 @@
 			const status = await res.status;
 			if (status == 201) {
 				console.log(`Data created`);
-				getData();
+				await getData();
 			} else {
 				console.log(`ERROR creating data: status received\n${status}`);
 			}
@@ -126,6 +133,10 @@
 		await getData();
 	});
 </script>
+
+{#if resultMessage}
+    <Alert color={resultStatus}>{resultMessage}</Alert>
+{/if}
 
 <h2>Estadísticas sobre la emigración en España</h2>
 
