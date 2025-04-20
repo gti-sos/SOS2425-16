@@ -1,10 +1,8 @@
 <script>
     // @ts-nocheck
-    console.log("ola");
     import { dev } from "$app/environment";
     let DEVEL_HOST = "http://localhost:16078";
     let API = "/api/v1/unemployment-stats";
-    console.log(API);
     if(dev){
         API = DEVEL_HOST + API;
     }
@@ -32,19 +30,17 @@
     let filterPYQVar = "";
 
     async function getData() {
-        console.log("Llamada a getData()")
         resultStatus = result = "";
         try {
             const res = await fetch(API);
             if (res.status === 200) {
                 unemploymentData = await res.json();
             } else if (res.status === 404) {
+                await fetch(API + '/loadInitialData', { method: 'GET' });
                 unemploymentData = [];
                 resultStatus = "No hay datos disponibles.";
                 result = "warning";
-            } else {
-                throw new Error("Error inesperado al cargar los datos");
-            }
+            } 
         } catch (error) {
             resultStatus = `No se pudieron obtener los datos: ${error.message}`;
             result = "danger";
@@ -52,17 +48,8 @@
     }
 
     async function searchData() {
-        console.log("Llamada a searchData()");
         resultStatus = result = "";
         let queryParams = [];
-        console.log("Valores usados para filtrar:", {
-            filterCommunity,
-            filterYear,
-            filterQuarter,
-            filterRate,
-            filterPQVar,
-            filterPYQVar
-            });
         //encodeURIComponent se usa para el tema de los espacios o tildes en las urls, para que estas no se rompan.
         //En nuestros datos las ccaas no tienen espacios ni tildes, realmente no es necesario en nuestro caso, pero
         // es bueno añadirlo.
@@ -88,7 +75,6 @@
         // A partir de queryParams hemos construido los parametros que añadimos en la URL, y en query detectamos si hay parametros
         // Si los hay, le añadimos el '?' del 'http://..../unemploymen-stats?autonomic_community=....', asi construimos el filtro.
         try {
-            console.log("🔍 URL construida:", API + query); // ✅ importante para depurar
             const res = await fetch(API + query); //Hacemos la petición al backend con los filtros añadidos.
 
             if (res.status === 200) {
@@ -100,9 +86,7 @@
                 unemploymentData = [];
                 resultStatus = "No se encontraron datos con esos criterios.";
                 result = "warning";
-            } else {
-                throw new Error(`Código inesperado: ${res.status}`);
-            }
+            } 
         } catch (error) {
             resultStatus = `Error al buscar datos: ${error.message}`;
             result = "danger";
@@ -126,17 +110,15 @@
             });
 
             if (response.status === 201) {
+                await getData(); // Recargar los datos automáticamente
                 resultStatus = "Dato creado correctamente.";
                 result = "success";
-                await getData(); // Recargar los datos automáticamente
             } else if (response.status === 409) {
                 resultStatus = "Ya existe un recurso con esos datos. No se puede duplicar.";
                 result = "danger";
             } else if (response.status === 400) {
                 resultStatus = "Los datos enviados no son válidos. Revisa los campos.";
                 result = "danger";
-            } else {
-                throw new Error(`Código inesperado: ${response.status}`);
             }
         } catch (error) {
             resultStatus = `Error al crear el dato: ${error.message}`;
@@ -150,14 +132,12 @@
             const res = await fetch(`${API}/${name}/${year}/${quarter}`, { method: "DELETE" });
 
             if (res.status === 200) {
+                await getData(); // Recarga automática
                 resultStatus = `El dato de '${name}' (${year}, ${quarter}) se ha eliminado correctamente.`;
                 result = "success";
-                await getData(); // Recarga automática
             } else if (res.status === 404) {
                 resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
                 result = "warning";
-            } else {
-                throw new Error(`Código inesperado: ${res.status}`);
             }
         } catch (error) {
             resultStatus = `Error al eliminar el recurso: ${error.message}`;
@@ -176,8 +156,6 @@
             } else if (res.status === 404) {
                 resultStatus = "No había datos para eliminar.";
                 result = "warning";
-            } else {
-                throw new Error(`Código inesperado: ${res.status}`);
             }
         } catch (error) {
             resultStatus = `Error al eliminar los datos: ${error.message}`;
@@ -266,6 +244,10 @@
                     <Button color="danger" size="sm" on:click={() => deleteData(data.autonomic_community, data.year, data.quarter)}>
                         Borrar
                     </Button>
+                    <a class="btn btn-warning btn-sm ms-2"
+                        href={`/unemployment-stats/${data.autonomic_community}/${data.year}/${data.quarter}`}>
+                        Editar
+                    </a>
                 </td>
             </tr>
         {/each}
