@@ -183,7 +183,7 @@
 				{newTaxesQuarter}
 			</td>
 			<td>
-				<input type="number" placeholder="Inserte IRPF" bind:value={newTaxesIRPF} />
+				<input type="number" placeholder="Inserte impuesto de irpf" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
 				<input type="number" placeholder="Inserte impuesto de sociedades" bind:value={newTaxesSocNoConsolidadas} />
