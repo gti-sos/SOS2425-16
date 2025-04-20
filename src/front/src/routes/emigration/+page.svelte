@@ -1,3 +1,6 @@
+<svelte:head>
+    <title>Emigracion España</title>
+</svelte:head>
 <script>
 // @ts-nocheck
     import { dev } from "$app/environment";
