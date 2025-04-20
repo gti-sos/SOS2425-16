@@ -178,27 +178,33 @@ function loadBackendIBL(app) {
             "atr_iva",
         ];
         let invalidFields = Object.keys(postBody).filter(
-            (f) => !allowedFields.includes(f),
+            (f) => !allowedFields.includes(f)
         );
+        let invalidValues = Object.values(postBody).filter(
+            (f) => f === ""
+        );
+        console.log(invalidValues)
 
-        if (invalidFields.length > 0) {
+        if (invalidFields.length > 0 || invalidValues.length > 0) {
             response.sendStatus(400);
         }
-        db.find(
-            {
-                autonomic_community: postBody.autonomic_community,
-                year: parseInt(postBody.year),
-                quarter: postBody.quarter,
-            },
-            function(err, docs) {
-                if (docs.length > 0) {
-                    response.sendStatus(409);
-                } else {
-                    db.insert(postBody);
-                    response.sendStatus(201);
-                }
-            },
-        );
+        else {
+            db.find(
+                {
+                    autonomic_community: postBody.autonomic_community,
+                    year: parseInt(postBody.year),
+                    quarter: postBody.quarter,
+                },
+                function(err, docs) {
+                    if (docs.length > 0) {
+                        response.sendStatus(409);
+                    } else {
+                        db.insert(postBody);
+                        response.sendStatus(201);
+                    }
+                },
+            );
+        }
     });
 
     // POST operation cannot be sent to /taxes-stats/:name/:year/:quarter
@@ -236,7 +242,11 @@ function loadBackendIBL(app) {
                 (f) => !allowedFields.includes(f),
             );
 
-            if (invalidFields.length > 0) {
+            let invalidValues = Object.values(postBody).filter(
+                (f) => f === ""
+            );
+
+            if (invalidFields.length > 0 || invalidValues > 0) {
                 response.sendStatus(400);
             } else if (
                 !(

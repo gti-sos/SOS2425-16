@@ -65,6 +65,8 @@
 			}
 		} catch (error) {
 			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -79,10 +81,14 @@
 				// getData();
 				taxesData.length = 0;
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudieron borrar los datos";
 				console.log(`ERROR deleting tax data: status received\n${status}`);
 			}
 		} catch (error) {
 			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -107,12 +113,17 @@
 			const status = await res.status;
 			if (status == 201) {
 				console.log(`Data created`);
+                newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
 				await getData();
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo crear el dato";
 				console.log(`ERROR creating data: status received\n${status}`);
 			}
 		} catch (error) {
 			console.log(`ERROR:  GET from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
