@@ -6,18 +6,18 @@
     import { dev } from "$app/environment";
     let DEVEL_HOST = "http://localhost:16078";
     //let PROD_HOST = "http://localhost:16078/api/v1/emigration-stats";
-    let API = "/api/v1/emigration-stats";
+    let API = "/api/v2/emigration-stats";
 
     if(dev){
         API = DEVEL_HOST + API;
     }
 
     import {onMount} from "svelte";
-    import { Button, Table } from '@sveltestrap/sveltestrap';
+    import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
     let emigration_data = [];
-    let result = ""; // resultado que devuelve la API
-    let resultStatus = "";  // codigo de estado
+    //let result = ""; // resultado que devuelve la API
+    let resultMessage, resultStatus = '';
     let newEmigrationName = "";
     let newEmigrationYear = "";
     let newEmigrationQuarter = "";
@@ -26,35 +26,61 @@
     let newEmigrationBetween_30_34_yo = "";
 
     // Variables para búsqueda
+    /*
     let filterCommunity = "";
     let filterYear = "";
     let filterQuarter = "";
     let filterBetween_20_24_yo = "";
     let filterBetween_25_29_yo = "";
     let filterBetween_30_34_yo = "";
+    */
 
-    async function getData() { // meterle 404
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, {method:"GET"});
-            if (res.status === 200){
-                const data = await res.json(); //asumo que la respuesta es json, o esta parseada asi
-                result = JSON.stringify(data,null,2); // para mostrarlo al usuario
-                emigration_data = data;
-                console.log(`Response received:\n${JSON.stringify(emigration_data,null,2)}`);
-            }else if (res.status === 404) {
-                emigration_data = [];
-                resultStatus = "No hay datos disponibles.";
-                result = "warning";
-            }else{
-                throw new Error("Error inesperado al cargar los datos");
+    async function getData(msg =true) { // meterle 404
+        let searchQuery = `?autonomic_community=${newEmigrationName}&year=${newEmigrationYear}
+        &quarter=${newEmigrationQuarter}&between_20_24_yo=${newEmigrationBetween_20_24_yo}
+        &between_25_29_yo=${newEmigrationBetween_25_29_yo}&between_30_34_yo=${newEmigrationBetween_30_34_yo}`;
+		// resultStatus, resultMessage = '';
+		try {
+			await fetch(API + '/loadInitialData' , { method: 'GET' });
+            // const data = await res.json();
+			const res = await fetch(API + searchQuery, { method: 'GET' });
+
+            if(res.status === 200){
+                emigration_data = await res.json();
+                if(msg){
+                    resultStatus = "success";
+                    resultMessage = "Datos recibidos";
+                }
+                console.log(`Response received:\n${JSON.stringify(emigration_data, null, 2)}`);
             }
-        } catch(error){
-            console.log(`ERROR getting data from ${API}: ${error}`);
-        }
+            else{
+                resultStatus = "warning";
+                resultMessage = `No existe la comunidad ${newEmigrationName} `;
+                if (newEmigrationYear){
+                    resultMessage+= `en el año ${newEmigrationYear} `
+                }
+                if (newEmigrationQuarter){
+                    resultMessage+= `en el trimestre ${newEmigrationQuarter} `
+                }
+                if (newEmigrationBetween_20_24_yo){
+                    resultMessage+= `con la cantidad de personas entre 20 y 24 años ${newEmigrationQuarter} `
+                }
+                if (newEmigrationBetween_25_29_yo){
+                    resultMessage+= `con la cantidad de personas entre 25 y 29 años ${newEmigrationQuarter} `
+                }
+                if (newEmigrationBetween_30_34_yo){
+                    resultMessage+= `con la cantidad de personas entre 30 y 34 años ${newEmigrationQuarter}`
+                }
+            }
+		} catch (error) {
+			console.log(`ERROR getting data from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
+		}
         
     }
 
+    /*
     async function searchData() {
         console.log("Llamada a searchData()");
         resultStatus = result = "";
@@ -104,108 +130,111 @@
                 emigration_data = [];
                 resultStatus = "No se encontraron datos con esos criterios.";
                 result = "warning";
-            } else {
-                throw new Error(`Código inesperado: ${res.status}`);
             }
         } catch (error) {
             resultStatus = `Error al buscar datos: ${error.message}`;
             result = "danger";
         }
-    }
+    }*/
 
-    async function crateData() { // da problemas luego al mirar pagina indiviadual y no deja borrarlo (problemas de sincronia?)
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, {
-                method:"POST",
-                headers:{
-                    "Content-Type" : "application/json"
-                },
-                body:JSON.stringify({
-                    autonomic_community : newEmigrationName,
-                    year : parseInt(newEmigrationYear),
-                    quarter : newEmigrationQuarter,
-                    between_20_24_yo : parseInt(newEmigrationBetween_20_24_yo),
-                    between_25_29_yo : parseInt(newEmigrationBetween_25_29_yo),
-                    between_30_34_yo : parseInt(newEmigrationBetween_30_34_yo),
-                })
-            });
-            const status = await res.status; 
-            resultStatus = status;
-            if(status === 201){
-                console.log(`Emigration created`);
-                await getData();
-            }else if (status === 409) {
-                resultStatus = "Ya existe un recurso con esos datos. No se puede duplicar.";
-                result = "danger";
-            } else if (status === 400) {
-                resultStatus = "Los datos enviados no son válidos. Revisa los campos.";
-                result = "danger";
-            }else{
-                console.log(`Error creating emigration: status received\n${status}`);
+    async function createData() {
+		try {
+			let postBody = JSON.stringify({
+                autonomic_community : newEmigrationName,
+                year : parseInt(newEmigrationYear),
+                quarter : newEmigrationQuarter,
+                between_20_24_yo : parseInt(newEmigrationBetween_20_24_yo),
+                between_25_29_yo : parseInt(newEmigrationBetween_25_29_yo),
+                between_30_34_yo : parseInt(newEmigrationBetween_30_34_yo),
+			});
+			const res = await fetch(API, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: postBody
+			});
+
+			const status = await res.status;
+			if (status == 201) {
+				console.log(`Data created`);
+                newEmigrationName = newEmigrationYear = newEmigrationQuarter = newEmigrationBetween_20_24_yo = newEmigrationBetween_25_29_yo = newEmigrationBetween_30_34_yo = "";
+                resultStatus = "success";
+                resultMessage = "Dato creado";
+				await getData(false);
+			} else if (status === 409) {
+                resultStatus = "warning";
+                resultMessage = "No se pudo crear el dato porque ya existe otro igual";
+				console.log(`ERROR creating data: status received\n${status}`);
+			}else{
+                resultStatus = "warning";
+                resultMessage = `No se pudo editar el dato, la expresión está mal formada, compruebe haber introducido datos numéricos`;
+				console.log(`ERROR creating data: status received\n${status}`);
             }
-            //result = JSON.stringify(data,null,2);
+		} catch (error) {
+			console.log(`ERROR:  GET from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
+		}
+	}
 
-        } catch(error){
-            console.log(`ERROR creating data from ${API}: ${error}`);
-        }
-        
-    }
+	async function deleteData(name,year,quarter) {
+		let deleteQuery = `/${name}/${year}/${quarter}`;
 
-    async function deleteData(name,year,quarter) {
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API+"/"+name+"/"+year+"/"+quarter, {method:"DELETE"});
+		try {
+			const res = await fetch(API + deleteQuery, { method: 'DELETE' });
 
-            const status = await res.status; 
-            resultStatus = status;
+			const status = await res.status;
 
-            if(status === 200){
-                console.log(`Emigration deleted`);
-                getData();
-            }else if (status === 404) {
-                resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
-                result = "warning";
-            }else{
-                console.log(`Error deleting emigration: status received\n${status}`);
-            }
-        } catch(error){
-            console.log(`ERROR deleting data from ${API}: ${error}`);
-        }
-    }
+			if (status == 200) {
+				console.log(`Emigration data ${deleteQuery} deleted`);
+                //newEmigrationName = newEmigrationYear = newEmigrationQuarter = newEmigrationBetween_20_24_yo = newEmigrationBetween_25_29_yo = newEmigrationBetween_30_34_yo = "";
+                resultStatus = "success";
+                resultMessage = "Dato borrado";
+				await getData(false);
+			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo borrar el dato";
+				console.log(`ERROR deleting emigration data ${name}: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
+		}
+	}
 
-    async function deleteAllData() { // editar para que devuelva un array vacio y se muestre al usuario
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, {method:"DELETE"});
+    async function deleteAllData() {
+		try {
+			const res = await fetch(API + '/', { method: 'DELETE' });
 
-            const status = await res.status; 
-            resultStatus = status;
+			const status = await res.status;
 
-            if(status === 200){
-                console.log(`All data has been nuked :D`);
-                getData();
-            }else if (status === 404) {
-                resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
-                result = "warning";
-            }else{
-                console.log(`Error deleting all data : status received\n${status}`);
-            }
-        } catch(error){
-            console.log(`ERROR deleting data from ${API}: ${error}`);
-        }
-        
-    }
+			if (status == 200) {
+				console.log(`All data deleted`);
+                resultStatus = "success";
+                resultMessage = "Todos los datos borrados";
+				// getData();
+				emigration_data.length = 0;
+			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudieron borrar los datos porque ya no hay datos";
+				console.log(`ERROR deleting tax data: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
+		}
+	}
 
     onMount(async () =>{
         await getData();
     });
     
 </script>
-
-
-{#if resultStatus}
-    <Alert color={result}>{resultStatus}</Alert>
+{#if resultMessage}
+    <Alert color={resultStatus}>{resultMessage}</Alert>
 {/if}
 
 <h2>Estadísticas sobre la emigración en España</h2>
@@ -245,16 +274,10 @@
         </tr>
         <tr>
 			<td>
-				<Button color="primary" on:click={crateData}>Insertar datos</Button>
+				<Button color="primary" on:click={createData}>Insertar datos</Button>
 			</td>
 			<td>
 				<Button color="success" on:click={getData}>Buscar datos</Button>
-			</td>
-			<!-- <td> -->
-			<!-- 	<Button color="success" on:click={searchData}>Buscar un dato</Button> -->
-			<!-- </td> -->
-			<td>
-				<Button color="warning" on:click={deleteData}>Borrar un dato</Button>
 			</td>
 			<td>
 				<Button color="danger" on:click={deleteAllData}>Borrar todos los datos</Button>
@@ -285,32 +308,5 @@
             </td>
         </tr>
         {/each}
-        <tr>
-            <td>
-                <!---<div class="d-flex justify-content-center align-items-center" style="height: 100%;">-->
-                    <Button color="danger" on:click={deleteAllData}>Borrar Todo</Button>
-                <!--</div>-->
-            </td>
-        </tr>
     </tbody>
 </Table>
-
-
-<!--
-<form on:submit|preventDefault={buscar}>
-    <input
-      type="text"
-      bind:value={emigration.autonomic_community}
-      placeholder="Buscar comunidad"
-      class="form-control"
-    />
-    <button class="btn btn-primary mt-2">Buscar</button>
-</form>
-
-
-<ul class="mt-3">
-    {#each emigration_data as emigration}
-      <li>{emigration.autonomic_community}</li>
-    {/each}
-</ul>
--->
