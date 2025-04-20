@@ -94,7 +94,7 @@
             filterBetween_30_34_yo
             });
         //encodeURIComponent se usa para el tema de los espacios o tildes en las urls, para que estas no se rompan.
-        //En nuestros datos las ccaas no tienen espacios ni tildes, realmente no es necesario en nuestro caso, pero xd
+        //En nuestros datos las ccaas no tienen espacios ni tildes, realmente no es necesario en nuestro caso, pero 
         // es bueno añadirlo.
         if (filterCommunity) {
             queryParams.push(`autonomic_community=${encodeURIComponent(filterCommunity)}`);
