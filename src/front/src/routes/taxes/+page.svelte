@@ -43,6 +43,10 @@
                 }
                 console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
             }
+            else if(res.status === 404){
+                resultStatus = "warning";
+                resultMessage = `No se pudo acceder a ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
             else{
                 resultStatus = "warning";
                 resultMessage = "No se pudo acceder a los datos";
@@ -68,7 +72,12 @@
                 resultStatus = "success";
                 resultMessage = "Dato borrado";
 				await getData(false);
-			} else {
+			}
+            else if(res.status === 404){
+                resultStatus = "warning";
+                resultMessage = `No se pudo borrar el dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
+            else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo borrar el dato";
 				console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
@@ -130,7 +139,16 @@
                 resultStatus = "success";
                 resultMessage = "Dato creado";
 				await getData(false);
-			} else {
+			} 
+            else if(res.status === 400){
+                resultStatus = "warning";
+                resultMessage = `No se pudo crear el dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
+            else if(res.status === 409){
+                resultStatus = "warning";
+                resultMessage = `El dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter} ya existe`;
+            }
+            else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo crear el dato";
 				console.log(`ERROR creating data: status received\n${status}`);
