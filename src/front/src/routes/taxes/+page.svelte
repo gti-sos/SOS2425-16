@@ -24,11 +24,12 @@
     let resultMessage, resultStatus = '';
 
 	async function getData() {
+		let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
 		resultStatus, resultMessage = '';
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
             // const data = await res.json();
-			const res = await fetch(API, { method: 'GET' });
+			const res = await fetch(API + searchQuery, { method: 'GET' });
 
             if(res.status === 200){
                 taxesData = await res.json();
@@ -44,24 +45,24 @@
             resultMessage = "El servidor se encuentra ausente";
 		}
 	}
-	async function searchData() {
-		let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
-
-		// let resultStatus = "";
-		try {
-			taxesData.length = 0;
-			await fetch(API + '/loadInitialData', { method: 'GET' });
-			const res = await fetch(API + searchQuery, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
-
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
-		} catch (error) {
-			console.log(`ERROR getting data from ${API}: ${error}`);
-		}
-	}
-
+	// async function searchData() {
+	// 	let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
+	//
+	// 	// let resultStatus = "";
+	// 	try {
+	// 		taxesData.length = 0;
+	// 		await fetch(API + '/loadInitialData', { method: 'GET' });
+	// 		const res = await fetch(API + searchQuery, { method: 'GET' });
+	// 		const data = await res.json();
+	// 		// result = JSON.stringify(data, null, 2);
+	//
+	// 		taxesData = data;
+	// 		console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+	// 	} catch (error) {
+	// 		console.log(`ERROR getting data from ${API}: ${error}`);
+	// 	}
+	// }
+	//
 	async function deleteData() {
 		let deleteQuery = `/${newTaxesName}/${newTaxesYear}/${newTaxesQuarter}`;
 
@@ -178,11 +179,11 @@
 				<Button color="primary" on:click={createData}>Insertar datos</Button>
 			</td>
 			<td>
-				<Button color="success" on:click={getData}>Listar datos</Button>
+				<Button color="success" on:click={getData}>Buscar datos</Button>
 			</td>
-			<td>
-				<Button color="success" on:click={searchData}>Buscar un dato</Button>
-			</td>
+			<!-- <td> -->
+			<!-- 	<Button color="success" on:click={searchData}>Buscar un dato</Button> -->
+			<!-- </td> -->
 			<td>
 				<Button color="warning" on:click={deleteData}>Borrar un dato</Button>
 			</td>
