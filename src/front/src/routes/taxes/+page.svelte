@@ -93,6 +93,7 @@
 	}
 
 	async function createData() {
+        console.log(newTaxesIRPF)
 		try {
 			let postBody = JSON.stringify({
 				autonomic_community: newTaxesName,
