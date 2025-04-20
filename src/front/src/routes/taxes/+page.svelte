@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Impuestos España</title>
+</svelte:head>
+
 <script>
 	// @ts-nocheck
 
@@ -39,6 +43,10 @@
                 }
                 console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
             }
+            else if(res.status === 404){
+                resultStatus = "warning";
+                resultMessage = `No se pudo acceder a ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
             else{
                 resultStatus = "warning";
                 resultMessage = "No se pudo acceder a los datos";
@@ -64,7 +72,12 @@
                 resultStatus = "success";
                 resultMessage = "Dato borrado";
 				await getData(false);
-			} else {
+			}
+            else if(res.status === 404){
+                resultStatus = "warning";
+                resultMessage = `No se pudo borrar el dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
+            else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo borrar el dato";
 				console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
@@ -126,7 +139,16 @@
                 resultStatus = "success";
                 resultMessage = "Dato creado";
 				await getData(false);
-			} else {
+			} 
+            else if(res.status === 400){
+                resultStatus = "warning";
+                resultMessage = `No se pudo crear el dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter}`;
+            }
+            else if(res.status === 409){
+                resultStatus = "warning";
+                resultMessage = `El dato ${newTaxesName} en el año ${newTaxesYear} y en el trimestre ${newTaxesQuarter} ya existe`;
+            }
+            else {
                 resultStatus = "warning";
                 resultMessage = "No se pudo crear el dato";
 				console.log(`ERROR creating data: status received\n${status}`);
@@ -154,7 +176,7 @@
 		<tr>
 			<th>Comunidad Autónoma</th>
 			<th>Año</th>
-			<th>Cuatrimestre</th>
+			<th>Trimestre</th>
 			<th>IRPF</th>
 			<th>Sociedades no consolidadas</th>
 			<th>IVA</th>
@@ -163,22 +185,22 @@
 	<tbody>
 		<tr>
 			<td>
-				<input type="text" bind:value={newTaxesName} />
+				<input type="text" placeholder="Inserte nombre" bind:value={newTaxesName} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesYear} />
+				<input type="number" placeholder="Inserte año" bind:value={newTaxesYear} />
 			</td>
 			<td>
-				<input type="text" bind:value={newTaxesQuarter} />
+				<input type="text" placeholder="Inserte trimestre" bind:value={newTaxesQuarter} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIRPF} />
+				<input type="number" placeholder="Inserte IRPF" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesSocNoConsolidadas} />
+				<input type="number" placeholder="Inserte impuesto de sociedades" bind:value={newTaxesSocNoConsolidadas} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIVA} />
+				<input type="number" placeholder="Inserte IVA" bind:value={newTaxesIVA} />
 			</td>
 		</tr>
 
