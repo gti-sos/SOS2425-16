@@ -57,6 +57,7 @@
 			console.log(`ERROR getting data from ${API_RES}: ${error}`);
 			resultStatus = 'danger';
 			resultMessage = 'El servidor se encuentra ausente';
+
 		}
 	}
 
@@ -104,6 +105,7 @@
 	async function deleteData() {
 		try {
 			const res = await fetch(API_RES, {
+
 				method: 'DELETE'
 			});
 
@@ -166,11 +168,13 @@
 			</td>
 			<td>
 				<input type="number" bind:value={newTaxesIVA} />
+
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<Button color="danger" on:click={deleteData}>Borrar</Button>
+
 			</td>
 			<td>
 				<Button color="primary" on:click={editData}>Actualizar datos de impuestos</Button>
