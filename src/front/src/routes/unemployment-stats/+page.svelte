@@ -1,3 +1,6 @@
+<svelte:head>
+    <title>Desempleo en España</title>
+</svelte:head>
 <script>
     // @ts-nocheck
     import { dev } from "$app/environment";
@@ -36,7 +39,6 @@
             if (res.status === 200) {
                 unemploymentData = await res.json();
             } else if (res.status === 404) {
-                await fetch(API + '/loadInitialData', { method: 'GET' });
                 unemploymentData = [];
                 resultStatus = "No hay datos disponibles.";
                 result = "warning";
@@ -96,19 +98,6 @@
     async function createData() {
         resultStatus = result = "";
         try {
-            console.log(newUnemploymentPrevious_year_quarter_var);
-            if (
-                !newUnemploymentAutonomicCommunity ||
-                !newUnemploymentYear ||
-                !newUnemploymentQuarter ||
-                newUnemploymentUnemployment_rate === null ||
-                newUnemploymentPrevious_quarter_var === null ||
-                newUnemploymentPrevious_year_quarter_var === null
-                ) {
-                resultMessage = "Por favor, rellena todos los campos antes de crear el dato.";
-                resultType = "danger";
-                return;
-            }
             const response = await fetch(API, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -121,7 +110,7 @@
                     previous_year_quarter_var: parseFloat(newUnemploymentPrevious_year_quarter_var),
                 })
             });
-
+            console.log(response.status);
             if (response.status === 201) {
                 await getData(); // Recargar los datos automáticamente
                 resultStatus = "Dato creado correctamente.";

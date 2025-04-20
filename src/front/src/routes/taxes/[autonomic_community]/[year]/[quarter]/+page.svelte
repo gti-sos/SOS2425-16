@@ -54,7 +54,15 @@
                     resultMessage = 'Dato recibido';
                 }
 				console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
-			} else {
+			} 
+            else if(res.status === 404){
+                let paramName = $page.params.autonomic_community;
+                let paramYear = $page.params.year; 
+                let paramQuarter = $page.params.quarter;
+                resultStatus = "warning";
+                resultMessage = `No se pudo encontrar el dato ${paramName} en el año ${paramYear} en el trimestre ${paramQuarter}`
+            }
+            else {
 				resultStatus = 'warning';
 				resultMessage = 'No se pudo acceder a los datos';
 			}
@@ -98,7 +106,12 @@
                     resultStatus = 'success';
                     resultMessage = 'Dato editado';
 					await getData(false);
-				} else {
+				}
+                else if(res.status === 400){
+                    resultStatus = "warning";
+                    resultMessage = `Los campos están mal formados`;
+                }
+                else {
 					resultStatus = 'warning';
 					resultMessage = 'No se pudieron editar los datos';
 					console.log(`Error editing taxes: status received\n${status}`);
@@ -170,13 +183,13 @@
 				{newTaxesQuarter}
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIRPF} />
+				<input type="number" placeholder="Inserte impuesto de irpf" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesSocNoConsolidadas} />
+				<input type="number" placeholder="Inserte impuesto de sociedades" bind:value={newTaxesSocNoConsolidadas} />
 			</td>
 			<td>
-				<input type="number" bind:value={newTaxesIVA} />
+				<input type="number" placeholder="Inserte IVA" bind:value={newTaxesIVA} />
 
 			</td>
 		</tr>

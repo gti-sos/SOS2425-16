@@ -32,10 +32,17 @@ const initialUnemploymentData = [
     { autonomic_community: "islas-baleares", year: 2020, quarter: "q4", unemployment_rate: 17.3, previous_quarter_var: 4.06, previous_year_quarter_var: 7.43 }  
 ];
 
-
+db.find({},(err, data)=>{
+    if (err){               
+        console.error(`ERROR: ${err}`);
+    }
+    else if(data.length < 1){
+        db.insert(initialUnemploymentData);
+    }
+});
 
 function loadBackendPVS(app) {
-    
+    /*
     app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{
         db.find({},(err, unemploymentData)=>{
             if (err){
@@ -48,7 +55,7 @@ function loadBackendPVS(app) {
             }
         });
     })
-
+    */
     app.get(BASE_API + "/unemployment-stats", (request, response) => {
         let paramName = request.query.autonomic_community;
         //Parametros opcionales
@@ -170,8 +177,11 @@ function loadBackendPVS(app) {
         let postBody = request.body;
         let allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
         let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
+        let invalidValues = Object.values(postBody).filter(
+            f => ((f === "") || (f === null) || (f === undefined))
+        );
 
-        if (invalidFields.length > 0){
+        if (invalidFields.length > 0 || invalidValues.length > 0){
             return response.sendStatus(400);
         }
         db.find({ autonomic_community: postBody.autonomic_community, year: parseInt(postBody.year),
@@ -210,8 +220,11 @@ function loadBackendPVS(app) {
 
         let allowedFields = ["autonomic_community", "year", "quarter", "unemployment_rate", "previous_quarter_var", "previous_year_quarter_var"];
         let invalidFields = Object.keys(postBody).filter(f => !allowedFields.includes(f));
+        let invalidValues = Object.values(postBody).filter(
+            (f) => ((f === "") || (f === null) || (f === undefined) || (f === "null"))
+        );
 
-        if (invalidFields.length > 0){
+        if (invalidFields.length > 0 || invalidValues.length > 0){
             return response.sendStatus(400);
         }
         else if(!((postBody.autonomic_community === paramName) && (parseInt(postBody.year) === paramYear) && (postBody.quarter === paramQuarter))){
