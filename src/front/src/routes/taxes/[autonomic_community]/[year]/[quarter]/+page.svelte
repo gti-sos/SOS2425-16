@@ -19,23 +19,30 @@
 
 
 	import { onMount } from 'svelte';
-	import { Button, Table } from '@sveltestrap/sveltestrap';
+	import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
 	let taxesData = {};
 
+    let resultMessage, resultStatus = '';
 
 	async function getData() {
-		// let resultStatus = "";
+		resultStatus, resultMessage = '';
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
 			const res = await fetch(API_RES, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
 
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            if(res.status === 200){
+                taxesData = await res.json();
+                console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            }
+            else{
+                resultStatus = "warning";
+                resultMessage = "No se pudo acceder a los datos";
+            }
 		} catch (error) {
 			console.log(`ERROR getting data from ${API_RES}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -60,11 +67,15 @@
 				console.log(`Taxes updated`);
 				await getData();
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo acceder a los datos";
 				console.log(`Error editing taxes: status received\n${status}`);
 			}
 			//result = JSON.stringify(data,null,2);
 		} catch (error) {
 			console.log(`ERROR editing data from ${API_RES}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -91,6 +102,10 @@
 		await getData();
 	});
 </script>
+
+{#if resultMessage}
+    <Alert color={resultStatus}>{resultMessage}</Alert>
+{/if}
 
 <h2>
 	Datos sobre los impuestos en {taxesData.autonomic_community} para el año {taxesData.year} y en el
