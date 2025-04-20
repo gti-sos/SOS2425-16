@@ -1,6 +1,6 @@
 import dataStore from "nedb";
 
-const BASE_API= "/api/v1";
+const BASE_API= "/api/v2";
 
 let db = new dataStore();
 
@@ -24,6 +24,7 @@ const initialEmigrationData = [
 
     // GET request that inserts to the database the initial data.
 
+        /*
         db.find({},(err, data)=>{
             if (err){               
                 console.error(`ERROR: ${err}`);
@@ -32,11 +33,28 @@ const initialEmigrationData = [
                 db.insert(initialEmigrationData);
             }
         });
+        */
 
 // Function that contains all of the HTTP requests.
 
 function loadBackendGAM(app){
 
+    
+    app.get(BASE_API + "/emigration-stats/loadInitialData", (request, response) => {
+        db.find({}, (err, data) => {
+            if (err) {
+                response
+                    .status(500)
+                    .send("Error code 01 (please contact admin)");
+                console.error(`ERROR: ${err}`);
+            } else if (data.length > 0) {
+                response.sendStatus(200);
+            } else if (data.length < 1) {
+                db.insert(initialEmigrationData);
+                response.sendStatus(200);
+            }
+        });
+    });
     
 
     //Searches:
@@ -120,7 +138,8 @@ function loadBackendGAM(app){
         let newAutonomicCommunity=request.body;
         console.log(newAutonomicCommunity);
         let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
-        if(invalidFields.length>0){ 
+        let invalidValues = Object.values(newAutonomicCommunity).filter((f) => ((f === "") || (f === null) || (f === undefined)));
+        if(invalidFields.length > 0 || invalidValues.length > 0){ 
             response.sendStatus(400);
             return;
         }
@@ -218,8 +237,9 @@ function loadBackendGAM(app){
         let putBody= request.body;
         let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
         let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
+        let invalidValues = Object.values(putBody).filter((f) => ((f === "") || (f === null) || (f === undefined)));
 
-        if(invalidFields.length>0){
+        if(invalidFields.length>0 || invalidValues.length > 0){
             response.sendStatus(400);
             return;
         }

@@ -5,107 +5,139 @@
     import { goto } from "$app/navigation";
     let DEVEL_HOST = "http://localhost:16078";
     //let PROD_HOST = "http://localhost:16078/api/v1/emigration-stats";
-    let API = "/api/v1/emigration-stats/"+$page.params.autonomic_community+"/"+$page.params.year+"/"+$page.params.quarter;
-    
+    //let API = "/api/v1/emigration-stats/"+$page.params.autonomic_community+"/"+$page.params.year+"/"+$page.params.quarter;
+    let API = '/api/v2/emigration-stats';
     if(dev){
         API = DEVEL_HOST + API;
     }
+    let API_RES = // peligro, deberia meterse dentro del if?
+		API +
+		'/' +
+		$page.params.autonomic_community +
+		'/' +
+		$page.params.year +
+		'/' +
+		$page.params.quarter;
     
     import {onMount} from "svelte";
-    import { Button, Table } from '@sveltestrap/sveltestrap';
+    import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
     
     let emigration_data = {};
-    let result = ""; // resultado que devuelve la API
-    let resultStatus = "";  // codigo de estado
+    let resultMessage,resultStatus = '';
 
-    // let newEmigrationBetween_20_24_yo = "";
-    // let newEmigrationBetween_25_29_yo = "";
-    // let newEmigrationBetween_30_34_yo = "";
+    let newEmigrationName = '';
+    let newEmigrationYear = '';
+    let newEmigrationQuarter = '';
+    let newEmigrationBetween_20_24_yo = '';
+    let newEmigrationBetween_25_29_yo = '';
+    let newEmigrationBetween_30_34_yo = '';
 
-    async function getData() {
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, {method:"GET"});
-            const data = await res.json(); //asumo que la respuesta es json, o esta parseada asi
-            result = JSON.stringify(data,null,2); // para mostrarlo al usuario
+    async function getData(msg = true) {
+		// resultStatus, (resultMessage = '');
+		try {
+			await fetch(API + '/loadInitialData', { method: 'GET' });
+			const res = await fetch(API_RES, { method: 'GET' });
 
-            emigration_data = data;
-            console.log(`Response received:\n${JSON.stringify(emigration_data,null,2)}`);
-        } catch(error){
-            console.log(`ERROR getting data from ${API}: ${error}`);
-        }
-        
-    }
+			if (res.status === 200) {
+				emigration_data = await res.json();
+				newEmigrationName = emigration_data.autonomic_community;
+				newEmigrationYear = emigration_data.year;
+				newEmigrationQuarter = emigration_data.quarter;
+				newEmigrationBetween_20_24_yo = emigration_data.between_20_24_yo;
+				newEmigrationBetween_25_29_yo = emigration_data.between_25_29_yo;
+				newEmigrationBetween_30_34_yo = emigration_data.between_30_34_yo;
+
+                if(msg){
+                    resultStatus = 'success';
+                    resultMessage = 'Dato recibido';
+                }
+				console.log(`Response received:\n${JSON.stringify(emigration_data, null, 2)}`);
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
+			}
+		} catch (error) {
+			console.log(`ERROR getting data from ${API_RES}: ${error}`);
+			resultStatus = 'danger';
+			resultMessage = 'El servidor se encuentra ausente';
+
+		}
+	}
 
     async function editData() {
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API, {
-                method:"PUT",
-                headers:{
-                    "Content-Type" : "application/json"
-                },
-                body:JSON.stringify({
-                    autonomic_community : emigration_data.autonomic_community,
-                    year : parseInt(emigration_data.year),
-                    quarter : emigration_data.quarter,
-                    between_20_24_yo : parseInt(emigration_data.between_20_24_yo),
-                    between_25_29_yo : parseInt(emigration_data.between_25_29_yo),
-                    between_30_34_yo : parseInt(emigration_data.between_30_34_yo),  
-                })
-            });
-            const status = await res.status; 
-            resultStatus = status;
-            if(status === 200){
-                console.log(`Emigration updated`);
-                await getData();
-            }else if (status === 400) {
-                resultStatus = "Los datos enviados no son válidos. Revisa los campos.";
-                result = "danger";
-            }else{
-                console.log(`Error editing emigration: status received\n${status}`);
-            }
-            //result = JSON.stringify(data,null,2);
+		let postBody = JSON.stringify({
+			autonomic_community: newEmigrationName,
+			year: newEmigrationYear,
+			quarter: newEmigrationQuarter,
+			between_20_24_yo: newEmigrationBetween_20_24_yo,
+			between_25_29_yo: newEmigrationBetween_25_29_yo,
+			between_30_34_yo: newEmigrationBetween_30_34_yo
+		});
 
-        } catch(error){
-            console.log(`ERROR editing data from ${API}: ${error}`);
-        }
-        
-    }
+        console.log(postBody)
+		let invalidValues = Object.values(postBody).filter((f) => ((f === '') || (f === null) || (f === undefined) || (f === "")));
+        console.log(invalidValues)
 
-    async function deleteData(name,year,quarter) {
-        resultStatus = result = "";
-        try {
-            const res = await fetch(API+"/"+name+"/"+year+"/"+quarter, {method:"DELETE"});
+		if (invalidValues.length > 0) {
+			resultStatus = 'warning';
+			resultMessage = 'Campos mal formados';
+		} else {
+			try {
+				const res = await fetch(API_RES, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: postBody
+				});
+				const status = await res.status;
+				if (status === 200) {
+					console.log(`Emigration updated`);
+                    resultStatus = 'success';
+                    resultMessage = 'Dato editado';
+					await getData(false);
+				} else {
+					resultStatus = 'warning';
+					resultMessage = 'No se pudo editar el dato, la expresión está mal formada, compruebe haber introducido datos numéricos';
+					console.log(`Error editing taxes: status received\n${status}`);
+				}
+				//result = JSON.stringify(data,null,2);
+			} catch (error) {
+				console.log(`ERROR editing data from ${API_RES}: ${error}`);
+				resultStatus = 'danger';
+				resultMessage = 'El servidor se encuentra ausente';
+			}
+		}
+	}
 
-            const status = await res.status; 
-            resultStatus = status;
+	async function deleteData() {
+		try {
+			const res = await fetch(API_RES, {
+				method: 'DELETE'
+			});
 
-            if(status === 200){
-                console.log(`Emigration deleted`);
-                goto("/emigration");
-            }
-            else if (status === 404) {
-                resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
-                result = "warning";
-            }
-            else{
-                console.log(`Error deleting emigration: status received\n${status}`);
-            }
-        } catch(error){
-            console.log(`ERROR deleting data from ${API}: ${error}`);
-        }
-    }
+			const status = await res.status;
+
+			if (status === 200) {
+				console.log(`Emigration deleted`);
+				goto('/emigration');
+			} else {
+				console.log(`Error deleting emigration: status received\n${status}`);
+			}
+		} catch (error) {
+			console.log(`ERROR deleting data from ${API_RES}: ${error}`);
+		}
+	}
 
     onMount(async () =>{
         await getData();
     });
     
 </script>
-{#if result}
-	<Alert color={result}>{resultStatus}</Alert>
+{#if resultMessage}
+	<Alert color={resultStatus}>{resultMessage}</Alert>
 {/if}
-<h2>Datos sobre la emigración en {emigration_data.autonomic_community} para el año {emigration_data.year} y en el cuatrimestre {emigration_data.quarter}</h2>
+<h2>Datos sobre la emigración en {emigration_data.autonomic_community} para el año {emigration_data.year} y en el trimestre {emigration_data.quarter}</h2>
 <!--{JSON.stringify(emigration_data,null,2)}-->
 
 <Table>
@@ -113,7 +145,7 @@
         <tr>
             <th>Comunidad Autónoma</th>
             <th>Año</th>
-            <th>Cuatrimestre</th>
+            <th>Trimestre</th>
             <th>Entre 20 y 24 años</th>
             <th>Entre 25 y 29 años</th>
             <th>Entre 30 y 34 años</th>
@@ -122,22 +154,22 @@
     <tbody>
         <tr>
             <td>
-                {emigration_data.autonomic_community}
+                {newEmigrationName}
             </td>
             <td>
-                {emigration_data.year}
+                {newEmigrationYear}
             </td>
             <td>
-                {emigration_data.quarter}
+                {newEmigrationQuarter}
             </td>
             <td>
-                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 20 y 24 años" bind:value={emigration_data.between_20_24_yo}/>
+                <input type="number" bind:value={newEmigrationBetween_20_24_yo}/>
             </td>
             <td>
-                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 25 y 29 años" bind:value={emigration_data.between_25_29_yo}/>
+                <input type="number"  bind:value={newEmigrationBetween_25_29_yo}/>
             </td>
             <td>
-                <input class="form-control" type="number" step="1" placeholder="Nº Personas entre 30 y 34 años" bind:value={emigration_data.between_30_34_yo}/>
+                <input  type="number" bind:value={newEmigrationBetween_30_34_yo}/>
             </td>
             <td>
                 <Button color="primary" on:click={editData}>Actualizar datos de emigración</Button>
@@ -145,7 +177,7 @@
         </tr>
         <tr>
             <td>
-                <Button color="danger" on:click={()=>{deleteData(emigration_data.autonomic_community,emigration_data.year,emigration_data.quarter)}}>Borrar</Button>
+                <Button color="danger" on:click={deleteData}>Borrar</Button>
             </td>
         </tr>
     </tbody>
