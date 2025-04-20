@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Impuestos España</title>
+</svelte:head>
+
 <script>
 	// @ts-nocheck
 
