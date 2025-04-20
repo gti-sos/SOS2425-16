@@ -96,6 +96,19 @@
     async function createData() {
         resultStatus = result = "";
         try {
+            console.log(newUnemploymentPrevious_year_quarter_var);
+            if (
+                !newUnemploymentAutonomicCommunity ||
+                !newUnemploymentYear ||
+                !newUnemploymentQuarter ||
+                newUnemploymentUnemployment_rate === null ||
+                newUnemploymentPrevious_quarter_var === null ||
+                newUnemploymentPrevious_year_quarter_var === null
+                ) {
+                resultMessage = "Por favor, rellena todos los campos antes de crear el dato.";
+                resultType = "danger";
+                return;
+            }
             const response = await fetch(API, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -121,7 +134,7 @@
                 result = "danger";
             }
         } catch (error) {
-            resultStatus = `Error al crear el dato: ${error.message}`;
+            resultStatus = `Error al crear el dato: ${error}`;
             result = "danger";
         }
     }
