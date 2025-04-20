@@ -45,24 +45,7 @@
             resultMessage = "El servidor se encuentra ausente";
 		}
 	}
-	// async function searchData() {
-	// 	let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
-	//
-	// 	// let resultStatus = "";
-	// 	try {
-	// 		taxesData.length = 0;
-	// 		await fetch(API + '/loadInitialData', { method: 'GET' });
-	// 		const res = await fetch(API + searchQuery, { method: 'GET' });
-	// 		const data = await res.json();
-	// 		// result = JSON.stringify(data, null, 2);
-	//
-	// 		taxesData = data;
-	// 		console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
-	// 	} catch (error) {
-	// 		console.log(`ERROR getting data from ${API}: ${error}`);
-	// 	}
-	// }
-	//
+
 	async function deleteData() {
 		let deleteQuery = `/${newTaxesName}/${newTaxesYear}/${newTaxesQuarter}`;
 
@@ -73,8 +56,11 @@
 
 			if (status == 200) {
 				console.log(`Tax data ${deleteQuery} deleted`);
+                newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
 				await getData();
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo borrar el dato";
 				console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
 			}
 		} catch (error) {
