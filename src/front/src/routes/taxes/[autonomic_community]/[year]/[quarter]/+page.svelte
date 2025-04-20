@@ -10,67 +10,102 @@
 	if (dev) {
 		API = DEVEL_HOST + API;
 	}
-	let API_RES = API + "/" +
+	let API_RES =
+		API +
+		'/' +
 		$page.params.autonomic_community +
 		'/' +
 		$page.params.year +
 		'/' +
 		$page.params.quarter;
 
-
 	import { onMount } from 'svelte';
-	import { Button, Table } from '@sveltestrap/sveltestrap';
+	import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
 	let taxesData = {};
 
+	let resultMessage,
+		resultStatus = '';
+
+	let newTaxesName = '';
+	let newTaxesYear = '';
+	let newTaxesQuarter = '';
+	let newTaxesIRPF = '';
+	let newTaxesSocNoConsolidadas = '';
+	let newTaxesIVA = '';
 
 	async function getData() {
-		// let resultStatus = "";
+		resultStatus, (resultMessage = '');
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
 			const res = await fetch(API_RES, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
 
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+			if (res.status === 200) {
+				taxesData = await res.json();
+				newTaxesName = taxesData.autonomic_community;
+				newTaxesYear = taxesData.year;
+				newTaxesQuarter = taxesData.quarter;
+				newTaxesIRPF = taxesData.atr_irpf;
+				newTaxesSocNoConsolidadas = taxesData.atr_soc_no_consolidadas;
+				newTaxesIVA = taxesData.atr_iva;
+				console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
+			}
 		} catch (error) {
 			console.log(`ERROR getting data from ${API_RES}: ${error}`);
+			resultStatus = 'danger';
+			resultMessage = 'El servidor se encuentra ausente';
+
 		}
 	}
 
 	async function editData() {
-		try {
-			const res = await fetch(API_RES, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					autonomic_community: taxesData.autonomic_community,
-					year: taxesData.year,
-					quarter: taxesData.quarter,
-					atr_irpf: taxesData.atr_irpf,
-					atr_soc_no_consolidadas: taxesData.atr_soc_no_consolidadas,
-					atr_iva: taxesData.atr_iva
-				})
-			});
-			const status = await res.status;
-			if (status === 200) {
-				console.log(`Taxes updated`);
-				await getData();
-			} else {
-				console.log(`Error editing taxes: status received\n${status}`);
+		let postBody = JSON.stringify({
+			autonomic_community: newTaxesName,
+			year: newTaxesYear,
+			quarter: newTaxesQuarter,
+			atr_irpf: newTaxesIRPF,
+			atr_soc_no_consolidadas: newTaxesSocNoConsolidadas,
+			atr_iva: newTaxesIVA
+		});
+
+		let invalidValues = Object.values(postBody).filter((f) => f === '' || f === null);
+
+		if (invalidValues) {
+			resultStatus = 'warning';
+			resultMessage = 'Campos mal formados';
+		} else {
+			try {
+				const res = await fetch(API_RES, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: postBody
+				});
+				const status = await res.status;
+				if (status === 200) {
+					console.log(`Taxes updated`);
+					await getData();
+				} else {
+					resultStatus = 'warning';
+					resultMessage = 'No se pudieron editar los datos';
+					console.log(`Error editing taxes: status received\n${status}`);
+				}
+				//result = JSON.stringify(data,null,2);
+			} catch (error) {
+				console.log(`ERROR editing data from ${API_RES}: ${error}`);
+				resultStatus = 'danger';
+				resultMessage = 'El servidor se encuentra ausente';
 			}
-			//result = JSON.stringify(data,null,2);
-		} catch (error) {
-			console.log(`ERROR editing data from ${API_RES}: ${error}`);
 		}
 	}
-
-	async function deleteData(name, year, quarter) {
+	async function deleteData() {
 		try {
-			const res = await fetch(API_RES + '/' + name + '/' + year + '/' + quarter, {
+			const res = await fetch(API_RES, {
+
 				method: 'DELETE'
 			});
 
@@ -91,6 +126,10 @@
 		await getData();
 	});
 </script>
+
+{#if resultMessage}
+	<Alert color={resultStatus}>{resultMessage}</Alert>
+{/if}
 
 <h2>
 	Datos sobre los impuestos en {taxesData.autonomic_community} para el año {taxesData.year} y en el
@@ -113,36 +152,29 @@
 	<tbody>
 		<tr>
 			<td>
-				{taxesData.autonomic_community}
+				{newTaxesName}
 			</td>
 			<td>
-				{taxesData.year}
+				{newTaxesYear}
 			</td>
 			<td>
-				{taxesData.quarter}
+				{newTaxesQuarter}
 			</td>
 			<td>
-				<input type="number" bind:value={taxesData.atr_irpf} />
+				<input type="number" bind:value={newTaxesIRPF} />
 			</td>
 			<td>
-				<input type="number" bind:value={taxesData.atr_soc_no_consolidadas} />
+				<input type="number" bind:value={newTaxesSocNoConsolidadas} />
 			</td>
 			<td>
-				<input type="number" bind:value={taxesData.atr_iva} />
+				<input type="number" bind:value={newTaxesIVA} />
+
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<Button
-					color="danger"
-					on:click={() => {
-						deleteData(
-							taxesData.autonomic_community,
-							taxesData.year,
-							taxesData.quarter
-						);
-					}}>Borrar</Button
-				>
+				<Button color="danger" on:click={deleteData}>Borrar</Button>
+
 			</td>
 			<td>
 				<Button color="primary" on:click={editData}>Actualizar datos de impuestos</Button>

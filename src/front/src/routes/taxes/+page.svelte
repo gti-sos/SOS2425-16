@@ -11,11 +11,9 @@
 	}
 
 	import { onMount } from 'svelte';
-	import { Button, Table } from '@sveltestrap/sveltestrap';
+	import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
 
 	let taxesData = [];
-	// let result = "";
-	// let resultStatus = "";
 	let newTaxesName = '';
 	let newTaxesYear = '';
 	let newTaxesQuarter = '';
@@ -23,35 +21,28 @@
 	let newTaxesSocNoConsolidadas = '';
 	let newTaxesIVA = '';
 
+    let resultMessage, resultStatus = '';
+
 	async function getData() {
-		// let resultStatus = "";
-		try {
-			await fetch(API + '/loadInitialData', { method: 'GET' });
-			const res = await fetch(API, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
-
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
-		} catch (error) {
-			console.log(`ERROR getting data from ${API}: ${error}`);
-		}
-	}
-	async function searchData() {
 		let searchQuery = `?autonomic_community=${newTaxesName}&year=${newTaxesYear}&quarter=${newTaxesQuarter}&atr_irpf=${newTaxesIRPF}&atr_soc_no_consolidadas=${newTaxesSocNoConsolidadas}&atr_iva=${newTaxesIVA}`;
-
-		// let resultStatus = "";
+		resultStatus, resultMessage = '';
 		try {
-			taxesData.length = 0;
 			await fetch(API + '/loadInitialData', { method: 'GET' });
+            // const data = await res.json();
 			const res = await fetch(API + searchQuery, { method: 'GET' });
-			const data = await res.json();
-			// result = JSON.stringify(data, null, 2);
 
-			taxesData = data;
-			console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            if(res.status === 200){
+                taxesData = await res.json();
+                console.log(`Response received:\n${JSON.stringify(taxesData, null, 2)}`);
+            }
+            else{
+                resultStatus = "warning";
+                resultMessage = "No se pudo acceder a los datos";
+            }
 		} catch (error) {
 			console.log(`ERROR getting data from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -65,12 +56,17 @@
 
 			if (status == 200) {
 				console.log(`Tax data ${deleteQuery} deleted`);
+                newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
 				await getData();
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo borrar el dato";
 				console.log(`ERROR deleting tax data ${name}: status received\n${status}`);
 			}
 		} catch (error) {
 			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -85,14 +81,19 @@
 				// getData();
 				taxesData.length = 0;
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudieron borrar los datos";
 				console.log(`ERROR deleting tax data: status received\n${status}`);
 			}
 		} catch (error) {
 			console.log(`ERROR:  DELETE from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
 	async function createData() {
+        console.log(newTaxesIRPF)
 		try {
 			let postBody = JSON.stringify({
 				autonomic_community: newTaxesName,
@@ -113,12 +114,17 @@
 			const status = await res.status;
 			if (status == 201) {
 				console.log(`Data created`);
-				getData();
+                newTaxesName = newTaxesYear = newTaxesQuarter = newTaxesIVA = newTaxesIRPF = newTaxesSocNoConsolidadas = "";
+				await getData();
 			} else {
+                resultStatus = "warning";
+                resultMessage = "No se pudo crear el dato";
 				console.log(`ERROR creating data: status received\n${status}`);
 			}
 		} catch (error) {
 			console.log(`ERROR:  GET from ${API}: ${error}`);
+            resultStatus = "danger";
+            resultMessage = "El servidor se encuentra ausente";
 		}
 	}
 
@@ -126,6 +132,10 @@
 		await getData();
 	});
 </script>
+
+{#if resultMessage}
+    <Alert color={resultStatus}>{resultMessage}</Alert>
+{/if}
 
 <h2>Estadísticas sobre la emigración en España</h2>
 
@@ -167,11 +177,11 @@
 				<Button color="primary" on:click={createData}>Insertar datos</Button>
 			</td>
 			<td>
-				<Button color="success" on:click={getData}>Listar datos</Button>
+				<Button color="success" on:click={getData}>Buscar datos</Button>
 			</td>
-			<td>
-				<Button color="success" on:click={searchData}>Buscar un dato</Button>
-			</td>
+			<!-- <td> -->
+			<!-- 	<Button color="success" on:click={searchData}>Buscar un dato</Button> -->
+			<!-- </td> -->
 			<td>
 				<Button color="warning" on:click={deleteData}>Borrar un dato</Button>
 			</td>
