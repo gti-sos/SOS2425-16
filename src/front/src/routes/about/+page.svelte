@@ -1,5 +1,16 @@
 <script>
     import { dev } from "$app/environment";
 </script>
-Mi primera pagina Svelte desarrollada con Nodejs (v3) 
-(Development = {dev})
+# SOS2425-16
+--------------
+- **Team**
+  - Gonzalo Aguilera Mancheño (https://github.com/TheVaultBoy16)
+  - Pablo Viña Santa Cruz (https://github.com/nfn8347)
+  - Iván Barbero Lay (https://github.com/ivabarlay)
+- **Project description**: Our work consists of analyzing the relationship between unemployment, emigration and tax increases in Spain with an API that is able to unify these data for the different analyses.
+- **Repository**: [gti-sos/SOS2425-16](https://github.com/gti-sos/SOS2425-16)
+- **URL**: https://sos2425-16.onrender.com/
+-  **APIs**:
+    - https://sos2425-16.onrender.com/api/v1/emigration-stats/docs (Developed by Gonzalo Aguilera Mancheño)
+    - https://sos2425-16.onrender.com/api/v1/taxes-stats/docs (Developed by Iván Barbero Lay)
+    - https://sos2425-16.onrender.com/api/v1/unemployment-stats/docs (Developed by Pablo Viña Santa Cruz)
