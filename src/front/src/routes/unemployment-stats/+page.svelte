@@ -233,12 +233,12 @@
     <tbody>
         <!-- Fila para introducir un nuevo dato -->
         <tr>
-            <td><input placeholder="Comunidad Autónoma" bind:value={newUnemploymentAutonomicCommunity}></td>
-            <td><input type="number" placeholder="Inserte año" bind:value={newUnemploymentYear}></td>
-            <td><input placeholder="Trimestre" bind:value={newUnemploymentQuarter}></td>
-            <td><input type="number" step="0.1" placeholder="Tasa de desempleo" bind:value={newUnemploymentUnemployment_rate}></td>
-            <td><input type="number" step="0.01" placeholder="Var. trimestre anterior" bind:value={newUnemploymentPrevious_quarter_var}></td>
-            <td><input type="number" step="0.01" placeholder="Var. mismo trimestre año anterior" bind:value={newUnemploymentPrevious_year_quarter_var}></td>
+            <td><input id="Comunidad" placeholder="Comunidad Autónoma" bind:value={newUnemploymentAutonomicCommunity}></td>
+            <td><input id="Año" type="number" placeholder="Inserte año" bind:value={newUnemploymentYear}></td>
+            <td><input id="Trimestre" placeholder="Trimestre" bind:value={newUnemploymentQuarter}></td>
+            <td><input id="Tasa" type="number" step="0.1" placeholder="Tasa de desempleo" bind:value={newUnemploymentUnemployment_rate}></td>
+            <td><input id="VarAnt" type="number" step="0.01" placeholder="Var. trimestre anterior" bind:value={newUnemploymentPrevious_quarter_var}></td>
+            <td><input id="VarSig" type="number" step="0.01" placeholder="Var. mismo trimestre año anterior" bind:value={newUnemploymentPrevious_year_quarter_var}></td>
             <td><Button color="primary" on:click={createData}>Añadir</Button></td>
         </tr>
 
