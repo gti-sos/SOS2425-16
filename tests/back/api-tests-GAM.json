@@ -32,13 +32,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/loadInitialData",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/loadInitialData",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"loadInitialData"
 							]
@@ -66,13 +66,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/josefina",
+							"raw": "{{BASE_URL}}/api/v1/josefina",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"josefina"
 							]
 						}
@@ -108,13 +108,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							]
 						}
@@ -146,13 +146,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							]
 						}
@@ -188,13 +188,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							]
 						}
@@ -230,13 +230,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							]
 						}
@@ -263,13 +263,13 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							]
 						}
@@ -301,13 +301,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -337,13 +337,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/jose",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/jose",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -373,13 +373,13 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -418,13 +418,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/asturias/2019/q3",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/asturias/2019/q3",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"asturias",
 								"2019",
@@ -459,13 +459,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -506,13 +506,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/q1",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/q1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -542,13 +542,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/asturias/2019/q3",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/asturias/2019/q3",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"asturias",
 								"2019",
@@ -578,13 +578,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats/madrid/2020/antonio",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats/madrid/2020/antonio",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats",
 								"madrid",
 								"2020",
@@ -621,13 +621,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&between_20_24_yo=2156",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&between_20_24_yo=2156",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [
@@ -673,13 +673,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [
@@ -721,13 +721,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?autonomic_community=andalucia&year=2020",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [
@@ -764,13 +764,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?autonomic_community=andalucia",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [
@@ -809,13 +809,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?limit=5&offset=0",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?limit=5&offset=0",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [
@@ -861,13 +861,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/v2/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&offset=0&limit=2&fields=year,quarter,between_20_24_yo",
+							"raw": "{{BASE_URL}}/api/v1/emigration-stats?autonomic_community=andalucia&year=2020&quarter=q2&offset=0&limit=2&fields=year,quarter,between_20_24_yo",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
-								"v2",
+								"v1",
 								"emigration-stats"
 							],
 							"query": [

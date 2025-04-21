@@ -6,7 +6,7 @@
     let DEVEL_HOST = "http://localhost:16078";
     //let PROD_HOST = "http://localhost:16078/api/v1/emigration-stats";
     //let API = "/api/v1/emigration-stats/"+$page.params.autonomic_community+"/"+$page.params.year+"/"+$page.params.quarter;
-    let API = '/api/v2/emigration-stats';
+    let API = '/api/v1/emigration-stats';
     if(dev){
         API = DEVEL_HOST + API;
     }
