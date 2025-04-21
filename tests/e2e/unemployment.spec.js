@@ -1,8 +1,7 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('localhost:16078');
+test('has title', async ({ page }) => { await page.goto('localhost:16078');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/API_GRUPO_16/);
@@ -31,12 +30,12 @@ test('create and delete data', async ({ page }) => {
     // Click the get started link.
     await page.getByRole('link', { name: 'Estadísticas sobre el desempleo en España' }).click();
 
-    await page.getByPlaceholder('Comunidad Autónoma').fill(testName);
-    await page.getByPlaceholder('Inserte año').fill(testYear);
-    await page.getByPlaceholder('Trimestre').fill(testQuarter);
-    await page.getByPlaceholder('Tasa de desempleo').fill(testUnemployment_rate);
-    await page.getByPlaceholder('Var. trimestre anterior').fill(testPrevious_quarter_var);
-    await page.getByPlaceholder('Var. mismo trimestre año anterior').fill(testPrevious_year_quarter_var);
+    await page.locator('#Comunidad').fill(testName);
+    await page.locator('#Año').fill(testYear);
+    await page.locator('#Trimestre').fill(testQuarter);
+    await page.locator('#Tasa').fill(testUnemployment_rate);
+    await page.locator('#VarAnt').fill(testPrevious_quarter_var);
+    await page.locator('#VarSig').fill(testPrevious_year_quarter_var);
 
     await page.getByRole('button', {name: "Añadir"}).click();
 
