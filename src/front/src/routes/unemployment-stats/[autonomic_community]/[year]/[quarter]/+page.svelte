@@ -19,13 +19,19 @@
     let result = ""; // resultado que devuelve la API
     let resultStatus = "";  // codigo de estado
 
-    async function getData() {
-        resultStatus = result = "";
+    async function getData(msg = true) {
+        if (msg) {
+            resultStatus = result = "";
+        }
         try {
             //await fetch(API + '/loadInitialData', { method: 'GET' });
             const res = await fetch(API_R);
             if (res.status === 200) {
                 unemploymentData = await res.json();
+                if(msg){
+                    resultStatus = "Datos recibidos";
+                    result = "success";
+                }
             } 
         } catch (error) {
             resultStatus = `No se pudieron obtener los datos: ${error.message}`;
@@ -56,7 +62,7 @@
                 resultStatus = `El dato de '${unemploymentData.autonomic_community}' (${unemploymentData.year}, ${unemploymentData.quarter}) se ha editado correctamente.`;
                 result = `success`;
                 console.log(resultStatus);
-                await getData();
+                await getData(false);
                 //goto("/unemployment-stats");
             } else if (res.status === 400) {
                 resultStatus = `Error al actualizar el dato: Revisa los campos`;

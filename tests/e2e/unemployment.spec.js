@@ -8,7 +8,7 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/API_GRUPO_16/);
 });
 
-test('get emigration link', async ({ page }) => {
+test('get unemployment link', async ({ page }) => {
   await page.goto('localhost:16078');
 
   // Click the emigration link.
@@ -39,4 +39,17 @@ test('create and delete data', async ({ page }) => {
     await page.getByPlaceholder('Var. mismo trimestre año anterior').fill(testPrevious_year_quarter_var);
 
     await page.getByRole('button', {name: "Añadir"}).click();
+
+    const unemploymentRow = page.locator('tr',{ hasText: testName});
+    await expect(unemploymentRow).toContainText(testYear);
+    await expect(unemploymentRow).toContainText(testQuarter); 
+    await expect(unemploymentRow).toContainText(testUnemployment_rate); 
+    await expect(unemploymentRow).toContainText(testPrevious_quarter_var); 
+    await expect(unemploymentRow).toContainText(testPrevious_year_quarter_var);  
+  
+    const deleteButton = unemploymentRow.getByRole('button',{ name: 'Borrar'}); 
+    await deleteButton.click();
+
+    await expect(unemploymentRow).toHaveCount(0);
+    
 });

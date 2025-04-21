@@ -32,16 +32,24 @@
     let filterPQVar = "";
     let filterPYQVar = "";
 
-    async function getData() {
-        resultStatus = result = "";
+    async function getData(msg = true, da = false) {
+        if (msg) {
+            resultStatus = result = "";
+        }
         try {
             const res = await fetch(API);
             if (res.status === 200) {
                 unemploymentData = await res.json();
+                if(msg){
+                    resultStatus = "Datos recibidos";
+                    result = "success";
+                }
             } else if (res.status === 404) {
                 unemploymentData = [];
+                if (!da) {
                 resultStatus = "No hay datos disponibles.";
                 result = "warning";
+                }
             } 
         } catch (error) {
             resultStatus = `No se pudieron obtener los datos: ${error.message}`;
@@ -112,9 +120,10 @@
             });
             console.log(response.status);
             if (response.status === 201) {
-                await getData(); // Recargar los datos automáticamente
                 resultStatus = "Dato creado correctamente.";
                 result = "success";
+                newUnemploymentAutonomicCommunity = newUnemploymentYear = newUnemploymentQuarter = newUnemploymentUnemployment_rate = newUnemploymentPrevious_quarter_var = newUnemploymentPrevious_year_quarter_var = "";
+                await getData(false); // Recargar los datos automáticamente
             } else if (response.status === 409) {
                 resultStatus = "Ya existe un recurso con esos datos. No se puede duplicar.";
                 result = "danger";
@@ -134,9 +143,9 @@
             const res = await fetch(`${API}/${name}/${year}/${quarter}`, { method: "DELETE" });
 
             if (res.status === 200) {
-                await getData(); // Recarga automática
                 resultStatus = `El dato de '${name}' (${year}, ${quarter}) se ha eliminado correctamente.`;
                 result = "success";
+                await getData(false); // Recarga automática
             } else if (res.status === 404) {
                 resultStatus = `No existe un recurso con esos datos: '${name}' (${year}, ${quarter}).`;
                 result = "warning";
@@ -154,7 +163,7 @@
             if (res.status === 200) {
                 resultStatus = "Todos los datos fueron eliminados correctamente.";
                 result = "success";
-                await getData();
+                await getData(false, true);
             } else if (res.status === 404) {
                 resultStatus = "No había datos para eliminar.";
                 result = "warning";
@@ -224,12 +233,12 @@
     <tbody>
         <!-- Fila para introducir un nuevo dato -->
         <tr>
-            <td><input bind:value={newUnemploymentAutonomicCommunity}></td>
-            <td><input type="number" bind:value={newUnemploymentYear}></td>
-            <td><input bind:value={newUnemploymentQuarter}></td>
-            <td><input type="number" step="0.1" bind:value={newUnemploymentUnemployment_rate}></td>
-            <td><input type="number" step="0.01" bind:value={newUnemploymentPrevious_quarter_var}></td>
-            <td><input type="number" step="0.01" bind:value={newUnemploymentPrevious_year_quarter_var}></td>
+            <td><input placeholder="Comunidad Autónoma" bind:value={newUnemploymentAutonomicCommunity}></td>
+            <td><input type="number" placeholder="Inserte año" bind:value={newUnemploymentYear}></td>
+            <td><input placeholder="Trimestre" bind:value={newUnemploymentQuarter}></td>
+            <td><input type="number" step="0.1" placeholder="Tasa de desempleo" bind:value={newUnemploymentUnemployment_rate}></td>
+            <td><input type="number" step="0.01" placeholder="Var. trimestre anterior" bind:value={newUnemploymentPrevious_quarter_var}></td>
+            <td><input type="number" step="0.01" placeholder="Var. mismo trimestre año anterior" bind:value={newUnemploymentPrevious_year_quarter_var}></td>
             <td><Button color="primary" on:click={createData}>Añadir</Button></td>
         </tr>
 
