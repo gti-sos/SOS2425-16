@@ -42,7 +42,7 @@ db.find({},(err, data)=>{
 });
 
 function loadBackendPVS(app) {
-    /*
+    
     app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{
         db.find({},(err, unemploymentData)=>{
             if (err){
@@ -55,7 +55,7 @@ function loadBackendPVS(app) {
             }
         });
     })
-    */
+    
     app.get(BASE_API + "/unemployment-stats", (request, response) => {
         let paramName = request.query.autonomic_community;
         //Parametros opcionales
