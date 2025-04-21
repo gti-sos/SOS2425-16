@@ -12,7 +12,7 @@ test('get emigration link', async ({ page }) => {
   await page.goto('localhost:16078');
 
   // Click the emigration link.
-  await page.getByRole('link', { name: 'Estadísticas sobre el desempleo en España' }).click();
+  await page.getByRole('link', { name: 'Estadísticas sobre la emigración en España' }).click();
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Emigracion España/);
@@ -29,7 +29,7 @@ test('create and delete data', async ({ page }) => {
   await page.goto('localhost:16078');
 
   // Click the get started link.
-  await page.getByRole('link', { name: 'Estadísticas sobre el desempleo en España' }).click();
+  await page.getByRole('link', { name: 'Estadísticas sobre la emigración en España' }).click();
 
   await page.getByRole('textbox').nth(0).fill(testName);
   await page.getByPlaceholder('Inserte año').fill(testYear); // cambiar porque no es textbox y no se como localizarla
