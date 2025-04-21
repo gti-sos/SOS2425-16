@@ -169,7 +169,7 @@
     <Alert color={resultStatus}>{resultMessage}</Alert>
 {/if}
 
-<h2>Estadísticas sobre la emigración en España</h2>
+<h2>Estadísticas sobre los impuestos en España</h2>
 
 <Table>
 	<thead>
