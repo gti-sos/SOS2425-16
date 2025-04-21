@@ -42,14 +42,20 @@ db.find({},(err, data)=>{
 });
 
 function loadBackendPVS(app) {
+<<<<<<< HEAD
     
+=======
+>>>>>>> f371ec1 (load de pablo arreglado)
     app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{
         db.find({},(err, unemploymentData)=>{
             if (err){
                 response.status(500).send("Error code 01 (please contact admin)");                
                 console.error(`ERROR: ${err}`);
             }
-            else if(!unemploymentData.length){
+            else if(unemploymentData.length > 0){
+                response.sendStatus(200);
+            }
+            else if(unemploymentData.length < 1){
                 db.insert(initialUnemploymentData);
                 response.sendStatus(200);
             }
