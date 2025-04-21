@@ -32,7 +32,7 @@ test('create and delete data', async ({ page }) => {
     await page.getByRole('link', { name: 'Estadísticas sobre el desempleo en España' }).click();
 
     await page.getByPlaceholder('Comunidad Autónoma').fill(testName);
-    await page.getByPlaceholder('Inserte año').fill(testYear); // cambiar porque no es textbox y no se como localizarla
+    await page.getByPlaceholder('Inserte año').fill(testYear);
     await page.getByPlaceholder('Trimestre').fill(testQuarter);
     await page.getByPlaceholder('Tasa de desempleo').fill(testUnemployment_rate);
     await page.getByPlaceholder('Var. trimestre anterior').fill(testPrevious_quarter_var);

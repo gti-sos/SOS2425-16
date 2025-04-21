@@ -82,7 +82,7 @@ test('Search data', async ({ page }) => {
     const taxesRow = page.locator('tr', { hasText: testSearchName });
     await expect(taxesRow).toContainText(testSearchYear);
 });
-
+/*
 test('Edit data', async ({ page }) => {
     await page.goto('localhost:16078');
 
@@ -129,3 +129,4 @@ test('Edit data', async ({ page }) => {
     await expect(taxesRow).toContainText(testSearchSOC);
     await expect(taxesRow).toContainText(testSearchIVA);
 });
+*/

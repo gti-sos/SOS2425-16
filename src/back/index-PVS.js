@@ -42,10 +42,7 @@ db.find({},(err, data)=>{
 });
 
 function loadBackendPVS(app) {
-<<<<<<< HEAD
     
-=======
->>>>>>> f371ec1 (load de pablo arreglado)
     app.get(BASE_API + "/unemployment-stats/loadInitialData", (request,response) =>{
         db.find({},(err, unemploymentData)=>{
             if (err){

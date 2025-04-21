@@ -191,13 +191,13 @@
 <form on:submit|preventDefault={searchData} class="mb-4">
   <div class="row g-2">
     <div class="col-md-4 col-lg-3">
-      <input class="form-control" placeholder="Comunidad Autónoma" bind:value={filterCommunity} />
+      <input class="form-control" placeholder="CCAA" bind:value={filterCommunity} />
     </div>
     <div class="col-md-2 col-lg-1">
       <input class="form-control" type="number" placeholder="Año" bind:value={filterYear} />
     </div>
     <div class="col-md-2 col-lg-1">
-      <input class="form-control" placeholder="Trimestre" bind:value={filterQuarter} />
+      <input class="form-control" placeholder="Inserte trimestre" bind:value={filterQuarter} />
     </div>
     <div class="col-md-3 col-lg-2">
       <input class="form-control" type="number" step="0.1" placeholder="Tasa desempleo" bind:value={filterRate} />
