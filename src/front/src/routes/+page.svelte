@@ -17,6 +17,6 @@
 <h3>Nombre de los componentes del equipo y el nombre de su fuente de datos</h3>
 <p>Gonzalo Aguilera Mancheño: emigration-stats</p>
 <p>Iván Barbero Lay: taxes-stats</p>
-<p>Pablo Viña Santacruz: unemployment-stats</p>
+<p>Pablo Viña Santa Cruz: unemployment-stats</p>
 
 
