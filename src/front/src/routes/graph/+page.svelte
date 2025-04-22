@@ -1,0 +1,1 @@
+<a href ="/graph/emigration_graph">Grafo de emigración con highcharts</a>

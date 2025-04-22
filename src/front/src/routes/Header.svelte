@@ -3,3 +3,4 @@
 <a href="/emigration">Estadísticas sobre la emigración en España</a>
 <a href="/taxes">Estadísticas sobre los impuestos en España</a>
 <a href="/unemployment-stats">Estadísticas sobre el desempleo en España</a>
+<a href="/graph">Gráficas</a>
