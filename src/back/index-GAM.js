@@ -7,11 +7,9 @@ let db = new dataStore();
 // Initial data extracted form the propuse sheet
 
 const initialEmigrationData = [
-    {autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
+    { autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
     { autonomic_community: "andalucia", year: 2020, quarter: "q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
     {autonomic_community: "asturias", year: 2021, quarter: "q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
-    { autonomic_community: "islas-baleares", year: 2021, quarter: "q1", between_20_24_yo: 6320, between_25_29_yo: 1023, between_30_34_yo: 1239 },
-    { autonomic_community: "canarias", year: 2021, quarter: "q2", between_20_24_yo: 947, between_25_29_yo: 1625, between_30_34_yo: 1643 },
     { autonomic_community: "madrid", year: 2021, quarter: "q3", between_20_24_yo: 6028, between_25_29_yo: 10836, between_30_34_yo: 10004 },
     { autonomic_community: "castilla-y-leon", year: 2021, quarter: "q1", between_20_24_yo: 766, between_25_29_yo: 1171, between_30_34_yo: 1210 },
     { autonomic_community: "castilla-la-mancha", year: 2021, quarter: "q2", between_20_24_yo: 984, between_25_29_yo: 1304, between_30_34_yo: 1512 },
@@ -19,8 +17,67 @@ const initialEmigrationData = [
     { autonomic_community: "cataluña", year: 2020, quarter: "q1", between_20_24_yo: 4469, between_25_29_yo: 8086, between_30_34_yo: 7808 },
     { autonomic_community: "cataluña", year: 2019, quarter: "q1", between_20_24_yo: 6397, between_25_29_yo: 12400, between_30_34_yo: 12023 },
     { autonomic_community: "madrid", year: 2020, quarter: "q1", between_20_24_yo: 3981, between_25_29_yo: 6753, between_30_34_yo: 6239 },
-    { autonomic_community: "valencia", year: 2020, quarter: "q1", between_20_24_yo: 4023, between_25_29_yo: 9012, between_30_34_yo: 10345 }
+    { autonomic_community: "valencia", year: 2020, quarter: "q1", between_20_24_yo: 4023, between_25_29_yo: 9012, between_30_34_yo: 10345 },
+    { autonomic_community: "valencia", year: 2021, quarter: "q1", between_20_24_yo: 5060, between_25_29_yo: 9051, between_30_34_yo: 12343 },
+    { autonomic_community: "valencia", year: 2019, quarter: "q1", between_20_24_yo: 3030, between_25_29_yo: 6014, between_30_34_yo: 9876 },
+    { autonomic_community: "murcia", year: 2019, quarter: "q1", between_20_24_yo: 2000, between_25_29_yo: 4278, between_30_34_yo: 3287 },
+    { autonomic_community: "murcia", year: 2020, quarter: "q1", between_20_24_yo: 3453, between_25_29_yo: 3251, between_30_34_yo: 4665 },
+    { autonomic_community: "murcia", year: 2021, quarter: "q1", between_20_24_yo: 5234, between_25_29_yo: 1231, between_30_34_yo: 8965 },
+    { autonomic_community: "aragon", year: 2019, quarter: "q1", between_20_24_yo: 123, between_25_29_yo: 4231, between_30_34_yo: 7243 },
+    { autonomic_community: "aragon", year: 2020, quarter: "q1", between_20_24_yo: 3032, between_25_29_yo: 6124, between_30_34_yo: 7612 },
+    { autonomic_community: "aragon", year: 2021, quarter: "q1", between_20_24_yo: 5124, between_25_29_yo: 8567, between_30_34_yo: 12432 },
+    { autonomic_community: "andalucia", year: 2019, quarter: "q1", between_20_24_yo: 2345, between_25_29_yo: 5897, between_30_34_yo: 8234 },
+    { autonomic_community: "asturias", year: 2019, quarter: "q1", between_20_24_yo: 3021, between_25_29_yo: 6213, between_30_34_yo: 1287 },
+    { autonomic_community: "asturias", year: 2021, quarter: "q1", between_20_24_yo: 2134, between_25_29_yo: 3141, between_30_34_yo: 8423 },
+    { autonomic_community: "galicia", year: 2019, quarter: "q1", between_20_24_yo: 538, between_25_29_yo: 1144, between_30_34_yo: 2341 },
+    { autonomic_community: "galicia", year: 2020, quarter: "q1", between_20_24_yo: 478, between_25_29_yo: 2345, between_30_34_yo: 3981 },
+    { autonomic_community: "galicia", year: 2021, quarter: "q1", between_20_24_yo: 487, between_25_29_yo: 3412, between_30_34_yo: 4832 },
+    { autonomic_community: "castilla-y-leon", year: 2019, quarter: "q1", between_20_24_yo: 156, between_25_29_yo: 1298, between_30_34_yo: 1291 },
+    { autonomic_community: "castilla-y-leon", year: 2020, quarter: "q1", between_20_24_yo: 231, between_25_29_yo: 2398, between_30_34_yo: 2384 },
+    { autonomic_community: "castilla-la-mancha", year: 2019, quarter: "q1", between_20_24_yo: 165, between_25_29_yo: 5328, between_30_34_yo: 2398 },
+    { autonomic_community: "castilla-la-mancha", year: 2020, quarter: "q1", between_20_24_yo: 387, between_25_29_yo: 1245, between_30_34_yo: 6781 },
+    { autonomic_community: "extremadura", year: 2019, quarter: "q1", between_20_24_yo: 789, between_25_29_yo: 2345, between_30_34_yo: 6546 },
+    { autonomic_community: "extremadura", year: 2020, quarter: "q1", between_20_24_yo: 1244, between_25_29_yo: 4667, between_30_34_yo: 7669 },
+    { autonomic_community: "extremadura", year: 2021, quarter: "q1", between_20_24_yo: 8761, between_25_29_yo: 5435, between_30_34_yo: 23948 },
+    { autonomic_community: "madrid", year: 2019, quarter: "q1", between_20_24_yo: 3155, between_25_29_yo: 6712, between_30_34_yo: 9164 }
 ];
+
+const groupedData = {};
+
+initialEmigrationData.forEach(item => {
+  const community = item.autonomic_community;
+  const year = item.year;
+  const total =
+    item.between_20_24_yo +
+    item.between_25_29_yo +
+    item.between_30_34_yo;
+
+  if (!groupedData[community]) {
+    groupedData[community] = {};
+  }
+
+  if (!groupedData[community][year]) {
+    groupedData[community][year] = 0;
+  }
+
+  groupedData[community][year] += total;
+});
+
+console.log(groupedData);
+
+const pepe = {
+    "andalucia": { "2019": "16476", "2020": "9047", "2021": "15071" },
+    "asturias": { "2019": "10521", "2021": "14995" },
+    "madrid": { "2019": "19031", "2020": "16973", "2021": "26868" },
+    "castilla-y-leon": { "2019": "2745", "2020": "5013", "2021": "3147" },
+    "castilla-la-mancha": { "2019": "7891", "2020": "8413", "2021": "3800" },
+    "cataluña": { "2019": "30820", "2020": "20363", "2021": "33342" },
+    "valencia": { "2019": "18920", "2020": "23380", "2021": "26454" },
+    "murcia": { "2019": "9565", "2020": "11369", "2021": "15430" },
+    "aragon": { "2019": "11597", "2020": "16768", "2021": "26123" },
+    "galicia": { "2019": "4023", "2020": "6804", "2021": "8731" },
+    "extremadura": { "2019": "9680", "2020": "13580", "2021": "38144" }
+}
 
 
     // GET request that inserts to the database the initial data.
@@ -39,6 +96,11 @@ const initialEmigrationData = [
 // Function that contains all of the HTTP requests.
 
 function loadBackendGAM(app){
+
+
+    app.get(BASE_API + "/emigration-stats/groupedData", (request, response) => {
+        response.send(JSON.stringify(pepe,null,2))
+    });
 
     
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request, response) => {
