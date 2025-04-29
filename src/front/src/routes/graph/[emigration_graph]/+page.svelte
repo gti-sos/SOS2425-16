@@ -176,12 +176,12 @@ function getData(year) {
 
 function getSubtitle() {
     // @ts-ignore
-    const population = (getData(input.value)[0][1] / 1000000000).toFixed(2);
+    const population = (getData(input.value)[0][1]);
     // @ts-ignore
     return `<span style="font-size: 80px">${input.value}</span>
         <br>
         <span style="font-size: 22px">
-            Total: <b>: ${population}</b> billion
+            Total: <b>: ${population}</b> miles
         </span>`;
 }
 
@@ -199,7 +199,7 @@ function getSubtitle() {
     chart = Highcharts.chart('container', {
         chart: {
             animation: {
-                duration: 500
+                duration: 700
             },
             marginRight: 50
         },
