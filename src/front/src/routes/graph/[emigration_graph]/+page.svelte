@@ -53,11 +53,11 @@
 
 
 	onMount(async () =>{
-        const startYear = 1960,
-    endYear = 2022,
-    btn = document.getElementById('play-pause-button'),
-    input = document.getElementById('play-range'),
-    nbr = 20;
+        const startYear = 2019,
+        endYear = 2021,
+        btn = document.getElementById('play-pause-button'),
+        input = document.getElementById('play-range'),
+        nbr = 11;
 
 // @ts-ignore
 let dataset, chart;
@@ -187,8 +187,11 @@ function getSubtitle() {
 
 (async () => {
 
+    //datos, hacer get extraño que saque solo el total por comunidad en un año
+
     dataset = await fetch(
-        'https://demo-live-data.highcharts.com/population.json'
+        'http://localhost:16078/api/v1/emigration-stats/groupedData'
+        //'https://demo-live-data.highcharts.com/population.json' // jason con comunidad: { año : total}
     ).then(response => response.json());
 
 
@@ -201,7 +204,7 @@ function getSubtitle() {
             marginRight: 50
         },
         title: {
-            text: 'World population by country',
+            text: 'Personas que emigran de España por comunidad',
             align: 'left'
         },
         subtitle: {
@@ -373,11 +376,11 @@ input.addEventListener('click', function () {
     <div id="parent-container">
 		<div id="play-controls">
 			<button id="play-pause-button" class="fa fa-play" title="play"></button>
-			<input id="play-range" type="range" value="1960" min="1960" max="2022" />
+			<input id="play-range" type="range" value="2019" min="2019" max="2021" />
 		</div>
 		<div id="container"></div>
 	</div>
     <p class="highcharts-description">
-        Bar chart showing the world population by countries from 1960 to 2022.
+        Gráfico de barras que muestra la evolución en la emigración de España desde 2019 a 2021.
     </p>
 </figure>
