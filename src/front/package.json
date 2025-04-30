@@ -32,6 +32,10 @@
 		"vite": "^6.2.5"
 	},
 	"dependencies": {
-		"@sveltestrap/sveltestrap": "^7.1.0"
+		"@amcharts/amcharts5": "^5.12.1",
+		"@amcharts/amcharts5-fonts": "^5.0.1",
+		"@amcharts/amcharts5-geodata": "^5.1.4",
+		"@sveltestrap/sveltestrap": "^7.1.0",
+		"zingchart": "^2.9.16-1"
 	}
 }
