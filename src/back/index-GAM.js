@@ -1,6 +1,7 @@
 import dataStore from "nedb";
 
 const BASE_API= "/api/v1";
+const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
 
 let db = new dataStore();
 
@@ -99,7 +100,7 @@ function loadBackendGAM(app){
 
 
     app.get(BASE_API + "/emigration-stats/groupedData", (request, response) => {
-        response.send(JSON.stringify(pepe,null,2))
+        response.send(JSON.stringify(pepe,null,2));
     });
 
     
@@ -364,6 +365,24 @@ function loadBackendGAM(app){
     app.get(BASE_API+"/emigration-stats/docs",(request,response)=>{
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
+
+    app.get(BASE_API+"/integrations/youtube",async (request,response)=>{
+        try{
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
+            let datos = await res.json();
+            response.send(JSON.stringify(datos,null,2));
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+        /*
+        let res = app.get(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`,(resquest,response)=>{
+            response.send(JSON.stringify())
+        });
+        response.send(JSON.stringify(res,null,2));
+        */
+    });
+
+
 }
 
 export {loadBackendGAM}
