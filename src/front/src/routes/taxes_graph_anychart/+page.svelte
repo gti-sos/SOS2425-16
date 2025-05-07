@@ -42,6 +42,9 @@
 			if (res.status === 200) {
 				taxes_data = await res.json();
 				taxes_data = collectToMap(taxes_data);
+                taxes_data = taxes_data.map((item) => ({
+                    x: item[0], value: item[1]
+                }))
 				console.log(taxes_data);
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
@@ -67,39 +70,36 @@
 			anychart.theme('darkTurquoise');
 			var data = taxes_data;
 
-			// sort data by alphabet order
-			data.sort(function (itemFirst, itemSecond) {
-				return itemSecond[1] - itemFirst[1];
-			});
+			// create barmekko chart with data
+			var chart = anychart.barmekko(data);
+			// set chart title text settings
+			chart.title('Mekko chart de impuestos en España por comunidad autónoma');
 
-			// create bar chart
-			var chart = anychart.bar();
+			// set chart padding
+			chart.padding().left(75);
 
-			// turn on chart animation
+			// enabled labels
+			chart.labels(true);
+
+			// set tooltip settings
+			chart.tooltip().format('Requests: {%Value}');
+
+			// get average
+			var average = Math.round(chart.getSeries(0).getStat('average'));
+
+			// create line marker
+			chart.lineMarker().zIndex(100).value(average).stroke('#F44336', 2).axis(chart.yAxis());
+
+			// create text marker
 			chart
-				.animation(true)
-				.padding([10, 40, 5, 20])
-				// set chart title text settings
-				.title('Impuestos en las comunidades de España');
-
-			// create area series with passed data
-			var series = chart.bar(data);
-			// set tooltip formatter
-			series
-				.tooltip()
-				.position('right')
-				.anchor('left-center')
-				.offsetX(5)
-				.offsetY(0)
-				.format('${%Value}{groupsSeparator: }');
-
-			// set titles for axises
-			chart.xAxis().title('Products by Revenue');
-			chart.yAxis().title('Revenue in Dollars');
-			chart.interactivity().hoverMode('by-x');
-			chart.tooltip().positionMode('point');
-			// set scale minimum
-			chart.yScale().minimum(0);
+				.textMarker()
+				.value(average)
+				.text('Media: ' + average)
+				.anchor('right-center')
+				.offsetX(10)
+				.align('left')
+				.zIndex(100)
+				.axis(chart.yAxis());
 
 			// set container id for the chart
 			chart.container('container');
@@ -117,6 +117,7 @@
 	<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
 	<script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
 	<script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+	<script src="https://cdn.anychart.com/releases/v8/js/anychart-mekko.min.js"></script>
 	<script src="https://cdn.anychart.com/releases/v8/themes/dark_turquoise.min.js"></script>
 </svelte:head>
 
