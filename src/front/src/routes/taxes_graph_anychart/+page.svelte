@@ -20,17 +20,16 @@
 
 		for (let i = 0; i < array.length; i++) {
 			const item = array[i];
-            let name = item.autonomic_community;
-            let taxesSum = item.atr_irpf + item.atr_iva + item.atr_soc_no_consolidadas;
-            if(!res.has(name)){
-                res.set(name, taxesSum);
-            }
-            else {
-                let prevValue = res.get(name);
-                res.set(name, prevValue + taxesSum);
-            }
+			let name = item.autonomic_community;
+			let taxesSum = item.atr_irpf + item.atr_iva + item.atr_soc_no_consolidadas;
+			if (!res.has(name)) {
+				res.set(name, taxesSum);
+			} else {
+				let prevValue = res.get(name);
+				res.set(name, prevValue + taxesSum);
+			}
 		}
-        return Array.from(res);
+		return Array.from(res);
 	}
 
 	async function getData() {
@@ -43,7 +42,7 @@
 			if (res.status === 200) {
 				taxes_data = await res.json();
 				taxes_data = collectToMap(taxes_data);
-                console.log(taxes_data)
+				console.log(taxes_data);
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
 				// console.log(taxes_data)
@@ -62,52 +61,48 @@
 	}
 
 	onMount(async () => {
-        await getData()
+		await getData();
 		anychart.onDocumentReady(function () {
 			// set chart theme
 			anychart.theme('darkTurquoise');
-			// create column chart
-			var chart = anychart.column();
+			var data = taxes_data;
+
+			// sort data by alphabet order
+			data.sort(function (itemFirst, itemSecond) {
+				return itemSecond[1] - itemFirst[1];
+			});
+
+			// create bar chart
+			var chart = anychart.bar();
 
 			// turn on chart animation
-			chart.animation(true);
-
-			// set chart title text settings
-			chart.title('Top 10 Cosmetic Products by Revenue');
+			chart
+				.animation(true)
+				.padding([10, 40, 5, 20])
+				// set chart title text settings
+				.title('Impuestos en las comunidades de España');
 
 			// create area series with passed data
-			var series = chart.column(
-				taxes_data
-			);
-
-			// set series tooltip settings
-			series.tooltip().titleFormat('{%X}');
-
+			var series = chart.bar(data);
+			// set tooltip formatter
 			series
 				.tooltip()
-				.position('center-top')
-				.anchor('center-bottom')
-				.offsetX(0)
-				.offsetY(5)
+				.position('right')
+				.anchor('left-center')
+				.offsetX(5)
+				.offsetY(0)
 				.format('${%Value}{groupsSeparator: }');
 
+			// set titles for axises
+			chart.xAxis().title('Products by Revenue');
+			chart.yAxis().title('Revenue in Dollars');
+			chart.interactivity().hoverMode('by-x');
+			chart.tooltip().positionMode('point');
 			// set scale minimum
 			chart.yScale().minimum(0);
 
-			// set yAxis labels formatter
-			chart.yAxis().labels().format('${%Value}{groupsSeparator: }');
-
-			// tooltips position and interactivity settings
-			chart.tooltip().positionMode('point');
-			chart.interactivity().hoverMode('by-x');
-
-			// axes titles
-			chart.xAxis().title('Product');
-			chart.yAxis().title('Revenue');
-
 			// set container id for the chart
 			chart.container('container');
-
 			// initiate chart drawing
 			chart.draw();
 		});
@@ -131,11 +126,11 @@
 	@import url('https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css');
 	@import url('https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css');
 
-	html,
-	body,
+	/* html, */
+	/* body, */
 	#container {
 		width: 100%;
-		height: 100%;
+		height: 80vh;
 		margin: 0;
 		padding: 0;
 	}
