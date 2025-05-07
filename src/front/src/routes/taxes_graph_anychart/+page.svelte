@@ -41,11 +41,14 @@
 
 			if (res.status === 200) {
 				taxes_data = await res.json();
+				let numYears = new Set(taxes_data.map((item) => item.year)).size;
+
 				taxes_data = collectToMap(taxes_data);
-                taxes_data = taxes_data.map((item) => ({
-                    x: item[0], value: item[1]
-                }))
 				console.log(taxes_data);
+				taxes_data = taxes_data.map((item) => ({
+					x: item[0],
+					value: Math.trunc(item[1] / numYears)
+				}));
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
 				// console.log(taxes_data)
@@ -73,7 +76,7 @@
 			// create barmekko chart with data
 			var chart = anychart.barmekko(data);
 			// set chart title text settings
-			chart.title('Mekko chart de impuestos en España por comunidad autónoma');
+			chart.title('Mekko chart de media anual de impuestos en España por comunidad autónoma (€)');
 
 			// set chart padding
 			chart.padding().left(75);
