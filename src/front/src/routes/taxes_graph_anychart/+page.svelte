@@ -82,7 +82,7 @@
 			chart.labels(true);
 
 			// set tooltip settings
-			chart.tooltip().format('Requests: {%Value}');
+			chart.tooltip().format('Impuestos: {%Value}');
 
 			// get average
 			var average = Math.round(chart.getSeries(0).getStat('average'));
