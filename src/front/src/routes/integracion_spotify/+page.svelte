@@ -1,30 +1,27 @@
 <script>
 	// @ts-nocheck
     import {onMount} from "svelte";
+	import {options_Spotify} from "../../../../../Secrets/api_keys_gonzalo.js";
 	let query = '';
 	// @ts-ignore
 	let canciones = [];
 
-	const options = {
-		method: 'GET',
-		headers: {
-			'x-rapidapi-key': '327d45c5e8mshf516faabaaf6508p130521jsn4b72c45e09cb',
-			'x-rapidapi-host': 'spotify23.p.rapidapi.com'
-		}
-	};
 
+
+	
     async function getData(){
         const url = 'https://spotify23.p.rapidapi.com/search/?q=Tornado%20Of%20Souls&type=multi&offset=0&limit=10&numberOfTopResults=5';
-        const res = await fetch(url, options);
+        const res = await fetch(url, options_Spotify);
         canciones = await res.json();
     }
 	
-
+	
+	
 	async function buscarCanciones() {
 		try {
             const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(query)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
-            console.log(encodeURIComponent(query))
-			const res = await fetch(url, options);
+            console.log(encodeURIComponent(query));
+			const res = await fetch(url, options_Spotify);
 			canciones = await res.json();
             console.log(res);
             console.log (canciones);
@@ -36,10 +33,11 @@
             console.log(error);
         }
 	}
-
+	
     onMount(async () =>{
-        await getData();
+        await buscarCanciones();
     });
+
 </script>
 
 <form on:submit|preventDefault={buscarCanciones}>

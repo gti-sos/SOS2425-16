@@ -3,7 +3,7 @@
 
     import {onMount} from "svelte";
     import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
-    const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
+    import {YOUTUBE_API_KEY} from "../../../../../Secrets/api_keys_gonzalo.js";
     let canal = {};
   
     onMount(async () => {
