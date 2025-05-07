@@ -1,6 +1,7 @@
 <script>
 	// @ts-nocheck
 	import { onMount } from 'svelte';
+	import { Alert, Button } from '@sveltestrap/sveltestrap';
 
 	import { dev } from '$app/environment';
 	let DEVEL_HOST = 'http://localhost:16078';
@@ -12,30 +13,51 @@
 	}
 
 	let taxes_data = [];
+	let graphYear = 2021;
+	let chart;
+	let resultStatus,
+		resultMessage = '';
+
+	async function updateGraphData() {
+		await getData();
+		chart.series[0].setData(taxes_data);
+	}
 
 	async function getData() {
 		// resultStatus, resultMessage = '';
 		try {
 			await fetch(API + '/loadInitialData', { method: 'GET' });
 			// const data = await res.json();
-			const res = await fetch(API, { method: 'GET' });
+			const res = await fetch(API + '?year=' + graphYear, { method: 'GET' });
 
 			if (res.status === 200) {
 				taxes_data = await res.json();
+				resultMessage = `Gráfica del año ${graphYear}`;
+				resultStatus = 'success';
 				// console.log(taxes_data)
 
 				const sum_taxes = taxes_data.reduce(
-					(accumulator, currentValue) => accumulator + currentValue.atr_irpf + currentValue.atr_iva + currentValue.atr_soc_no_consolidadas,
+					(accumulator, currentValue) =>
+						accumulator +
+						currentValue.atr_irpf +
+						currentValue.atr_iva +
+						currentValue.atr_soc_no_consolidadas,
 					0
 				);
-				console.log(sum_taxes);
 
 				taxes_data = taxes_data.map((item) => ({
 					name: item.autonomic_community,
-					y: (item.atr_irpf + item.atr_iva + item.atr_soc_no_consolidadas)/sum_taxes * 100
+					y: ((item.atr_irpf + item.atr_iva + item.atr_soc_no_consolidadas) / sum_taxes) * 100
 				}));
 
+
 				console.log(`Response received:\n${JSON.stringify(taxes_data, null, 2)}`);
+			} else if (res.status === 404) {
+				resultStatus = 'warning';
+				resultMessage = `No se encontraron datos del año ${graphYear}`;
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
 			}
 		} catch (error) {
 			console.log(`ERROR getting data from ${API}: ${error}`);
@@ -44,7 +66,7 @@
 
 	onMount(async () => {
 		await getData();
-		Highcharts.chart('container', {
+		chart = Highcharts.chart('container', {
 			chart: {
 				type: 'pie',
 				zooming: {
@@ -57,13 +79,10 @@
 				panKey: 'shift'
 			},
 			title: {
-				text: 'Egg Yolk Composition'
+				text: 'Porcentaje de impuestos en España por comunidad autónoma'
 			},
 			tooltip: {
 				valueSuffix: '%'
-			},
-			subtitle: {
-				text: 'Source:<a href="https://www.mdpi.com/2072-6643/11/3/684/htm" target="_default">MDPI</a>'
 			},
 			plotOptions: {
 				pie: {
@@ -111,9 +130,17 @@
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </svelte:head>
 
+{#if resultMessage}
+	<Alert color={resultStatus}>{resultMessage}</Alert>
+{/if}
+
 <figure class="highcharts-figure">
 	<div id="container"></div>
 </figure>
+
+<label for="graphYear">Año de gráfica</label>
+<input type="number" min="0" bind:value={graphYear} />
+<Button on:click={updateGraphData}>Mostrar año</Button>
 
 <style>
 	.highcharts-figure,
