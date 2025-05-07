@@ -1,4 +1,6 @@
 import dataStore from "nedb";
+import {YOUTUBE_API_KEY} from "../../Secrets/api_keys_gonzalo.js";
+import {options_Spotify} from "../../Secrets/api_keys_gonzalo.js";
 
 const BASE_API = "/api/v1";
 
@@ -365,7 +367,43 @@ function loadBackendGAM(app) {
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 
+    app.get(BASE_API+"/integrations/youtube",async (request,response)=>{
+        try{
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
+            let datos = await res.json();
+            response.json(datos);
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
+
+    /*
+    app.get(BASE_API+"/integrations/spotify",async (request,response)=>{
+        try {
+            //let canciones = [];
+            let cancion = request.query.cancion;
+            const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(cancion)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
+            console.log(encodeURIComponent(cancion));
+			const res = await fetch(url, options_Spotify);
+			let datos = await res.json();
+            response.json(datos);
+            console.log(res);
+            console.log (datos);
+            console.log(datos.tracks.items);
+            console.log(datos.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
+            console.log(datos.tracks.items[0].data.name);
+            console.log(datos.tracks.items[0].data.uri);
+		} catch (error) {
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
+    */
+
     
+
+
+
+
 }
 
 export { loadBackendGAM }
