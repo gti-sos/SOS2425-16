@@ -1,13 +1,11 @@
 <script>
 // @ts-nocheck
-
     import {onMount} from "svelte";
     import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
-    import {YOUTUBE_API_KEY} from "../../../../../Secrets/api_keys_gonzalo.js";
     let canal = {};
   
     onMount(async () => {
-      const res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
+      const res = await fetch('http://localhost:16078/api/v1/integrations/youtube');
       const jsonStr = await res.text();
       const data = JSON.parse(jsonStr);
   
