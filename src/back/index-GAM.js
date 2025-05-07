@@ -1,6 +1,6 @@
 import dataStore from "nedb";
 import {YOUTUBE_API_KEY} from "../../Secrets/api_keys_gonzalo.js";
-import {options_Spotify} from "../../Secrets/api_keys_gonzalo.js";
+//import {options_Spotify} from "../../Secrets/api_keys_gonzalo.js";
 
 const BASE_API = "/api/v1";
 
