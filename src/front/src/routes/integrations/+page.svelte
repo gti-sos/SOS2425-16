@@ -1,2 +1,3 @@
 <a href ="/integracion_youtube">Integración con la API de YouTube</a>
 <a href ="/integracion_spotify">Integración con la API de Spotify</a>
+<a href ="/integracion_steam">Integración con la API de Steam mediante Proxy</a>

@@ -1,7 +1,6 @@
 import dataStore from "nedb";
 
-const BASE_API= "/api/v1";
-const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
+const BASE_API = "/api/v1";
 
 let db = new dataStore();
 
@@ -10,7 +9,7 @@ let db = new dataStore();
 const initialEmigrationData = [
     { autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
     { autonomic_community: "andalucia", year: 2020, quarter: "q2", between_20_24_yo: 2156, between_25_29_yo: 3201, between_30_34_yo: 3690 },
-    {autonomic_community: "asturias", year: 2021, quarter: "q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
+    { autonomic_community: "asturias", year: 2021, quarter: "q3", between_20_24_yo: 304, between_25_29_yo: 510, between_30_34_yo: 483 },
     { autonomic_community: "madrid", year: 2021, quarter: "q3", between_20_24_yo: 6028, between_25_29_yo: 10836, between_30_34_yo: 10004 },
     { autonomic_community: "castilla-y-leon", year: 2021, quarter: "q1", between_20_24_yo: 766, between_25_29_yo: 1171, between_30_34_yo: 1210 },
     { autonomic_community: "castilla-la-mancha", year: 2021, quarter: "q2", between_20_24_yo: 984, between_25_29_yo: 1304, between_30_34_yo: 1512 },
@@ -46,22 +45,22 @@ const initialEmigrationData = [
 const groupedData = {};
 
 initialEmigrationData.forEach(item => {
-  const community = item.autonomic_community;
-  const year = item.year;
-  const total =
-    item.between_20_24_yo +
-    item.between_25_29_yo +
-    item.between_30_34_yo;
+    const community = item.autonomic_community;
+    const year = item.year;
+    const total =
+        item.between_20_24_yo +
+        item.between_25_29_yo +
+        item.between_30_34_yo;
 
-  if (!groupedData[community]) {
-    groupedData[community] = {};
-  }
+    if (!groupedData[community]) {
+        groupedData[community] = {};
+    }
 
-  if (!groupedData[community][year]) {
-    groupedData[community][year] = 0;
-  }
+    if (!groupedData[community][year]) {
+        groupedData[community][year] = 0;
+    }
 
-  groupedData[community][year] += total;
+    groupedData[community][year] += total;
 });
 
 console.log(groupedData);
@@ -81,29 +80,29 @@ const pepe = {
 }
 
 
-    // GET request that inserts to the database the initial data.
+// GET request that inserts to the database the initial data.
 
-        /*
-        db.find({},(err, data)=>{
-            if (err){               
-                console.error(`ERROR: ${err}`);
-            }
-            else if(data.length < 1){
-                db.insert(initialEmigrationData);
-            }
-        });
-        */
+/*
+db.find({},(err, data)=>{
+    if (err){               
+        console.error(`ERROR: ${err}`);
+    }
+    else if(data.length < 1){
+        db.insert(initialEmigrationData);
+    }
+});
+*/
 
 // Function that contains all of the HTTP requests.
 
-function loadBackendGAM(app){
+function loadBackendGAM(app) {
 
 
     app.get(BASE_API + "/emigration-stats/groupedData", (request, response) => {
-        response.send(JSON.stringify(pepe,null,2));
+        response.send(JSON.stringify(pepe, null, 2));
     });
 
-    
+
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request, response) => {
         db.find({}, (err, data) => {
             if (err) {
@@ -119,14 +118,14 @@ function loadBackendGAM(app){
             }
         });
     });
-    
+
 
     //Searches:
 
     // GET request that retrieves from de DB the current data loaded.
 
-     // GET operation for a certain community and querying for year or/and quarter paginated
-     app.get(BASE_API + "/emigration-stats", (request, response) => {
+    // GET operation for a certain community and querying for year or/and quarter paginated
+    app.get(BASE_API + "/emigration-stats", (request, response) => {
         let paramName = request.query.autonomic_community;
         let paramYear = parseInt(request.query.year);
         let paramQuarter = request.query.quarter;
@@ -138,26 +137,26 @@ function loadBackendGAM(app){
 
         let query = {};
         let paramFields = request.query.fields;
-    
-        if(paramName){
+
+        if (paramName) {
             query.autonomic_community = paramName;
         }
-        if(paramYear){
+        if (paramYear) {
             query.year = paramYear;
         }
-        if(paramQuarter){
+        if (paramQuarter) {
             query.quarter = paramQuarter;
         }
-        if(paramBetween_20_24_yo){
+        if (paramBetween_20_24_yo) {
             query.between_20_24_yo = paramBetween_20_24_yo;
         }
-        if(paramBetween_25_29_yo){
+        if (paramBetween_25_29_yo) {
             query.between_25_29_yo = paramBetween_25_29_yo;
         }
-        if(paramBetween_30_34_yo){
+        if (paramBetween_30_34_yo) {
             query.between_30_34_yo = paramBetween_30_34_yo;
         }
-        if(paramFields){
+        if (paramFields) {
             paramFields = paramFields.split(',');
         }
 
@@ -172,12 +171,12 @@ function loadBackendGAM(app){
             paramLimit = 0;
         }
 
-        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs){
-            if(!docs.length){
+        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function (err, docs) {
+            if (!docs.length) {
                 response.sendStatus(404);
                 return;
             }
-            else{
+            else {
                 response.send(JSON.stringify(docs.map((c) => {
                     delete c._id;
                     Object.keys(c).forEach(field => {
@@ -191,19 +190,19 @@ function loadBackendGAM(app){
         })
     });
 
-    
+
     // POST request that inserts one item to the DB.
 
-    app.post(BASE_API+"/emigration-stats",(request,response)=>{ 
+    app.post(BASE_API + "/emigration-stats", (request, response) => {
         console.log("New POST to /emigration-stats");
-        console.log(`<${request.body}>`); 
-    
+        console.log(`<${request.body}>`);
+
         const allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
-        let newAutonomicCommunity=request.body;
+        let newAutonomicCommunity = request.body;
         console.log(newAutonomicCommunity);
-        let invalidFields= Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
+        let invalidFields = Object.keys(newAutonomicCommunity).filter(f => !allowedFields.includes(f));
         let invalidValues = Object.values(newAutonomicCommunity).filter((f) => ((f === "") || (f === null) || (f === undefined)));
-        if(invalidFields.length > 0 || invalidValues.length > 0){ 
+        if (invalidFields.length > 0 || invalidValues.length > 0) {
             response.sendStatus(400);
             return;
         }
@@ -212,49 +211,49 @@ function loadBackendGAM(app){
             year: parseInt(newAutonomicCommunity.year),
             quarter: newAutonomicCommunity.quarter
         },
-        (err,existingResource)=>{
-            if (err){
-                response.status(500).send("Error code 01 (please contact admin)");                
-                console.error(`ERROR: ${err}`);
-                return;
+            (err, existingResource) => {
+                if (err) {
+                    response.status(500).send("Error code 01 (please contact admin)");
+                    console.error(`ERROR: ${err}`);
+                    return;
+                }
+                else if (existingResource) {
+                    response.sendStatus(409);
+                    return;
+                }
+                else {
+                    db.insert(newAutonomicCommunity, (err, newDoc) => {
+                        if (err) {
+                            response.status(500).send("Error code 01 (please contact admin)");
+                            console.error(`ERROR: ${err}`);
+                            return;
+                        }
+                        else {
+                            response.sendStatus(201);
+                        }
+                    });
+                }
             }
-            else if (existingResource){
-                response.sendStatus(409);
-                return;
-            }
-            else{
-                db.insert(newAutonomicCommunity,(err,newDoc)=>{
-                    if (err){
-                        response.status(500).send("Error code 01 (please contact admin)");                
-                        console.error(`ERROR: ${err}`);
-                        return;
-                    }
-                    else{
-                        response.sendStatus(201);
-                    }
-                });
-            }
-        }
-        );        
+        );
     });
 
     // PUT request that is not allowed.
-    
-    app.put(BASE_API+"/emigration-stats",(request,response)=>{ 
+
+    app.put(BASE_API + "/emigration-stats", (request, response) => {
         response.sendStatus(405);
     });
-    
+
     //DELETE request that removes every item from the DB.
 
-    app.delete(BASE_API+"/emigration-stats",(request,response)=>{ 
-        db.remove({},{multi: true},function(err,numRemoved){
-            if (err){
-                response.status(500).send("Error code 01 (please contact admin)");                
+    app.delete(BASE_API + "/emigration-stats", (request, response) => {
+        db.remove({}, { multi: true }, function (err, numRemoved) {
+            if (err) {
+                response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
                 return;
-            }else{
+            } else {
                 response.sendStatus(200);
-    
+
             }
         });
     });
@@ -262,130 +261,114 @@ function loadBackendGAM(app){
     //Methods for a specific resource:
 
     // GET request that retrieves from de DB the item which parameters are the indacated in the request.
-    
-    app.get(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+
+    app.get(BASE_API + "/emigration-stats/:name/:year/:quarter", (request, response) => {
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New GET to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
 
-        db.findOne({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{_id: 0 },(err,emigrationData)=>{ //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
-            if(err){
-                response.status(500).send("Error code 01 (please contact admin)");                
+        db.findOne({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter }, { _id: 0 }, (err, emigrationData) => { //campo _id:0 le dice a nedb que no incluya el campo _id, solo sirve cuando se trata a un solo objeto, si fuera un array eliminarlo con map
+            if (err) {
+                response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
                 return;
             }
-            else if (!emigrationData){
+            else if (!emigrationData) {
                 response.sendStatus(404);
                 return;
             }
-            else{ 
-                response.send(JSON.stringify(emigrationData,null,2));
+            else {
+                response.send(JSON.stringify(emigrationData, null, 2));
             }
         });
     });
 
     // POST request that is not allowed.
-    
-    app.post(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+
+    app.post(BASE_API + "/emigration-stats/:name/:year/:quarter", (request, response) => {
         response.sendStatus(405);
     });
-    
+
 
     // PUT request that updates from de DB the item which parameters are the indacated in the request.
 
-    app.put(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{
+    app.put(BASE_API + "/emigration-stats/:name/:year/:quarter", (request, response) => {
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
-        let putBody= request.body;
+        let putBody = request.body;
         let allowedFields = ["autonomic_community", "year", "quarter", "between_20_24_yo", "between_25_29_yo", "between_30_34_yo"];
         let invalidFields = Object.keys(putBody).filter(f => !allowedFields.includes(f));
         let invalidValues = Object.values(putBody).filter((f) => ((f === "") || (f === null) || (f === undefined)));
 
-        if(invalidFields.length>0 || invalidValues.length > 0){
+        if (invalidFields.length > 0 || invalidValues.length > 0) {
             response.sendStatus(400);
             return;
         }
-        else if(!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))){
+        else if (!((putBody.autonomic_community === paramName) && (parseInt(putBody.year) === parseInt(paramYear)) && (putBody.quarter === paramQuarter))) {
             response.sendStatus(400);
-            return; 
+            return;
         }
 
-        db.update({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{$set: putBody},{},(err,numReplaced)=>{
-            if(err){
-                response.status(500).send("Error code 01 (please contact admin)");                
+        db.update({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter }, { $set: putBody }, {}, (err, numReplaced) => {
+            if (err) {
+                response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
                 return;
             }
-            else{
-                if((numReplaced === 0)){
+            else {
+                if ((numReplaced === 0)) {
                     response.sendStatus(404);
                     return;
                 }
-                else{
+                else {
                     response.sendStatus(200);
                     return;
                 }
-            } 
+            }
 
         });
     });
-    
+
     // DELETE request that removes from de DB the item which parameters are the indacated in the request.
 
 
-    app.delete(BASE_API+"/emigration-stats/:name/:year/:quarter",(request,response)=>{ 
+    app.delete(BASE_API + "/emigration-stats/:name/:year/:quarter", (request, response) => {
         let paramName = request.params.name;
         let paramYear = request.params.year;
         let paramQuarter = request.params.quarter;
         console.log(`New DELETE to /emigration-stats/${paramName}/${paramYear}/${paramQuarter}`);
-        db.remove({autonomic_community: paramName, year: parseInt(paramYear), quarter:paramQuarter},{},(err,numRemoved)=>{ 
-            if(err){
-                response.status(500).send("Error code 01 (please contact admin)");                
+        db.remove({ autonomic_community: paramName, year: parseInt(paramYear), quarter: paramQuarter }, {}, (err, numRemoved) => {
+            if (err) {
+                response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
                 return;
             }
-            else{
-                if((numRemoved === 0)){
+            else {
+                if ((numRemoved === 0)) {
                     response.sendStatus(404);
                     return;
                 }
-                else{
+                else {
                     response.sendStatus(200);
                     return;
                 }
-            } 
+            }
 
         })
     });
 
     // GET request that navigates to my personal POSTMAN collection documentation.
 
-    app.get(BASE_API+"/emigration-stats/docs",(request,response)=>{
+    app.get(BASE_API + "/emigration-stats/docs", (request, response) => {
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 
-    app.get(BASE_API+"/integrations/youtube",async (request,response)=>{
-        try{
-            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
-            let datos = await res.json();
-            response.send(JSON.stringify(datos,null,2));
-        }catch (error){
-            response.status(500).send('Error al obtener los datos');
-        }
-        /*
-        let res = app.get(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`,(resquest,response)=>{
-            response.send(JSON.stringify())
-        });
-        response.send(JSON.stringify(res,null,2));
-        */
-    });
-
-
+    
 }
 
-export {loadBackendGAM}
+export { loadBackendGAM }
 
 
 
