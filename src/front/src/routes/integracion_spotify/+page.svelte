@@ -5,6 +5,7 @@
 	let query = '';
 	// @ts-ignore
 	let canciones = [];
+	let listaCanciones = [];
 
 	const options_Spotify = {
 		method: 'GET',
@@ -16,16 +17,19 @@
 
 	async function buscarCanciones() {
 		try {
-			const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(query)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
-			console.log(encodeURIComponent(query));
-			const res = await fetch(url, options_Spotify);
-			canciones = await res.json();
-			console.log(res);
-			console.log(canciones);
-			console.log(canciones.tracks.items);
-			console.log(canciones.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
-			console.log(canciones.tracks.items[0].data.name);
-			console.log(canciones.tracks.items[0].data.uri);
+			if (query != '') {
+				const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(query)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
+				console.log(encodeURIComponent(query));
+				const res = await fetch(url, options_Spotify);
+				canciones = await res.json();
+				console.log(res);
+				console.log(canciones);
+				console.log(canciones.tracks.items);
+				listaCanciones = canciones.tracks.items;
+				console.log(canciones.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
+				console.log(canciones.tracks.items[0].data.name);
+				console.log(canciones.tracks.items[0].data.uri);
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -43,12 +47,16 @@
 
 {#if canciones.tracks?.items?.length > 0}
 	<ul>
-		{#each canciones.tracks.items as item}
-			<li>
-				<img src={item.data.albumOfTrack.coverArt.sources[0].url} alt="cover" width="50" />
-				<strong>{item.data.name}</strong>
-				<a href={item.data.uri}><button>Reproducir canción</button></a>
-			</li>
+		{#each listaCanciones as item}
+			{#if item?.data?.albumOfTrack?.coverArt?.sources?.length > 0}
+				<li>
+					{console.log(item)}
+					{console.log(item.data.albumOfTrack.coverArt.sources[0].url)}
+					<img src={item.data.albumOfTrack.coverArt.sources[0].url} alt="cover" width="50" />
+					<strong>{item.data.name}</strong>
+					<a href={item.data.uri}><button>Reproducir canción</button></a>
+				</li>
+			{/if}
 		{/each}
 	</ul>
 {/if}

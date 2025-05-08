@@ -427,11 +427,6 @@ function loadBackendGAM(app) {
         }
     });
 
-    
-
-
-
-
 }
 
 export { loadBackendGAM }
