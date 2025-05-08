@@ -399,6 +399,26 @@ function loadBackendGAM(app) {
     });
     */
 
+    app.get(BASE_API+"/integrations/g20",async (request,response)=>{
+        try{
+            let res = await fetch(`https://sos2425-20.onrender.com/api/v1/traffic-accidents`);
+            let datos = await res.json();
+            response.json(datos);
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
+
+    app.get(BASE_API+"/integrations/g12",async (request,response)=>{
+        try{
+            let res = await fetch(`https://sos2425-12.onrender.com/api/v1/annual-consumptions`);
+            let datos = await res.json();
+            response.json(datos);
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
+
     
 
 
