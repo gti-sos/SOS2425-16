@@ -2,6 +2,15 @@ import dataStore from "nedb";
 import {YOUTUBE_API_KEY} from "../../Secrets/api_keys_gonzalo.js";
 //import {options_Spotify} from "../../Secrets/api_keys_gonzalo.js";
 
+/*
+const options_Spotify = {
+    method: 'GET',
+    headers: {
+        'x-rapidapi-key': '327d45c5e8mshf516faabaaf6508p130521jsn4b72c45e09cb',
+        'x-rapidapi-host': 'spotify23.p.rapidapi.com'
+    }
+};
+*/
 const BASE_API = "/api/v1";
 
 let db = new dataStore();
@@ -387,9 +396,9 @@ function loadBackendGAM(app) {
 			const res = await fetch(url, options_Spotify);
 			let datos = await res.json();
             response.json(datos);
-            console.log(res);
-            console.log (datos);
-            console.log(datos.tracks.items);
+            console.log("respuestaback->"+res);
+            console.log ("datoz-->"+datos);
+            console.log("cosos canciones->"+datos.tracks.items);
             console.log(datos.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
             console.log(datos.tracks.items[0].data.name);
             console.log(datos.tracks.items[0].data.uri);
@@ -398,6 +407,25 @@ function loadBackendGAM(app) {
         }
     });
     */
+    app.get(BASE_API+"/integrations/g20",async (request,response)=>{
+        try{
+            let res = await fetch(`https://sos2425-20.onrender.com/api/v1/traffic-accidents`);
+            let datos = await res.json();
+            response.json(datos);
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
+
+    app.get(BASE_API+"/integrations/g12",async (request,response)=>{
+        try{
+            let res = await fetch(`https://sos2425-12.onrender.com/api/v1/annual-consumptions`);
+            let datos = await res.json();
+            response.json(datos);
+        }catch (error){
+            response.status(500).send('Error al obtener los datos');
+        }
+    });
 
     
 
