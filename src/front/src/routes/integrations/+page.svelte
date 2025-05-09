@@ -10,3 +10,5 @@
 <a href ="/integracion_covid-api">Integración con la API de datos covid-api</a>
 
 <a href="/integracion_worldbank">Integración con la API de Worldbank</a>
+<a href="/integracion_myanimelist">Integración con la API de Myanimelist</a>
+<a href="/integracion_police_uk">Integración con la API de data police uk</a>

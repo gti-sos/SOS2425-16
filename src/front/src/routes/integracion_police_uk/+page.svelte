@@ -5,35 +5,46 @@
 
 	// let DEVEL_HOST = 'http://localhost:16078';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
-	let API = 'https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json';
+	let API =
+		'https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
 
 	// if (dev) {
 	// 	API = DEVEL_HOST + API;
 	// }
 
-	let worldbank_data = [];
 	let resultStatus,
 		resultMessage = '';
 
-	function standarizeData(jsonData) {
-		let res = jsonData;
-		res = res[1];
-		res = res.map((item) => [item.date, item.value]);
-		return res;
+	function countData(jsonData) {
+		const res = new Map();
+
+		for (let i = 0; i < jsonData.length; i++) {
+			const item = jsonData[i];
+			let name = item.category;
+			if (!res.has(name)) {
+				res.set(name, 1);
+			} else {
+				let prevValue = res.get(name);
+				res.set(name, prevValue + 1);
+			}
+		}
+		console.log(res);
+		return Array.from(res);
 	}
 
 	async function getData() {
+		let police_data;
 		try {
 			const res = await fetch(API, { method: 'GET' });
 
 			if (res.status === 200) {
-				worldbank_data = await res.json();
-				worldbank_data = standarizeData(worldbank_data);
+				police_data = await res.json();
+				police_data = countData(police_data);
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
-				// console.log(worldbank_data)
+				// console.log(police_data)
 
-				console.log(`Response received:\n${JSON.stringify(worldbank_data, null, 2)}`);
+				console.log(`Response received:\n${JSON.stringify(police_data, null, 2)}`);
 			} else if (res.status === 404) {
 				resultStatus = 'warning';
 				resultMessage = `No se encontraron datos`;
@@ -41,35 +52,31 @@
 				resultStatus = 'warning';
 				resultMessage = 'No se pudo acceder a los datos';
 			}
-			return worldbank_data;
+			return police_data;
 		} catch (error) {
 			console.log(`ERROR getting data from ${API}: ${error}`);
 		}
 	}
 
 	onMount(async () => {
-		let graphData = await getData();
+		let chartData = await getData();
 		anychart.onDocumentReady(function () {
 			// set chart theme
 			anychart.theme('darkTurquoise');
-			anychart.theme(anychart.themes.darkEarth);
-			// set the data
-			var data = {
-				header: ['Name', 'Población'],
-				rows: graphData
-			};
+			// create pie chart with passed data
+			var chart = anychart.pie(chartData);
 
-			// create the chart
-			var chart = anychart.bar();
+			// set chart title text settings
+			chart
+				.title('Recuento de crímenes en UK en 2025-03')
+				// set chart radius
+				.radius('43%')
+				// create empty area in pie chart
+				.innerRadius('30%');
 
-			// add data
-			chart.data(data);
-
-			// set the chart title
-			chart.title('Evolución de la población En África Sur y Este');
-
-			// draw
+			// set container id for the chart
 			chart.container('container');
+			// initiate chart drawing
 			chart.draw();
 		});
 	});
@@ -96,7 +103,7 @@
 	body,
 	#container {
 		width: 100%;
-		height: 100vh;
+		height: 80vh;
 		margin: 0;
 		padding: 0;
 	}
