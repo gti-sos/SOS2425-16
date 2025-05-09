@@ -55,7 +55,7 @@
 			anychart.theme(anychart.themes.darkEarth);
 			// set the data
 			var data = {
-				header: ['Name', 'Death toll'],
+				header: ['Name', 'Población'],
 				rows: graphData
 			};
 
