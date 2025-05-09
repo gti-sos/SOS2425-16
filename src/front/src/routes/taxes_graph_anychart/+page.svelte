@@ -75,14 +75,17 @@
 
 			// create barmekko chart with data
 			var chart = anychart.barmekko(data);
+            chart.legend(true);
 			// set chart title text settings
 			chart.title('Mekko chart de media anual de impuestos en España por comunidad autónoma (€)');
 
 			// set chart padding
 			chart.padding().left(75);
 
-			// enabled labels
-			chart.labels(true);
+			// disabled labels
+			chart.labels(false);
+
+            chart.xAxis().labels().enabled(false)
 
 			// set tooltip settings
 			chart.tooltip().format('Impuestos: {%Value}');
