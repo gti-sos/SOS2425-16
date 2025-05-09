@@ -1,0 +1,20 @@
+[
+  { "aacc": "Andalucía", "total_co2_emission": 55873 },
+  { "aacc": "Aragón", "total_co2_emission": 0 },
+  { "aacc": "Asturias, Principado de", "total_co2_emission": 146676 },
+  { "aacc": "Balears, Illes", "total_co2_emission": 80802 },
+  { "aacc": "Canarias", "total_co2_emission": 86531 },
+  { "aacc": "Cantabria", "total_co2_emission": 90147 },
+  { "aacc": "Castilla - La Mancha", "total_co2_emission": 155524 },
+  { "aacc": "Castilla y León", "total_co2_emission": 154753 },
+  { "aacc": "Cataluña", "total_co2_emission": 114869 },
+  { "aacc": "Ceuta", "total_co2_emission": 143410 },
+  { "aacc": "Comunitat Valenciana", "total_co2_emission": 129126 },
+  { "aacc": "Extremadura", "total_co2_emission": 159870 },
+  { "aacc": "Galicia", "total_co2_emission": 132272 },
+  { "aacc": "Madrid, Comunidad de", "total_co2_emission": 216853 },
+  { "aacc": "Melilla", "total_co2_emission": 111276 },
+  { "aacc": "Murcia, Región de", "total_co2_emission": 131549 },
+  { "aacc": "Navarra, Comunidad Foral de", "total_co2_emission": 143969 },
+  { "aacc": "País Vasco", "total_co2_emission": 99789 }
+]
