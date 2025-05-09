@@ -1,0 +1,20 @@
+[
+  { "autonomous_community": "La Rioja", "total_deceased": 24 },
+  { "autonomous_community": "Extremadura", "total_deceased": 111 },
+  { "autonomous_community": "Cataluña", "total_deceased": 552 },
+  { "autonomous_community": "Comunidad Valenciana", "total_deceased": 329 },
+  { "autonomous_community": "Ceuta y Melilla", "total_deceased": 6 },
+  { "autonomous_community": "Galicia", "total_deceased": 251 },
+  { "autonomous_community": "Castilla La Mancha", "total_deceased": 220 },
+  { "autonomous_community": "Andalucía", "total_deceased": 643 },
+  { "autonomous_community": "País Vasco", "total_deceased": 111 },
+  { "autonomous_community": "Navarra", "total_deceased": 54 },
+  { "autonomous_community": "Asturias", "total_deceased": 83 },
+  { "autonomous_community": "Castilla y León", "total_deceased": 346 },
+  { "autonomous_community": "Aragón", "total_deceased": 155 },
+  { "autonomous_community": "Canarias", "total_deceased": 137 },
+  { "autonomous_community": "Murcia", "total_deceased": 121 },
+  { "autonomous_community": "Cantabria", "total_deceased": 45 },
+  { "autonomous_community": "Madrid", "total_deceased": 262 },
+  { "autonomous_community": "Baleares", "total_deceased": 102 }
+]
