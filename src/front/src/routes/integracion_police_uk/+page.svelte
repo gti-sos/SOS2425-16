@@ -6,7 +6,7 @@
 	// let DEVEL_HOST = 'http://localhost:16078';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
 	let API =
-		'https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
+		'http://localhost:16078/api/policeuk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
 
 	// if (dev) {
 	// 	API = DEVEL_HOST + API;
