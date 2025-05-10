@@ -466,7 +466,7 @@
 			]
 		});
 
-		// Add mouse and touch events for rotation
+		// Add mouse and touch events for rotationnn
 		(function (H) {
 			// @ts-ignore
 			function dragStart(eStart) {
