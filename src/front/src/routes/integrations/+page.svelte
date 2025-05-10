@@ -8,5 +8,7 @@
 <a href ="/integracion_OpenWeatherMap">Integración con la API de OpenWeatherMap</a>
 <a href ="/integracion_ExchangeRate">Integración con la API de ExchangeRate</a>
 <a href ="/integracion_covid-api">Integración con la API de datos covid-api</a>
+<a href ="/integracion_g19-sanctions-and-points-stats">Integración con la API de Sanctions and points del grupo 19</a>
+<a href ="/integracion_g19-ownerships-changes-stats">Integración con la API de Ownerships changes del grupo 19</a>
 
 <a href="/integracion_worldbank">Integración con la API de Worldbank</a>
