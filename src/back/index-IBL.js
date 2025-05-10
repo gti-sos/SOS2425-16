@@ -1,4 +1,5 @@
 import dataStore from "nedb";
+import request from "request";
 
 const BASE_API = "/api/v1";
 let db = new dataStore();
@@ -11,6 +12,17 @@ import initialTaxesData from "./taxesData.json" with { type: "json" };
  */
 
 function loadBackendIBL(app) {
+
+    // Parameters
+    // You can use a shorthand for multiple API endpoints: /api|/other_api
+    var paths = '/api/policeuk';
+    var apiServerHost = 'https://data.police.uk';
+    app.use(paths, function(req, res) {
+        var url = apiServerHost + req.url;
+        console.log('piped: ' + req.url);
+        req.pipe(request(url)).pipe(res);
+    });
+
     // GET operation that inits the data on taxesData from initialTaxesData
     app.get(BASE_API + "/taxes-stats/loadInitialData", (request, response) => {
         db.find({}, (err, data) => {
