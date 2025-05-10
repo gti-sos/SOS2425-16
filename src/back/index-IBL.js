@@ -1,4 +1,6 @@
 import dataStore from "nedb";
+import express from "express";
+import request from "request";
 
 const BASE_API = "/api/v1";
 let db = new dataStore();
@@ -11,6 +13,22 @@ import initialTaxesData from "./taxesData.json" with { type: "json" };
  */
 
 function loadBackendIBL(app) {
+
+    // Parameters
+    // You can use a shorthand for multiple API endpoints: /api|/other_api
+    var paths = '/api';
+    var apiServerHost = 'https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
+
+    app.use(paths, function(req, res) {
+        var url = apiServerHost + req.baseUrl + req.url;
+        console.log('piped: ' + req.baseUrl + req.url);
+        req.pipe(request(url)).pipe(res);
+    });
+
+    app.use(express.static('.'));
+
+    // app.listen(process.env.PORT || 8080);
+
     // GET operation that inits the data on taxesData from initialTaxesData
     app.get(BASE_API + "/taxes-stats/loadInitialData", (request, response) => {
         db.find({}, (err, data) => {
@@ -26,6 +44,21 @@ function loadBackendIBL(app) {
                 response.sendStatus(200);
             }
         });
+    });
+
+    app.use('/api/worldbank', async (req, res) => {
+        let path = req.originalUrl.replace('/api/worldbank', '');
+
+        // Añadir ? o & según sea necesario
+        const connector = path.includes('?') ? '&' : '?';
+        const fullUrl = `${API_HOST}${path}${connector}appid=${API_KEY}`;
+
+        console.log('Proxying to:', fullUrl);
+
+        const response = await fetch(fullUrl);
+        const data = await response.json();
+
+        res.status(response.status).json(data);
     });
 
     // GET operation for a certain community and querying for year or/and quarter paginated

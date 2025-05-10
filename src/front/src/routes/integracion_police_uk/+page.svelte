@@ -3,7 +3,7 @@
 	import { dev } from '$app/environment';
 	import { Alert } from '@sveltestrap/sveltestrap';
 
-	// let DEVEL_HOST = 'http://localhost:16078';
+	let PROXY_HOST = 'http://localhost:16078/api';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
 	let API =
 		'https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
@@ -35,7 +35,7 @@
 	async function getData() {
 		let police_data;
 		try {
-			const res = await fetch(API, { method: 'GET' });
+			const res = await fetch(PROXY_HOST + "/" + API, { method: 'GET' });
 
 			if (res.status === 200) {
 				police_data = await res.json();
