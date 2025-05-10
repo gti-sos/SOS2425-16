@@ -5,3 +5,4 @@
 <a href="/unemployment-stats">Estadísticas sobre el desempleo en España</a>
 <a href="/graph">Gráficas</a>
 <a href="/integrations">Integraciones</a>
+<a href="/analytics">Analíticas</a>
