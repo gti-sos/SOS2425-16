@@ -122,7 +122,7 @@
 				}
 			},
 			tooltip: {
-				headerFormat: '<b>Age: {category}</b><br>'
+				headerFormat: '<b> {category}</b><br>'
 			},
 			plotOptions: {
 				series: {
@@ -134,6 +134,11 @@
 				{
 					data: [24, 111, 552, 329, 6, 251, 220, 643, 111, 54, 83, 346, 155, 137, 121, 45, 262, 102],
 					name: 'Fallecidos',
+					showInLegend: false
+				},
+				{
+					data: [424, 10794 , 18171 , 12113 , 621, 1503 , 1536 , 8167 , 1115, 5459 , 1153, 8279, 1552, 10687, 2311, 4512, 13164 , 1029],
+					name: 'Emigraciones totales de personas entre 20 y 24 años ',
 					showInLegend: false
 				}
 			]
