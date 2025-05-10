@@ -108,7 +108,31 @@
                         ['Murcia', 131549],
                         ['Navarra', 143969],
                         ['País Vasco', 99789],
-					]
+					],
+					
+				},
+				{
+					name: 'Emigraciones totales',
+					data: [
+						['Andalucía', 15071],
+						['Asturias', 14995],
+						['Baleares', 20802],
+						['Canarias', 6531],
+						['Cantabria', 4147],
+						['Castilla La Mancha', 3800],
+						['Castilla Y León', 6930],
+						['Cataluña', 33342],
+						['Ceuta', 143410],
+                        ['Valencia', 26454],
+                        ['Extremadura', 9870],
+                        ['Galicia', 8731],
+                        ['Madrid', 26868],
+                        ['Melilla', 111276],
+                        ['Murcia', 430],
+                        ['Navarra', 969],
+                        ['País Vasco', 3789],
+					],
+					
 				}
 			]
 		});
