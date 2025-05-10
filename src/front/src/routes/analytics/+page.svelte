@@ -1,21 +1,262 @@
+<script>
+	// @ts-nocheck
+	// @ts-ignore
+
+	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+
+	let DEVEL_HOST = 'http://localhost:16078';
+	let API_TAXES = '/api/v1/taxes-stats';
+	let API_EMIGRATION = '/api/v1/emigration-stats';
+	let API_UNEMPLOYMENT = '/api/v1/unemployment-stats';
+
+	let resultStatus,
+		resultMessage = '';
+
+	if (dev) {
+		API_TAXES = DEVEL_HOST + API_TAXES;
+		API_UNEMPLOYMENT = DEVEL_HOST + API_UNEMPLOYMENT;
+		API_EMIGRATION = DEVEL_HOST + API_EMIGRATION;
+	}
+
+	async function getTaxesData() {
+        let sum_taxes = 0;
+		try {
+			await fetch(API_TAXES + '/loadInitialData', { method: 'GET' });
+			// const data = await res.json();
+			const res_taxes = await fetch(API_TAXES, { method: 'GET' });
+
+
+			if (res_taxes.status === 200) {
+				const taxes_data = await res_taxes.json();
+				resultMessage = `Gráfica mostrada`;
+				resultStatus = 'success';
+				// console.log(taxes_data)
+
+				sum_taxes = taxes_data.reduce(
+					(accumulator, currentValue) =>
+						accumulator +
+						currentValue.atr_irpf +
+						currentValue.atr_iva +
+						currentValue.atr_soc_no_consolidadas,
+					0
+				);
+
+				console.log(`Response received:\n${JSON.stringify(taxes_data, null, 2)}`);
+			} else if (res_taxes.status === 404) {
+				resultStatus = 'warning';
+				resultMessage = `No se encontraron datos`;
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
+			}
+		} catch (error) {
+			console.log(`ERROR getting data ${error}`);
+		}
+        return sum_taxes;
+	}
+
+
+	async function getEmigrationData() {
+        let sum_emigration = 0;
+		try {
+			await fetch(API_EMIGRATION + '/loadInitialData', { method: 'GET' });
+			// const data = await res.json();
+			const res_emigration = await fetch(API_EMIGRATION, { method: 'GET' });
+
+
+			if (res_emigration.status === 200) {
+				const emigration_data = await res_emigration.json();
+				resultMessage = `Gráfica mostrada`;
+				resultStatus = 'success';
+				// console.log(emigration_data)
+
+				sum_emigration = emigration_data.reduce(
+					(accumulator, currentValue) =>
+						accumulator +
+						currentValue.between_20_24_yo +
+						currentValue.between_25_29_yo +
+						currentValue.between_30_34_yo,
+					0
+				);
+
+				console.log(`Response received:\n${JSON.stringify(emigration_data, null, 2)}`);
+			} else if (res_emigration.status === 404) {
+				resultStatus = 'warning';
+				resultMessage = `No se encontraron datos`;
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
+			}
+		} catch (error) {
+			console.log(`ERROR getting data ${error}`);
+		}
+        return sum_emigration;
+	}
+
+
+	async function getUnemploymentData() {
+        let sum_unemployment = 0;
+		try {
+			await fetch(API_UNEMPLOYMENT + '/loadInitialData', { method: 'GET' });
+			// const data = await res.json();
+			const res_unemployment = await fetch(API_UNEMPLOYMENT, { method: 'GET' });
+
+
+			if (res_unemployment.status === 200) {
+				const unemployment_data = await res_unemployment.json();
+				resultMessage = `Gráfica mostrada`;
+				resultStatus = 'success';
+				// console.log(unemployment_data)
+
+				sum_unemployment = unemployment_data.reduce(
+					(accumulator, currentValue) =>
+						accumulator +
+						currentValue.unemployment_rate +
+						currentValue.previous_quarter_var +
+						currentValue.previous_year_quarter_var,
+					0
+				);
+
+				console.log(`Response received:\n${JSON.stringify(unemployment_data, null, 2)}`);
+			} else if (res_unemployment.status === 404) {
+				resultStatus = 'warning';
+				resultMessage = `No se encontraron datos`;
+			} else {
+				resultStatus = 'warning';
+				resultMessage = 'No se pudo acceder a los datos';
+			}
+		} catch (error) {
+			console.log(`ERROR getting data ${error}`);
+		}
+        return sum_unemployment;
+	}
+
+	async function getData() {
+		let res = [];
+
+        let res_taxes = await getTaxesData();
+        console.log(res_taxes)
+
+        let res_emigration = await getEmigrationData();
+        console.log(res_emigration)
+
+        let res_unemployment = await getUnemploymentData();
+        console.log(res_unemployment)
+
+        res = [
+            ['Impuestos (Escala 1:10000)', res_taxes/10000],
+            ['Emigración', res_emigration],
+            ['Desempleo (Escala 1:100)', res_unemployment*100]
+        ]
+		// try {
+		// 	await fetch(API_TAXES + '/loadInitialData', { method: 'GET' });
+		// 	await fetch(API_EMIGRATION + '/loadInitialData', { method: 'GET' });
+		// 	await fetch(API_UNEMPLOYMENT + '/loadInitialData', { method: 'GET' });
+		// 	// const data = await res.json();
+		// 	const res_taxes = await fetch(API_TAXES, { method: 'GET' });
+		// 	const res_emigration = await fetch(API_EMIGRATION, { method: 'GET' });
+		// 	const res_unemployment = await fetch(API_UNEMPLOYMENT, { method: 'GET' });
+		//
+		// 	let sum_taxes = 0;
+		//
+		// 	if (res_taxes.status === 200) {
+		// 		const taxes_data = await res_taxes.json();
+		// 		resultMessage = `Gráfica mostrada`;
+		// 		resultStatus = 'success';
+		// 		// console.log(taxes_data)
+		//
+		// 		sum_taxes = taxes_data.reduce(
+		// 			(accumulator, currentValue) =>
+		// 				accumulator +
+		// 				currentValue.atr_irpf +
+		// 				currentValue.atr_iva +
+		// 				currentValue.atr_soc_no_consolidadas,
+		// 			0
+		// 		);
+		//
+		// 		console.log(`Response received:\n${JSON.stringify(taxes_data, null, 2)}`);
+		// 	} else if (res_taxes.status === 404) {
+		// 		resultStatus = 'warning';
+		// 		resultMessage = `No se encontraron datos del año ${graphYear}`;
+		// 	} else {
+		// 		resultStatus = 'warning';
+		// 		resultMessage = 'No se pudo acceder a los datos';
+		// 	}
+		// } catch (error) {
+		// 	console.log(`ERROR getting data ${error}`);
+		// }
+
+        console.log(res);
+
+		return res;
+	}
+
+	onMount(async () => {
+
+        let graphData = await getData();
+		// Set up the chart
+		Highcharts.chart('container', {
+			chart: {
+				type: 'pyramid3d',
+				options3d: {
+					enabled: true,
+					alpha: 10,
+					depth: 50,
+					viewDistance: 50
+				}
+			},
+			title: {
+				text: 'Highcharts Pyramid3D Chart'
+			},
+			plotOptions: {
+				series: {
+					dataLabels: {
+						enabled: true,
+						format: '<b>{point.name}</b> ({point.y:,.0f})',
+						allowOverlap: true,
+						x: 10,
+						y: -5
+					},
+					width: '60%',
+					height: '80%',
+					center: ['50%', '45%']
+				}
+			},
+			series: [{
+					name: 'Unique users',
+					data: graphData
+				}
+			]
+		});
+	});
+</script>
+
 <svelte:head>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+	<script src="https://code.highcharts.com/modules/cylinder.js"></script>
+	<script src="https://code.highcharts.com/modules/funnel3d.js"></script>
+	<script src="https://code.highcharts.com/modules/pyramid3d.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/modules/export-data.js"></script>
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </svelte:head>
+
+<figure class="highcharts-figure">
+	<div id="container"></div>
+	<p class="highcharts-description">
+		Highcharts supports drawing pyramid charts in 3D as well as 2D. While the 2D version is
+		typically easier to read, the 3D version is sometimes used for decorative effect.
+	</p>
+</figure>
 
 <style>
 	.highcharts-figure,
 	.highcharts-data-table table {
 		min-width: 310px;
 		max-width: 800px;
-		margin: 0 auto;
-	}
-
-	#container {
-		height: 400px;
+		margin: 1em auto;
 	}
 
 	.highcharts-data-table table {
@@ -58,478 +299,3 @@
 		margin: 0.3rem 10px;
 	}
 </style>
-
-<script>
-	import { onMount } from 'svelte';
-	onMount(async () => {
-		// Give the points a 3D feel by adding a radial gradient
-		// @ts-ignore
-		Highcharts.setOptions({
-			// @ts-ignore
-			colors: Highcharts.getOptions().colors.map(function (color) {
-				return {
-					radialGradient: {
-						cx: 0.4,
-						cy: 0.3,
-						r: 0.5
-					},
-					stops: [
-						[0, color],
-						// @ts-ignore
-						[1, Highcharts.color(color).brighten(-0.2).get('rgb')]
-					]
-				};
-			})
-		});
-
-		// Set up the chart
-		// @ts-ignore
-		const chart = new Highcharts.Chart({
-			chart: {
-				renderTo: 'container',
-				margin: 100,
-				type: 'scatter3d',
-				animation: false,
-				options3d: {
-					enabled: true,
-					alpha: 10,
-					beta: 30,
-					depth: 250,
-					viewDistance: 5,
-					fitToPlot: false,
-					frame: {
-						bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
-						back: { size: 1, color: 'rgba(0,0,0,0.04)' },
-						side: { size: 1, color: 'rgba(0,0,0,0.06)' }
-					}
-				}
-			},
-			title: {
-				text: 'Emigraciones en relación con el desempleo y la subida de impuestos.'
-			},
-			subtitle: {
-				text: 'Haga click y arrastre para rotar'
-			},
-			plotOptions: {
-				scatter: {
-					width: 10,
-					height: 10,
-					depth: 10
-				}
-			},
-			yAxis: {
-				min: 0,
-				max: 10,
-				title: null
-			},
-			xAxis: {
-				min: 0,
-				max: 10,
-				gridLineWidth: 1
-			},
-			zAxis: {
-				min: 0,
-				max: 10,
-				showFirstLabel: false
-			},
-			legend: {
-				enabled: false
-			},
-			series: [
-				{
-					name: 'Emigración',
-					colorByPoint: true,
-					accessibility: {
-						exposeAsGroupOnly: true
-					},
-					data: [
-						[1, 6, 5],
-						[8, 7, 9],
-						[1, 3, 4],
-						[4, 6, 8],
-						[5, 7, 7],
-						[6, 9, 6],
-						[7, 0, 5],
-						[2, 3, 3],
-						[3, 9, 8],
-						[3, 6, 5],
-						[4, 9, 4],
-						[2, 3, 3],
-						[6, 9, 9],
-						[0, 7, 0],
-						[7, 7, 9],
-						[7, 2, 9],
-						[0, 6, 2],
-						[4, 6, 7],
-						[3, 7, 7],
-						[0, 1, 7],
-						[2, 8, 6],
-						[2, 3, 7],
-						[6, 4, 8],
-						[3, 5, 9],
-						[7, 9, 5],
-						[3, 1, 7],
-						[4, 4, 2],
-						[3, 6, 2],
-						[3, 1, 6],
-						[6, 8, 5],
-						[6, 6, 7],
-						[4, 1, 1],
-						[7, 2, 7],
-						[7, 7, 0],
-						[8, 8, 9],
-						[9, 4, 1],
-						[8, 3, 4],
-						[9, 8, 9],
-						[3, 5, 3],
-						[0, 2, 4],
-						[6, 0, 2],
-						[2, 1, 3],
-						[5, 8, 9],
-						[2, 1, 1],
-						[9, 7, 6],
-						[3, 0, 2],
-						[9, 9, 0],
-						[3, 4, 8],
-						[2, 6, 1],
-						[8, 9, 2],
-						[7, 6, 5],
-						[6, 3, 1],
-						[9, 3, 1],
-						[8, 9, 3],
-						[9, 1, 0],
-						[3, 8, 7],
-						[8, 0, 0],
-						[4, 9, 7],
-						[8, 6, 2],
-						[4, 3, 0],
-						[2, 3, 5],
-						[9, 1, 4],
-						[1, 1, 4],
-						[6, 0, 2],
-						[6, 1, 6],
-						[3, 8, 8],
-						[8, 8, 7],
-						[5, 5, 0],
-						[3, 9, 6],
-						[5, 4, 3],
-						[6, 8, 3],
-						[0, 1, 5],
-						[6, 7, 3],
-						[8, 3, 2],
-						[3, 8, 3],
-						[2, 1, 6],
-						[4, 6, 7],
-						[8, 9, 9],
-						[5, 4, 2],
-						[6, 1, 3],
-						[6, 9, 5],
-						[4, 8, 2],
-						[9, 7, 4],
-						[5, 4, 2],
-						[9, 6, 1],
-						[2, 7, 3],
-						[4, 5, 4],
-						[6, 8, 1],
-						[3, 4, 0],
-						[2, 2, 6],
-						[5, 1, 2],
-						[9, 9, 7],
-						[6, 9, 9],
-						[8, 4, 3],
-						[4, 1, 7],
-						[6, 2, 5],
-						[0, 4, 9],
-						[3, 5, 9],
-						[6, 9, 1],
-						[1, 9, 2]
-					]
-				},
-                {
-					name: 'Desempleo',
-					colorByPoint: true,
-					accessibility: {
-						exposeAsGroupOnly: true
-					},
-					data: [
-						[1, 6, 5],
-						[8, 7, 9],
-						[1, 3, 4],
-						[4, 6, 8],
-						[5, 7, 7],
-						[6, 9, 6],
-						[7, 0, 5],
-						[2, 3, 3],
-						[3, 9, 8],
-						[3, 6, 5],
-						[4, 9, 4],
-						[2, 3, 3],
-						[6, 9, 9],
-						[0, 7, 0],
-						[7, 7, 9],
-						[7, 2, 9],
-						[0, 6, 2],
-						[4, 6, 7],
-						[3, 7, 7],
-						[0, 1, 7],
-						[2, 8, 6],
-						[2, 3, 7],
-						[6, 4, 8],
-						[3, 5, 9],
-						[7, 9, 5],
-						[3, 1, 7],
-						[4, 4, 2],
-						[3, 6, 2],
-						[3, 1, 6],
-						[6, 8, 5],
-						[6, 6, 7],
-						[4, 1, 1],
-						[7, 2, 7],
-						[7, 7, 0],
-						[8, 8, 9],
-						[9, 4, 1],
-						[8, 3, 4],
-						[9, 8, 9],
-						[3, 5, 3],
-						[0, 2, 4],
-						[6, 0, 2],
-						[2, 1, 3],
-						[5, 8, 9],
-						[2, 1, 1],
-						[9, 7, 6],
-						[3, 0, 2],
-						[9, 9, 0],
-						[3, 4, 8],
-						[2, 6, 1],
-						[8, 9, 2],
-						[7, 6, 5],
-						[6, 3, 1],
-						[9, 3, 1],
-						[8, 9, 3],
-						[9, 1, 0],
-						[3, 8, 7],
-						[8, 0, 0],
-						[4, 9, 7],
-						[8, 6, 2],
-						[4, 3, 0],
-						[2, 3, 5],
-						[9, 1, 4],
-						[1, 1, 4],
-						[6, 0, 2],
-						[6, 1, 6],
-						[3, 8, 8],
-						[8, 8, 7],
-						[5, 5, 0],
-						[3, 9, 6],
-						[5, 4, 3],
-						[6, 8, 3],
-						[0, 1, 5],
-						[6, 7, 3],
-						[8, 3, 2],
-						[3, 8, 3],
-						[2, 1, 6],
-						[4, 6, 7],
-						[8, 9, 9],
-						[5, 4, 2],
-						[6, 1, 3],
-						[6, 9, 5],
-						[4, 8, 2],
-						[9, 7, 4],
-						[5, 4, 2],
-						[9, 6, 1],
-						[2, 7, 3],
-						[4, 5, 4],
-						[6, 8, 1],
-						[3, 4, 0],
-						[2, 2, 6],
-						[5, 1, 2],
-						[9, 9, 7],
-						[6, 9, 9],
-						[8, 4, 3],
-						[4, 1, 7],
-						[6, 2, 5],
-						[0, 4, 9],
-						[3, 5, 9],
-						[6, 9, 1],
-						[1, 9, 2]
-					]
-				},
-                {
-					name: 'Impuestos',
-					colorByPoint: true,
-					accessibility: {
-						exposeAsGroupOnly: true
-					},
-					data: [
-						[1, 6, 5],
-						[8, 7, 9],
-						[1, 3, 4],
-						[4, 6, 8],
-						[5, 7, 7],
-						[6, 9, 6],
-						[7, 0, 5],
-						[2, 3, 3],
-						[3, 9, 8],
-						[3, 6, 5],
-						[4, 9, 4],
-						[2, 3, 3],
-						[6, 9, 9],
-						[0, 7, 0],
-						[7, 7, 9],
-						[7, 2, 9],
-						[0, 6, 2],
-						[4, 6, 7],
-						[3, 7, 7],
-						[0, 1, 7],
-						[2, 8, 6],
-						[2, 3, 7],
-						[6, 4, 8],
-						[3, 5, 9],
-						[7, 9, 5],
-						[3, 1, 7],
-						[4, 4, 2],
-						[3, 6, 2],
-						[3, 1, 6],
-						[6, 8, 5],
-						[6, 6, 7],
-						[4, 1, 1],
-						[7, 2, 7],
-						[7, 7, 0],
-						[8, 8, 9],
-						[9, 4, 1],
-						[8, 3, 4],
-						[9, 8, 9],
-						[3, 5, 3],
-						[0, 2, 4],
-						[6, 0, 2],
-						[2, 1, 3],
-						[5, 8, 9],
-						[2, 1, 1],
-						[9, 7, 6],
-						[3, 0, 2],
-						[9, 9, 0],
-						[3, 4, 8],
-						[2, 6, 1],
-						[8, 9, 2],
-						[7, 6, 5],
-						[6, 3, 1],
-						[9, 3, 1],
-						[8, 9, 3],
-						[9, 1, 0],
-						[3, 8, 7],
-						[8, 0, 0],
-						[4, 9, 7],
-						[8, 6, 2],
-						[4, 3, 0],
-						[2, 3, 5],
-						[9, 1, 4],
-						[1, 1, 4],
-						[6, 0, 2],
-						[6, 1, 6],
-						[3, 8, 8],
-						[8, 8, 7],
-						[5, 5, 0],
-						[3, 9, 6],
-						[5, 4, 3],
-						[6, 8, 3],
-						[0, 1, 5],
-						[6, 7, 3],
-						[8, 3, 2],
-						[3, 8, 3],
-						[2, 1, 6],
-						[4, 6, 7],
-						[8, 9, 9],
-						[5, 4, 2],
-						[6, 1, 3],
-						[6, 9, 5],
-						[4, 8, 2],
-						[9, 7, 4],
-						[5, 4, 2],
-						[9, 6, 1],
-						[2, 7, 3],
-						[4, 5, 4],
-						[6, 8, 1],
-						[3, 4, 0],
-						[2, 2, 6],
-						[5, 1, 2],
-						[9, 9, 7],
-						[6, 9, 9],
-						[8, 4, 3],
-						[4, 1, 7],
-						[6, 2, 5],
-						[0, 4, 9],
-						[3, 5, 9],
-						[6, 9, 1],
-						[1, 9, 2]
-					]
-				}
-			]
-		});
-
-		// Add mouse and touch events for rotationnn
-		(function (H) {
-			// @ts-ignore
-			function dragStart(eStart) {
-				eStart = chart.pointer.normalize(eStart);
-
-				const posX = eStart.chartX,
-					posY = eStart.chartY,
-					alpha = chart.options.chart.options3d.alpha,
-					beta = chart.options.chart.options3d.beta,
-					sensitivity = 5, // lower is more sensitive
-					// @ts-ignore
-					handlers = [];
-
-				// @ts-ignore
-				function drag(e) {
-					// Get e.chartX and e.chartY
-					e = chart.pointer.normalize(e);
-
-					chart.update(
-						{
-							chart: {
-								options3d: {
-									alpha: alpha + (e.chartY - posY) / sensitivity,
-									beta: beta + (posX - e.chartX) / sensitivity
-								}
-							}
-						},
-						undefined,
-						undefined,
-						false
-					);
-				}
-
-				function unbindAll() {
-					// @ts-ignore
-					handlers.forEach(function (unbind) {
-						if (unbind) {
-							unbind();
-						}
-					});
-					handlers.length = 0;
-				}
-
-				handlers.push(H.addEvent(document, 'mousemove', drag));
-				handlers.push(H.addEvent(document, 'touchmove', drag));
-
-				handlers.push(H.addEvent(document, 'mouseup', unbindAll));
-				handlers.push(H.addEvent(document, 'touchend', unbindAll));
-			}
-			H.addEvent(chart.container, 'mousedown', dragStart);
-			H.addEvent(chart.container, 'touchstart', dragStart);
-		// @ts-ignore
-		})(Highcharts);
-	});
-</script>
-
-
-
-<figure class="highcharts-figure">
-	<div id="container"></div>
-	<p class="highcharts-description">
-		Gráfico 3D con la posibilidad de arrastrar para obtener una vista detallada de los datos.
-	</p>
-</figure>
-
-
