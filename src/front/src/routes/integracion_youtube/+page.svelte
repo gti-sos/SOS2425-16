@@ -3,9 +3,10 @@
     import {onMount} from "svelte";
     import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
     let canal = {};
+    const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
   
     onMount(async () => {
-      const res = await fetch('http://localhost:16078/api/v1/integrations/youtube');
+      const res = await fetch(`http://localhost:16078/api/v1/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
       const jsonStr = await res.text();
       const data = JSON.parse(jsonStr);
   
