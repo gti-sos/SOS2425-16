@@ -6,7 +6,11 @@
     const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
   
     onMount(async () => {
+<<<<<<< HEAD
       const res = await fetch(`http://localhost:16078/api/yt/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`)
+=======
+      const res = await fetch(`http://localhost:16078/api/yt/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
+>>>>>>> c1a0d5276b7f1def073dc0302c81c7da559b35c2
       const jsonStr = await res.text();
       const data = JSON.parse(jsonStr);
   
