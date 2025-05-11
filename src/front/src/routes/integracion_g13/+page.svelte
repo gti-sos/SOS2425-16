@@ -161,11 +161,11 @@
 		var options = {
 			series: [
 				{
-					name: 'Parques naturales',
+					name: 'Impuestos IRPF',
 					data: graphData[1]
 				},
 				{
-					name: 'Impuestos IRPF',
+					name: 'Parques naturales',
 					data: graphData[2]
 				},
 			],
