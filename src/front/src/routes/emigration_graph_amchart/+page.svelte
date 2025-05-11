@@ -9,6 +9,7 @@
 	}
 
 	let emigration_data = [];
+	// @ts-ignore
 	let groupedData = [];
 	async function getEmigrationData() {
 		try {
@@ -18,12 +19,14 @@
 			if (res.status === 200) {
 				emigration_data = await res.json();
 				console.log(emigration_data);
+				// @ts-ignore
 				emigration_data.forEach((entry) => {
 					if (entry.year !== 2021) return;
 					const comunidad = entry.autonomic_community;
 					const totalEntry =
 						entry.between_20_24_yo + entry.between_25_29_yo + entry.between_30_34_yo;
 
+					// @ts-ignore
 					const existing = groupedData.find((item) => item.autonomic_community === comunidad);
 
 					if (existing) {
@@ -38,6 +41,7 @@
 		}
 	}
 
+	// @ts-ignore
 	console.log(groupedData);
 
 	onMount(async () => {
@@ -58,6 +62,7 @@
 		// https://www.amcharts.com/docs/v5/charts/xy-chart/
 		// @ts-ignore
 		var chart = root.container.children.push(
+			// @ts-ignore
 			am5xy.XYChart.new(root, {
 				title: 'Personas que han emigrado de España en el año 2021 de entre 20 y 34 años',
 				panX: false,
@@ -70,6 +75,7 @@
 		);
 
 		// Data
+		// @ts-ignore
 		var data = groupedData;
 
 		// Create axes
@@ -82,9 +88,11 @@
 
 		// @ts-ignore
 		var xAxis = chart.xAxes.push(
+			// @ts-ignore
 			am5xy.CategoryAxis.new(root, {
 				categoryField: 'country',
 				renderer: xRenderer,
+				// @ts-ignore
 				// @ts-ignore
 				bullet: function (root, axis, dataItem) {
 					// @ts-ignore
@@ -117,6 +125,7 @@
 
 		// @ts-ignore
 		var yAxis = chart.yAxes.push(
+			// @ts-ignore
 			am5xy.ValueAxis.new(root, {
 				// @ts-ignore
 				renderer: am5xy.AxisRendererY.new(root, {
@@ -129,6 +138,7 @@
 		// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 		// @ts-ignore
 		var series = chart.series.push(
+			// @ts-ignore
 			am5xy.ColumnSeries.new(root, {
 				xAxis: xAxis,
 				yAxis: yAxis,
