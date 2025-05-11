@@ -13,7 +13,7 @@
   
     let chart;
   
-    // Definimos las fechas finales de cada trimestre
+    // Metemos los quarters como el ultimo dia de cada trimestre
     const quarters = [
       { label: "Q1 2021", date: "2021-03-31" },
       { label: "Q2 2021", date: "2021-06-30" },
@@ -32,7 +32,7 @@
         )
       );
   
-      // Generamos 3 series: USD, GBP, CHF
+      // Generamos 3 series para USD, GBP y CHF
       const usdSeries = {
         type: "candlestick",
         name: "USD",
