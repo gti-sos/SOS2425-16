@@ -1,21 +1,11 @@
 import dataStore from "nedb";
-import {YOUTUBE_API_KEY} from "../../Secrets/api_keys_gonzalo.js";
-//import {options_Spotify} from "../../Secrets/api_keys_gonzalo.js";
+import request from "request";
 
-/*
-const options_Spotify = {
-    method: 'GET',
-    headers: {
-        'x-rapidapi-key': '327d45c5e8mshf516faabaaf6508p130521jsn4b72c45e09cb',
-        'x-rapidapi-host': 'spotify23.p.rapidapi.com'
-    }
-};
-*/
 const BASE_API = "/api/v1";
 
 let db = new dataStore();
 
-// Initial data extracted form the propuse sheet
+// Initial data extracted from the propuse sheet
 
 const initialEmigrationData = [
     { autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
@@ -53,42 +43,6 @@ const initialEmigrationData = [
     { autonomic_community: "madrid", year: 2019, quarter: "q1", between_20_24_yo: 3155, between_25_29_yo: 6712, between_30_34_yo: 9164 }
 ];
 
-const groupedData = {};
-
-initialEmigrationData.forEach(item => {
-    const community = item.autonomic_community;
-    const year = item.year;
-    const total =
-        item.between_20_24_yo +
-        item.between_25_29_yo +
-        item.between_30_34_yo;
-
-    if (!groupedData[community]) {
-        groupedData[community] = {};
-    }
-
-    if (!groupedData[community][year]) {
-        groupedData[community][year] = 0;
-    }
-
-    groupedData[community][year] += total;
-});
-
-console.log(groupedData);
-
-const pepe = {
-    "andalucia": { "2019": "16476", "2020": "9047", "2021": "15071" },
-    "asturias": { "2019": "10521", "2021": "14995" },
-    "madrid": { "2019": "19031", "2020": "16973", "2021": "26868" },
-    "castilla-y-leon": { "2019": "2745", "2020": "5013", "2021": "3147" },
-    "castilla-la-mancha": { "2019": "7891", "2020": "8413", "2021": "3800" },
-    "cataluña": { "2019": "30820", "2020": "20363", "2021": "33342" },
-    "valencia": { "2019": "18920", "2020": "23380", "2021": "26454" },
-    "murcia": { "2019": "9565", "2020": "11369", "2021": "15430" },
-    "aragon": { "2019": "11597", "2020": "16768", "2021": "26123" },
-    "galicia": { "2019": "4023", "2020": "6804", "2021": "8731" },
-    "extremadura": { "2019": "9680", "2020": "13580", "2021": "38144" }
-}
 
 
 // GET request that inserts to the database the initial data.
@@ -107,12 +61,6 @@ db.find({},(err, data)=>{
 // Function that contains all of the HTTP requests.
 
 function loadBackendGAM(app) {
-
-
-    app.get(BASE_API + "/emigration-stats/groupedData", (request, response) => {
-        response.send(JSON.stringify(pepe, null, 2));
-    });
-
 
     app.get(BASE_API + "/emigration-stats/loadInitialData", (request, response) => {
         db.find({}, (err, data) => {
@@ -182,7 +130,7 @@ function loadBackendGAM(app) {
             paramLimit = 0;
         }
 
-        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function (err, docs) {
+        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs) {
             if (!docs.length) {
                 response.sendStatus(404);
                 return;
@@ -257,7 +205,7 @@ function loadBackendGAM(app) {
     //DELETE request that removes every item from the DB.
 
     app.delete(BASE_API + "/emigration-stats", (request, response) => {
-        db.remove({}, { multi: true }, function (err, numRemoved) {
+        db.remove({}, { multi: true }, function(err, numRemoved) {
             if (err) {
                 response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
@@ -376,65 +324,17 @@ function loadBackendGAM(app) {
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 
-    app.get(BASE_API+"/integrations/youtube",async (request,response)=>{
-        try{
-            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
-            let datos = await res.json();
-            response.json(datos);
-        }catch (error){
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
 
-    /*
-    app.get(BASE_API+"/integrations/spotify",async (request,response)=>{
-        try {
-            //let canciones = [];
-            let cancion = request.query.cancion;
-            const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(cancion)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
-            console.log(encodeURIComponent(cancion));
-			const res = await fetch(url, options_Spotify);
-			let datos = await res.json();
-            response.json(datos);
-            console.log("respuestaback->"+res);
-            console.log ("datoz-->"+datos);
-            console.log("cosos canciones->"+datos.tracks.items);
-            console.log(datos.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
-            console.log(datos.tracks.items[0].data.name);
-            console.log(datos.tracks.items[0].data.uri);
-		} catch (error) {
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
-    */
-    app.get(BASE_API+"/integrations/g20",async (request,response)=>{
-        try{
-            let res = await fetch(`https://sos2425-20.onrender.com/api/v1/traffic-accidents`);
-            let datos = await res.json();
-            response.json(datos);
-        }catch (error){
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
-
-    app.get(BASE_API+"/integrations/g12",async (request,response)=>{
-        try{
-            let res = await fetch(`https://sos2425-12.onrender.com/api/v1/annual-consumptions`);
-            let datos = await res.json();
-            response.json(datos);
-        }catch (error){
-            response.status(500).send('Error al obtener los datos');
-        }
+    // Integracion API YouTube mediante proxy
+    var paths = '/api/yt';
+    var apiServerHost = 'https://youtube.googleapis.com';
+    app.use(paths, function(req, res) {
+        var url = apiServerHost + req.url;
+        console.log('piped: ' + req.url);
+        req.pipe(request(url)).pipe(res);
     });
 
 }
 
 export { loadBackendGAM }
-
-
-
-
-
-
-
 
