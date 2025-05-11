@@ -5,7 +5,7 @@ const BASE_API = "/api/v1";
 
 let db = new dataStore();
 
-// Initial data extracted form the propuse sheet
+// Initial data extracted from the propuse sheet
 
 const initialEmigrationData = [
     { autonomic_community: "andalucia", year: 2021, quarter: "q1", between_20_24_yo: 3666, between_25_29_yo: 5409, between_30_34_yo: 5996 },
