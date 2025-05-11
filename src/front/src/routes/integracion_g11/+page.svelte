@@ -4,7 +4,7 @@
 
 	let DEVEL_HOST = 'http://localhost:16078';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
-	let API_G13 = 'https://sos2425-13.onrender.com/api/v2/national-parks';
+	let API_G11 = 'https://sos2425-11.onrender.com/api/v1/autonomy-dependence-applications';
 	let API_TAXES = '/api/v1/taxes-stats';
 	let resultStatus,
 		resultMessage = '';
@@ -41,21 +41,39 @@
 		return taxes_data;
 	}
 
-	async function getNationalParksData() {
-		let national_parks_data = [];
+	function collectToMapTaxes(array) {
+		const res = new Map();
+
+		for (let i = 0; i < array.length; i++) {
+			const item = array[i];
+			let name = item.autonomic_community;
+			let taxesSum = item.atr_iva;
+			if (!res.has(name)) {
+				res.set(name, taxesSum);
+			} else {
+				let prevValue = res.get(name);
+				res.set(name, prevValue + taxesSum);
+			}
+		}
+		// return Array.from(res);
+		return res;
+	}
+
+	async function getAutonomyDependenceApplications() {
+		let applications = [];
 		try {
-			await fetch(API_TAXES + '/loadInitialData', { method: 'GET' });
+			await fetch(API_G11 + '/loadInitialData', { method: 'GET' });
 			// const data = await res.json();
-			const res = await fetch(API_TAXES, { method: 'GET' });
+			const res = await fetch(API_G11, { method: 'GET' });
 
 			if (res.status === 200) {
-				national_parks_data = await res.json();
+				applications = await res.json();
 
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
 				// console.log(national_parks_data)
 
-				console.log(`Response received:\n${JSON.stringify(national_parks_data, null, 2)}`);
+				console.log(`Response received:\n${JSON.stringify(applications, null, 2)}`);
 			} else if (res.status === 404) {
 				resultStatus = 'warning';
 				resultMessage = `No se encontraron datos`;
@@ -66,13 +84,31 @@
 		} catch (error) {
 			console.log(`ERROR getting data: ${error}`);
 		}
-		return national_parks_data;
+		return applications;
+	}
+
+	function collectToMapApplications(array) {
+		const res = new Map();
+
+		for (let i = 0; i < array.length; i++) {
+			const item = array[i];
+			let name = item.place;
+			let appsSum = item.dependent_population;
+			if (!res.has(name)) {
+				res.set(name, appsSum);
+			} else {
+				let prevValue = res.get(name);
+				res.set(name, prevValue + appsSum);
+			}
+		}
+		// return Array.from(res);
+		return res;
 	}
 
 	async function getData() {
 		let res = [];
 		let taxes_data = [];
-		let national_parks_data = [];
+		let applications_data = [];
 
 		res = [
 			['Lip gloss', 22998, 12043],
@@ -88,7 +124,28 @@
 		];
 
 		taxes_data = await getTaxesData();
-		national_parks_data = await getNationalParksData();
+		applications_data = await getAutonomyDependenceApplications();
+
+		let sumTaxes = collectToMapTaxes(taxes_data);
+		console.log(sumTaxes);
+
+		let sumApplications = collectToMapApplications(applications_data);
+		console.log(sumApplications);
+
+		// res = joinData(taxes_data, national_parks_data);
+		res = joinData(sumTaxes, sumApplications);
+        console.log(res)
+		return res;
+	}
+
+	function joinData(taxesMap, applicationsMap) {
+		let res = [];
+
+		taxesMap.forEach((val, key) => {
+			if (applicationsMap.has(key)) {
+				res.push([key, val, applicationsMap.get(key)]);
+			}
+		});
 
 		return res;
 	}
@@ -114,7 +171,7 @@
 			chart.animation(true);
 
 			// set chart title text settings
-			chart.title('Top 10 Products by Revenue in two Regions');
+			chart.title('Comparación de impuestos IVA y ayudas de dependencia');
 
 			// temp variable to store series instance
 			var series;
@@ -128,21 +185,21 @@
 			// create first series with mapped data
 			series = chart.column(firstSeriesData);
 			series.xPointPosition(0.45);
-			setupSeries(series, 'Florida');
+			setupSeries(series, 'Impuestos IVA');
 
 			// create second series with mapped data
 			series = chart.column(secondSeriesData);
 			series.xPointPosition(0.25);
-			setupSeries(series, 'Texas');
+			setupSeries(series, 'Ayudas dependencia');
 
 			// set chart padding
 			chart.barGroupsPadding(0.3);
 
 			// format numbers in y axis label to match browser locale
-			chart.yAxis().labels().format('${%Value}{groupsSeparator: }');
+			chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
 
 			// set titles for Y-axis
-			chart.yAxis().title('Revenue in Dollars');
+			// chart.yAxis().title('');
 
 			// turn on legend
 			chart.legend().enabled(true).fontSize(13).padding([0, 0, 20, 0]);
@@ -177,7 +234,7 @@
 	body,
 	#container {
 		width: 100%;
-		height: 100vh;
+		height: 80vh;
 		margin: 0;
 		padding: 0;
 	}
