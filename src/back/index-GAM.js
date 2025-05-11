@@ -130,7 +130,7 @@ function loadBackendGAM(app) {
             paramLimit = 0;
         }
 
-        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function (err, docs) {
+        db.find(query).sort({ autonomic_community: 1 }).skip(paramOffset).limit(paramLimit).exec(function(err, docs) {
             if (!docs.length) {
                 response.sendStatus(404);
                 return;
@@ -205,7 +205,7 @@ function loadBackendGAM(app) {
     //DELETE request that removes every item from the DB.
 
     app.delete(BASE_API + "/emigration-stats", (request, response) => {
-        db.remove({}, { multi: true }, function (err, numRemoved) {
+        db.remove({}, { multi: true }, function(err, numRemoved) {
             if (err) {
                 response.status(500).send("Error code 01 (please contact admin)");
                 console.error(`ERROR: ${err}`);
@@ -324,12 +324,12 @@ function loadBackendGAM(app) {
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 
-    app.get(BASE_API+"/integrations/youtube",async (request,response)=>{
-        try{
+    app.get(BASE_API + "/integrations/youtube", async (request, response) => {
+        try {
             let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
             let datos = await res.json();
             response.json(datos);
-        }catch (error){
+        } catch (error) {
             response.status(500).send('Error al obtener los datos');
         }
     });
@@ -341,8 +341,8 @@ function loadBackendGAM(app) {
             let cancion = request.query.cancion;
             const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(cancion)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
             console.log(encodeURIComponent(cancion));
-			const res = await fetch(url, options_Spotify);
-			let datos = await res.json();
+            const res = await fetch(url, options_Spotify);
+            let datos = await res.json();
             response.json(datos);
             console.log("respuestaback->"+res);
             console.log ("datoz-->"+datos);
@@ -350,33 +350,33 @@ function loadBackendGAM(app) {
             console.log(datos.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
             console.log(datos.tracks.items[0].data.name);
             console.log(datos.tracks.items[0].data.uri);
-		} catch (error) {
+        } catch (error) {
             response.status(500).send('Error al obtener los datos');
         }
     });
     */
-    app.get(BASE_API+"/integrations/g20",async (request,response)=>{
-        try{
+    app.get(BASE_API + "/integrations/g20", async (request, response) => {
+        try {
             let res = await fetch(`https://sos2425-20.onrender.com/api/v1/traffic-accidents`);
             let datos = await res.json();
             response.json(datos);
-        }catch (error){
+        } catch (error) {
             response.status(500).send('Error al obtener los datos');
         }
     });
 
-    app.get(BASE_API+"/integrations/g12",async (request,response)=>{
-        try{
+    app.get(BASE_API + "/integrations/g12", async (request, response) => {
+        try {
             let res = await fetch(`https://sos2425-12.onrender.com/api/v1/annual-consumptions`);
             let datos = await res.json();
             response.json(datos);
-        }catch (error){
+        } catch (error) {
             response.status(500).send('Error al obtener los datos');
         }
     });
 
     // Integracion API YouTube mediante proxy
-    var paths = '/api/v1';
+    var paths = '/api/yt';
     var apiServerHost = 'https://youtube.googleapis.com';
     app.use(paths, function(req, res) {
         var url = apiServerHost + req.url;
@@ -387,11 +387,3 @@ function loadBackendGAM(app) {
 }
 
 export { loadBackendGAM }
-
-
-
-
-
-
-
-
