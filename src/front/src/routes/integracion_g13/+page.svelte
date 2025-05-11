@@ -4,7 +4,7 @@
 
 	let DEVEL_HOST = 'http://localhost:16078';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
-	let API_G11 = 'https://sos2425-11.onrender.com/api/v1/autonomy-dependence-applications';
+	let API_G13 = 'https://sos2425-13.onrender.com/api/v2/national-parks';
 	let API_TAXES = '/api/v1/taxes-stats';
 	let resultStatus,
 		resultMessage = '';
@@ -47,7 +47,7 @@
 		for (let i = 0; i < array.length; i++) {
 			const item = array[i];
 			let name = item.autonomic_community;
-			let taxesSum = item.atr_iva;
+			let taxesSum = item.atr_irpf;
 			if (!res.has(name)) {
 				res.set(name, taxesSum);
 			} else {
@@ -59,21 +59,21 @@
 		return res;
 	}
 
-	async function getAutonomyDependenceApplications() {
-		let applications = [];
+	async function getNaturalParksData() {
+		let parks = [];
 		try {
-			await fetch(API_G11 + '/loadInitialData', { method: 'GET' });
+			await fetch(API_G13 + '/loadInitialData', { method: 'GET' });
 			// const data = await res.json();
-			const res = await fetch(API_G11, { method: 'GET' });
+			const res = await fetch(API_G13, { method: 'GET' });
 
 			if (res.status === 200) {
-				applications = await res.json();
+				parks = await res.json();
 
 				resultMessage = `Gráfica mostrada`;
 				resultStatus = 'success';
 				// console.log(national_parks_data)
 
-				console.log(`Response received:\n${JSON.stringify(applications, null, 2)}`);
+				console.log(`Response received:\n${JSON.stringify(parks, null, 2)}`);
 			} else if (res.status === 404) {
 				resultStatus = 'warning';
 				resultMessage = `No se encontraron datos`;
@@ -84,21 +84,21 @@
 		} catch (error) {
 			console.log(`ERROR getting data: ${error}`);
 		}
-		return applications;
+		return parks;
 	}
 
-	function collectToMapApplications(array) {
+	function collectToMapNaturalParks(array) {
 		const res = new Map();
 
 		for (let i = 0; i < array.length; i++) {
 			const item = array[i];
-			let name = item.place;
-			let appsSum = item.dependent_population;
+			let name = item.autonomous_community;
+			let parksSum = item.current_area;
 			if (!res.has(name)) {
-				res.set(name, appsSum);
+				res.set(name, parksSum);
 			} else {
 				let prevValue = res.get(name);
-				res.set(name, prevValue + appsSum);
+				res.set(name, prevValue + parksSum);
 			}
 		}
 		// return Array.from(res);
@@ -108,7 +108,7 @@
 	async function getData() {
 		let res = [];
 		let taxes_data = [];
-		let applications_data = [];
+		let parks_data = [];
 
 		res = [
 			['Lip gloss', 22998, 12043],
@@ -124,26 +124,26 @@
 		];
 
 		taxes_data = await getTaxesData();
-		applications_data = await getAutonomyDependenceApplications();
+		parks_data = await getNaturalParksData();
 
 		let sumTaxes = collectToMapTaxes(taxes_data);
 		console.log(sumTaxes);
 
-		let sumApplications = collectToMapApplications(applications_data);
-		console.log(sumApplications);
+		let sumParks = collectToMapNaturalParks(parks_data);
+		console.log(sumParks);
 
 		// res = joinData(taxes_data, national_parks_data);
-		res = joinData(sumTaxes, sumApplications);
+		res = joinData(sumTaxes, sumParks);
         console.log(res)
 		return res;
 	}
 
-	function joinData(taxesMap, applicationsMap) {
+	function joinData(taxesMap, parksMap) {
 		let res = [];
 
 		taxesMap.forEach((val, key) => {
-			if (applicationsMap.has(key)) {
-				res.push([key, val, applicationsMap.get(key)]);
+			if (parksMap.has(key)) {
+				res.push([key, val, parksMap.get(key)]);
 			}
 		});
 
@@ -171,7 +171,7 @@
 			chart.animation(true);
 
 			// set chart title text settings
-			chart.title('Comparación de impuestos IVA y ayudas de dependencia');
+			chart.title('Comparación de impuestos IRPF y Área de parques naturales');
 
 			// temp variable to store series instance
 			var series;
@@ -185,12 +185,12 @@
 			// create first series with mapped data
 			series = chart.column(firstSeriesData);
 			series.xPointPosition(0.45);
-			setupSeries(series, 'Impuestos IVA');
+			setupSeries(series, 'Impuestos IRPF');
 
 			// create second series with mapped data
 			series = chart.column(secondSeriesData);
 			series.xPointPosition(0.25);
-			setupSeries(series, 'Ayudas dependencia');
+			setupSeries(series, 'Parques naturales');
 
 			// set chart padding
 			chart.barGroupsPadding(0.3);
