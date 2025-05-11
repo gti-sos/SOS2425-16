@@ -23,6 +23,7 @@
 				console.log(emigration_data);
 				// @ts-ignore
 				emigration_data.forEach((entry) => {
+					if (entry.year !== 2021) return;
 					const comunidad = entry.autonomic_community;
 					// @ts-ignore
 					const existing = resultEmigration.find((item) => item.autonomic_community === comunidad);
@@ -52,6 +53,7 @@
 				console.log(trafficData);
 				// @ts-ignore
 				trafficData.forEach((entry) => {
+					if (entry.year !== 2022) return;
 					const comunidad = entry.autonomous_community;
 					// @ts-ignore
 					const existing = resultTraffic.find((item) => item.autonomous_community === comunidad);
@@ -87,7 +89,7 @@
 				}
 			},
 			title: {
-				text: 'Número de accidentes por comunidad en los últimos dos años y personas que emigran de entre 20 y 24 años'
+				text: 'Número de accidentes por comunidad y personas que emigran de entre 20 y 24 años en el año 2022'
 			},
 			subtitle: {
 				text:
@@ -108,7 +110,7 @@
 			yAxis: {
 				title: {
 					margin: 20,
-					text: 'Fallecidos'
+					text: 'Fallecidos y emigrantes'
 				},
 				labels: {
 					skew3d: true
@@ -154,7 +156,7 @@
 	<div id="container"></div>
 	<p class="highcharts-description">
 		Gráfico que muestra las comunidades con más fallecidos por accidentes en carretera y personas
-		que emigran de entre 20 y 24 años de dichas comunidades.
+		que emigran de entre 20 y 24 años de dichas comunidades para el año 2022.
 	</p>
 </figure>
 

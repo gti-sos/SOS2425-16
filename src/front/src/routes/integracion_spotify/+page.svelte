@@ -54,7 +54,6 @@
 					{console.log(item.data.albumOfTrack.coverArt.sources[0].url)}
 					<img src={item.data.albumOfTrack.coverArt.sources[0].url} alt="cover" width="50" />
 					<strong>{item.data.name}</strong>
-					<a href={item.data.uri}><button>Reproducir canción</button></a>
 				</li>
 			{/if}
 		{/each}
