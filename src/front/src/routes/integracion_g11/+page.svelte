@@ -110,19 +110,6 @@
 		let taxes_data = [];
 		let applications_data = [];
 
-		res = [
-			['Lip gloss', 22998, 12043],
-			['Eyeliner', 12321, 15067],
-			['Eyeshadows', 12998, 12043],
-			['Powder', 10261, 14419],
-			['Mascara', 11261, 10419],
-			['Foundation', 10342, 10119],
-			['Rouge', 11624, 7004],
-			['Lipstick', 8814, 9054],
-			['Eyebrow pencil', 11012, 5067],
-			['Nail polish', 9814, 3054]
-		];
-
 		taxes_data = await getTaxesData();
 		applications_data = await getAutonomyDependenceApplications();
 

@@ -134,7 +134,12 @@
 
 		// res = joinData(taxes_data, national_parks_data);
 		res = joinData(sumTaxes, sumParks);
-        console.log(res)
+
+        let categories = res.map(item => item[0]);
+        sumTaxes = res.map(item => item[1]);
+        sumParks = res.map(item => item[2]);
+        res = [categories, sumTaxes, sumParks]
+		console.log(res);
 		return res;
 	}
 
@@ -152,90 +157,65 @@
 
 	onMount(async () => {
 		let graphData = await getData();
-		anychart.onDocumentReady(function () {
-			// set chart theme
-			anychart.theme('darkTurquoise');
-			// create data set on our data
-			var dataSet = anychart.data.set(graphData);
 
-			// map data for the first series, take x from the zero column and value from the first column of data set
-			var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });
+		var options = {
+			series: [
+				{
+					name: 'Impuestos IRPF',
+					data: graphData[1]
+				},
+				{
+					name: 'Parques naturales',
+					data: graphData[2]
+				},
+			],
+			chart: {
+				type: 'bar',
+				height: 350
+			},
+			plotOptions: {
+				bar: {
+					horizontal: false,
+					columnWidth: '55%',
+					borderRadius: 5,
+					borderRadiusApplication: 'end'
+				}
+			},
+			dataLabels: {
+				enabled: false
+			},
+			stroke: {
+				show: true,
+				width: 2,
+				colors: ['transparent']
+			},
+			xaxis: {
+				categories: graphData[0]
+			},
+			yaxis: {
+				title: {
+					text: ''
+				}
+			},
+			fill: {
+				opacity: 1
+			},
+			tooltip: {
+				y: {
+					formatter: function (val) {
+						return val;
+					}
+				}
+			}
+		};
 
-			// map data for the second series, take x from the zero column and value from the second column of data set
-			var secondSeriesData = dataSet.mapAs({ x: 0, value: 2 });
-
-			// create column chart
-			var chart = anychart.column();
-
-			// turn on chart animation
-			chart.animation(true);
-
-			// set chart title text settings
-			chart.title('Comparación de impuestos IRPF y Área de parques naturales');
-
-			// temp variable to store series instance
-			var series;
-
-			// helper function to setup label settings for all series
-			var setupSeries = function (series, name) {
-				series.name(name);
-				series.selected().fill('#f48fb1 0.8').stroke('1.5 #c2185b');
-			};
-
-			// create first series with mapped data
-			series = chart.column(firstSeriesData);
-			series.xPointPosition(0.45);
-			setupSeries(series, 'Impuestos IRPF');
-
-			// create second series with mapped data
-			series = chart.column(secondSeriesData);
-			series.xPointPosition(0.25);
-			setupSeries(series, 'Parques naturales');
-
-			// set chart padding
-			chart.barGroupsPadding(0.3);
-
-			// format numbers in y axis label to match browser locale
-			chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
-
-			// set titles for Y-axis
-			// chart.yAxis().title('');
-
-			// turn on legend
-			chart.legend().enabled(true).fontSize(13).padding([0, 0, 20, 0]);
-
-			chart.interactivity().hoverMode('single');
-
-			chart.tooltip().format('{%Value}{groupsSeparator: }');
-
-			// set container id for the chart
-			chart.container('container');
-
-			// initiate chart drawing
-			chart.draw();
-		});
+		var chart = new ApexCharts(document.querySelector('#chart'), options);
+		chart.render();
 	});
 </script>
 
 <svelte:head>
-	<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-	<script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-	<script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
-	<script src="https://cdn.anychart.com/releases/v8/themes/dark_turquoise.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </svelte:head>
 
-<div id="container"></div>
-
-<style>
-	@import url('https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css');
-	@import url('https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css');
-
-	html,
-	body,
-	#container {
-		width: 100%;
-		height: 80vh;
-		margin: 0;
-		padding: 0;
-	}
-</style>
+<div id="chart"></div>
