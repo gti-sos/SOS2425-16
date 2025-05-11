@@ -1,3 +1,148 @@
+<script>
+	import { onMount } from 'svelte';
+
+	const emigrationAPI = 'http://localhost:16078/api/v1/emigration-stats';
+	const trafficAPI = 'https://sos2425-20.onrender.com/api/v1/traffic-accidents';
+
+	let emigration_data = [];
+	// @ts-ignore
+	let trafficData = [];
+
+	// @ts-ignore
+	let resultEmigration = [];
+	// @ts-ignore
+	let resultTraffic = [];
+
+	async function getEmigrationData() {
+		try {
+			await fetch(emigrationAPI + '/loadInitialData', { method: 'GET' });
+			let res = await fetch(emigrationAPI, { method: 'GET' });
+			console.log(res);
+			if (res.status === 200) {
+				emigration_data = await res.json();
+				console.log(emigration_data);
+				// @ts-ignore
+				emigration_data.forEach((entry) => {
+					if (entry.year !== 2021) return;
+					const comunidad = entry.autonomic_community;
+					// @ts-ignore
+					const existing = resultEmigration.find((item) => item.autonomic_community === comunidad);
+
+					if (existing) {
+						existing.total += entry.between_20_24_yo;
+					} else {
+						resultEmigration.push({ autonomic_community: comunidad, total: entry.between_20_24_yo });
+					}
+				});
+			}
+		} catch (error) {
+			console.log(`ERROR getting data ${error}`);
+		}
+	}
+
+	// @ts-ignore
+	console.log(resultEmigration.sort((a, b) => a.autonomic_community.localeCompare(b.autonomic_community)));
+
+	async function getTrafficData() {
+		try {
+			await fetch(trafficAPI + '/loadInitialData', { method: 'GET' });
+			let res = await fetch(trafficAPI, { method: 'GET' });
+			console.log(res);
+			if (res.status === 200) {
+				trafficData = await res.json();
+				console.log(trafficData);
+				// @ts-ignore
+				trafficData.forEach((entry) => {
+					if (entry.year !== 2022) return;
+					const comunidad = entry.autonomous_community;
+					// @ts-ignore
+					const existing = resultTraffic.find((item) => item.autonomous_community === comunidad);
+
+					if (existing) {
+						existing.total += entry.deceased;
+					} else {
+						resultTraffic.push({ autonomous_community: comunidad, total: entry.deceased });
+					}
+				});
+			}
+		} catch (error) {
+			console.log(`ERROR getting data ${error}`);
+		}
+	}
+
+	// @ts-ignore
+	console.log(resultTraffic);
+
+	onMount(async () => {
+		await getEmigrationData();
+		await getTrafficData();
+		// @ts-ignore
+		Highcharts.chart('container', {
+			chart: {
+				type: 'cylinder',
+				options3d: {
+					enabled: true,
+					alpha: 15,
+					beta: 15,
+					depth: 50,
+					viewDistance: 25
+				}
+			},
+			title: {
+				text: 'Número de accidentes por comunidad y personas que emigran de entre 20 y 24 años en el año 2022'
+			},
+			subtitle: {
+				text:
+					'Fuente: ' +
+					'<a href="https://sos2425-20.onrender.com/api/v1/traffic-accidents"' +
+					'target="_blank">API Grupo 20</a>'
+			},
+			xAxis: {
+				// @ts-ignore
+				categories: resultTraffic.sort((a, b) => a.autonomous_community.localeCompare(b.autonomous_community)).map(item => item.autonomous_community),
+				title: {
+					text: 'Comunidades'
+				},
+				labels: {
+					skew3d: true
+				}
+			},
+			yAxis: {
+				title: {
+					margin: 20,
+					text: 'Fallecidos y emigrantes'
+				},
+				labels: {
+					skew3d: true
+				}
+			},
+			tooltip: {
+				headerFormat: '<b> {category}</b><br>'
+			},
+			plotOptions: {
+				series: {
+					depth: 25,
+					colorByPoint: true
+				}
+			},
+			series: [
+				{
+					// @ts-ignore
+					data: resultTraffic.map(item => item.total),
+					name: 'Fallecidos',
+					showInLegend: false
+				},
+				{
+					// @ts-ignore
+					data: resultEmigration.map(item => item.total),
+					name: 'Emigraciones totales de personas entre 20 y 24 años ',
+					showInLegend: false
+				}
+			]
+		});
+	});
+</script>
+
 <svelte:head>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/highcharts-3d.js"></script>
@@ -6,6 +151,14 @@
 	<script src="https://code.highcharts.com/modules/export-data.js"></script>
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </svelte:head>
+
+<figure class="highcharts-figure">
+	<div id="container"></div>
+	<p class="highcharts-description">
+		Gráfico que muestra las comunidades con más fallecidos por accidentes en carretera y personas
+		que emigran de entre 20 y 24 años de dichas comunidades para el año 2022.
+	</p>
+</figure>
 
 <style>
 	#container {
@@ -59,96 +212,3 @@
 		margin: 0.3rem 10px;
 	}
 </style>
-
-<script>
-	import { onMount } from 'svelte';
-	onMount(async () => {
-		// @ts-ignore
-		Highcharts.chart('container', {
-			chart: {
-				type: 'cylinder',
-				options3d: {
-					enabled: true,
-					alpha: 15,
-					beta: 15,
-					depth: 50,
-					viewDistance: 25
-				}
-			},
-			title: {
-				text: 'Número de accidentes por comunidad en los últimos dos años'
-			},
-			subtitle: {
-				text:
-					'Fuente: ' +
-					'<a href="https://sos2425-20.onrender.com/api/v1/traffic-accidents"' +
-					'target="_blank">API Grupo 20</a>'
-			},
-			xAxis: {
-				categories: [
-					'La Rioja',
-					'Extremadura',
-					'Cataluña',
-					'Comunidad Valenciana',
-					'Ceuta y Melilla',
-					'Galicia',
-					'Castilla La Mancha',
-					'Andalucía',
-					'País Vasco',
-					'Navarra',
-                    'Asturias',
-                    'Castilla y León',
-                    'Aragón',
-                    'Canarias',
-                    'Murcia',
-                    'Cantabria',
-                    'Madrid',
-                    'Baleares',
-				],
-				title: {
-					text: 'Comunidades'
-				},
-				labels: {
-					skew3d: true
-				}
-			},
-			yAxis: {
-				title: {
-					margin: 20,
-					text: 'Fallecidos'
-				},
-				labels: {
-					skew3d: true
-				}
-			},
-			tooltip: {
-				headerFormat: '<b> {category}</b><br>'
-			},
-			plotOptions: {
-				series: {
-					depth: 25,
-					colorByPoint: true
-				}
-			},
-			series: [
-				{
-					data: [24, 111, 552, 329, 6, 251, 220, 643, 111, 54, 83, 346, 155, 137, 121, 45, 262, 102],
-					name: 'Fallecidos',
-					showInLegend: false
-				},
-				{
-					data: [424, 10794 , 18171 , 12113 , 621, 1503 , 1536 , 8167 , 1115, 5459 , 1153, 8279, 1552, 10687, 2311, 4512, 13164 , 1029],
-					name: 'Emigraciones totales de personas entre 20 y 24 años ',
-					showInLegend: false
-				}
-			]
-		});
-	});
-</script>
-
-<figure class="highcharts-figure">
-    <div id="container"></div>
-    <p class="highcharts-description">
-        Gráfico que muestra las comunidades con más fallecidos por accidentes en carretera.
-    </p>
-</figure>
