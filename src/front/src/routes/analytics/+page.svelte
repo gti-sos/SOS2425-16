@@ -245,10 +245,6 @@
 
 <figure class="highcharts-figure">
 	<div id="container"></div>
-	<p class="highcharts-description">
-		Highcharts supports drawing pyramid charts in 3D as well as 2D. While the 2D version is
-		typically easier to read, the 3D version is sometimes used for decorative effect.
-	</p>
 </figure>
 
 <style>
