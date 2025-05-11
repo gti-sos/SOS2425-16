@@ -71,14 +71,12 @@
                 busOwnershipChanges.push(ownershipEntry ? ownershipEntry.bus : 0);
             });
 
-            // Configuración de ZingChart
             // @ts-ignore
             zingchart.render({
                 id: 'comparisonChart',
                 data: {
                     type: 'bar',
                     title: {
-                        //text: 'Unemployment Rate vs Bus Ownership Changes (2021 Q4)',
                         fontSize: 20
                     },
                     legend: {

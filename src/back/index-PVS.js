@@ -1,4 +1,5 @@
 import dataStore from "nedb";
+import request from "request";
 
 const BASE_API= "/api/v1";
 
@@ -354,20 +355,11 @@ function loadBackendPVS(app) {
         response.redirect("https://documenter.getpostman.com/view/42345307/2sB2cUCP3a");
     });
 
-
-    app.use('/api/openweather', async (req, res) => {
-        let path = req.originalUrl.replace('/api/openweather', '');
-    
-        // Añadir ? o & según sea necesario
-        const connector = path.includes('?') ? '&' : '?';
-        const fullUrl = `${API_HOST}${path}${connector}appid=${API_KEY}`;
-
-        console.log('Proxying to:', fullUrl);
-
-        const response = await fetch(fullUrl);
-        const data = await response.json();
-
-        res.status(response.status).json(data);
+    app.use('/api/openweather', function (req, res) {
+        let connector = req.url.includes('?') ? '&' : '?';
+        let url = API_HOST + req.url + connector + 'appid=' + API_KEY;
+        console.log('piped: ' + req.url);
+        req.pipe(request(url)).pipe(res);
     });
 
 }
