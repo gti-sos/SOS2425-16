@@ -16,10 +16,11 @@
   
     onMount(async () => {
       try {
-        // Usamos el proxy
+        // Petición a través del proxy
         const response = await fetch('http://localhost:16078/api/openweather/data/2.5/weather?lat=37.39&lon=-5.99&units=metric');
         const data = await response.json();
   
+        // Transformamos los datos
         // @ts-ignore
         chartData = [
           { label: "Temperatura actual", y: data.main.temp },
@@ -27,6 +28,7 @@
           { label: "Mínima", y: data.main.temp_min }
         ];
   
+        // Renderizamos el gráfico
         // @ts-ignore
         const chart = new CanvasJS.Chart("chartContainer", {
           animationEnabled: true,

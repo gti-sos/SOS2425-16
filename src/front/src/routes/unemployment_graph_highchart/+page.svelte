@@ -56,7 +56,7 @@
 
     // @ts-ignore
     function formatData(data) {
-        // Primero ordeno las fechas
+        // Ordenamos los datos por fecha
         // @ts-ignore
         data.sort((a, b) => {
             const keyA = `${a.year} ${a.quarter}`;
@@ -64,9 +64,11 @@
             return keyA.localeCompare(keyB);
         });
 
+        // Obtener lista única de fechas (xAxis)
         // @ts-ignore
         const categories = [...new Set(data.map(d => `${d.year} ${d.quarter}`))];
 
+        // Agrupar por comunidad
         const seriesMap = {};
         // @ts-ignore
         data.forEach(d => {
@@ -81,6 +83,7 @@
             seriesMap[key][timeLabel] = d.unemployment_rate;
         });
 
+        // Construir series para Highcharts
         const series = Object.entries(seriesMap).map(([community, values]) => {
             const dataPoints = categories.map(cat => values[cat] ?? null); // null para missing data, es bueno ponerlo
             return {
