@@ -13,14 +13,13 @@
 <script>
     import { onMount } from "svelte";
   
-    let chart; // Variable global para el gráfico
+    let chart;
   
     onMount(async () => {
       try {
         const response = await fetch("http://localhost:16078/api/v1/unemployment-stats?year=2021&quarter=q4");
         const data = await response.json();
   
-        // Convertir los datos al formato que CanvasJS necesita
         // @ts-ignore
         const chartData = data.map(entry => ({
           y: entry.unemployment_rate,
@@ -28,7 +27,6 @@
           label: entry.autonomic_community.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())
         }));
   
-        // Crear el gráfico Doughnut
         // @ts-ignore
         chart = new CanvasJS.Chart("chartContainer", {
           animationEnabled: true,
