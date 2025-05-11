@@ -324,60 +324,7 @@ function loadBackendGAM(app) {
         response.redirect("https://documenter.getpostman.com/view/42116692/2sAYkLkc24");
     });
 
-<<<<<<< HEAD
-=======
-    app.get(BASE_API + "/integrations/youtube", async (request, response) => {
-        try {
-            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`);
-            let datos = await res.json();
-            response.json(datos);
-        } catch (error) {
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
 
-    /*
-    app.get(BASE_API+"/integrations/spotify",async (request,response)=>{
-        try {
-            //let canciones = [];
-            let cancion = request.query.cancion;
-            const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(cancion)}&type=multi&offset=0&limit=10&numberOfTopResults=5`;
-            console.log(encodeURIComponent(cancion));
-            const res = await fetch(url, options_Spotify);
-            let datos = await res.json();
-            response.json(datos);
-            console.log("respuestaback->"+res);
-            console.log ("datoz-->"+datos);
-            console.log("cosos canciones->"+datos.tracks.items);
-            console.log(datos.tracks.items[0].data.albumOfTrack.coverArt.sources[0].url);
-            console.log(datos.tracks.items[0].data.name);
-            console.log(datos.tracks.items[0].data.uri);
-        } catch (error) {
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
-    */
-    app.get(BASE_API + "/integrations/g20", async (request, response) => {
-        try {
-            let res = await fetch(`https://sos2425-20.onrender.com/api/v1/traffic-accidents`);
-            let datos = await res.json();
-            response.json(datos);
-        } catch (error) {
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
-
-    app.get(BASE_API + "/integrations/g12", async (request, response) => {
-        try {
-            let res = await fetch(`https://sos2425-12.onrender.com/api/v1/annual-consumptions`);
-            let datos = await res.json();
-            response.json(datos);
-        } catch (error) {
-            response.status(500).send('Error al obtener los datos');
-        }
-    });
-
->>>>>>> c1a0d5276b7f1def073dc0302c81c7da559b35c2
     // Integracion API YouTube mediante proxy
     var paths = '/api/yt';
     var apiServerHost = 'https://youtube.googleapis.com';
@@ -389,8 +336,5 @@ function loadBackendGAM(app) {
 
 }
 
-<<<<<<< HEAD
 export { loadBackendGAM }
-=======
-export { loadBackendGAM }
->>>>>>> c1a0d5276b7f1def073dc0302c81c7da559b35c2
+
