@@ -207,7 +207,7 @@
 				}
 			},
 			title: {
-				text: 'Highcharts Pyramid3D Chart'
+				text: 'Gráfica de pirámide comparando los impuestos, emigración y desempleo en España'
 			},
 			plotOptions: {
 				series: {
