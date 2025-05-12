@@ -189,6 +189,7 @@ function loadBackendIBL(app) {
             "atr_soc_no_consolidadas",
             "atr_iva",
         ];
+        
         let invalidFields = Object.keys(postBody).filter(
             (f) => !allowedFields.includes(f)
         );
