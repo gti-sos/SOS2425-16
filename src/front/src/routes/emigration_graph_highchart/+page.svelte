@@ -18,19 +18,25 @@
 			if (res.status === 200) {
 				emigration_data = await res.json();
                 console.log(emigration_data);
+				// @ts-ignore
 				emigration_data.forEach(item => {
 					let community = item.autonomic_community;
 					let year = item.year;
 					let total = item.between_20_24_yo + item.between_25_29_yo + item.between_30_34_yo;
 
+					// @ts-ignore
 					if (!groupedData[community]) {
+						// @ts-ignore
 						groupedData[community] = {};
 					}
 
+					// @ts-ignore
 					if (!groupedData[community][year]) {
+						// @ts-ignore
 						groupedData[community][year] = 0;
 					}
 
+					// @ts-ignore
 					groupedData[community][year] += total;
 				});
 			}
