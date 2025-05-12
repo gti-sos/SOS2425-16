@@ -325,7 +325,8 @@ function loadBackendGAM(app) {
     });
 
 
-    // Integracion API YouTube mediante proxy
+    // YouTube API use with proxy.
+
     var paths = '/api/yt';
     var apiServerHost = 'https://youtube.googleapis.com';
     app.use(paths, function(req, res) {
