@@ -1,12 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
-	import { dev } from '$app/environment';
 	import { Alert } from '@sveltestrap/sveltestrap';
+	import { dev } from '$app/environment';
+	let DEVEL_HOST = 'http://localhost:16078';
+	let API = '/api/policeuk';
+
+	if (dev) {
+		API = DEVEL_HOST + API;
+	}
 
 	// let DEVEL_HOST = 'http://localhost:16078';
 	// let PROD_HOST = "http://localhost:16078/api/v1/taxes-stats";
-	let API =
-		'http://localhost:16078/api/policeuk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03';
+	API =
+		`${API}/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2025-03`;
 
 	// if (dev) {
 	// 	API = DEVEL_HOST + API;
