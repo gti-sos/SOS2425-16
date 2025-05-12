@@ -4,8 +4,14 @@
 
 <script>
     import { onMount } from "svelte";
+    import { dev } from "$app/environment";
+    let DEVEL_HOST = "http://localhost:16078";
+    let unemploymentAPI = "/api/v1/unemployment-stats";
+    if(dev){
+        unemploymentAPI = DEVEL_HOST + unemploymentAPI;
+    }
 
-    const unemploymentAPI = 'http://localhost:16078/api/v1/unemployment-stats';
+    //const unemploymentAPI = 'http://localhost:16078/api/v1/unemployment-stats';
     const sanctionsAPI = 'https://sos2425-19.onrender.com/api/v1/sanctions-and-points-stats';
     
     // @ts-ignore

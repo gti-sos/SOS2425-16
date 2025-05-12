@@ -4,10 +4,18 @@
     import { Button, Table, Alert } from '@sveltestrap/sveltestrap';
     let canal = {};
     const YOUTUBE_API_KEY = `AIzaSyAUrrD_KAr20eE03y0ZMJf9lTVRl2TCFDU`;
+
+    import { dev } from '$app/environment';
+	let DEVEL_HOST = 'http://localhost:16078';
+	let emigrationAPI = '/api/yt';
+
+	if (dev) {
+		emigrationAPI = DEVEL_HOST + emigrationAPI;
+	}
   
     onMount(async () => {
         
-      const res = await fetch(`http://localhost:16078/api/yt/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`)
+      const res = await fetch(`${emigrationAPI}/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&id=UCV4xOVpbcV8SdueDCOxLXtQ&key=${YOUTUBE_API_KEY}`)
       const jsonStr = await res.text();
       const data = JSON.parse(jsonStr);
   

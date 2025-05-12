@@ -4,10 +4,16 @@
 
 <script>
     import { onMount } from "svelte";
+    import { dev } from "$app/environment";
     let chart;
+    let DEVEL_HOST = "http://localhost:16078";
+    let API = "/api/v1/unemployment-stats";
+    if(dev){
+        API = DEVEL_HOST + API;
+    }
 
     onMount(async () => {
-        const rawData = await fetch('http://localhost:16078/api/v1/unemployment-stats')
+        const rawData = await fetch(API)
             .then(res => res.json());
         
         const formattedData = formatData(rawData);

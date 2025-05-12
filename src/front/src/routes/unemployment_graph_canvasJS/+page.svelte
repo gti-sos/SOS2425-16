@@ -12,12 +12,18 @@
 
 <script>
     import { onMount } from "svelte";
+    import { dev } from "$app/environment";
+    let DEVEL_HOST = "http://localhost:16078";
+    let API = "/api/v1/unemployment-stats";
+    if(dev){
+        API = DEVEL_HOST + API;
+    }
   
     let chart;
   
     onMount(async () => {
       try {
-        const response = await fetch("http://localhost:16078/api/v1/unemployment-stats?year=2021&quarter=q4");
+        const response = await fetch(`${API}?year=2021&quarter=q4`);
         const data = await response.json();
   
         // @ts-ignore
