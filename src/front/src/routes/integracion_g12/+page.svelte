@@ -1,7 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+	let DEVEL_HOST = 'http://localhost:16078';
+	let emigrationAPI = '/api/v1/emigration-stats';
 
-	const emigrationAPI = 'http://localhost:16078/api/v1/emigration-stats';
+	if (dev) {
+		emigrationAPI = DEVEL_HOST + emigrationAPI;
+	}
+	
 	const conumptionsAPI = 'https://sos2425-12.onrender.com/api/v1/annual-consumptions';
 
 	let emigration_data = [];
